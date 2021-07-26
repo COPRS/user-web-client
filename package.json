@@ -1,14 +1,6 @@
 {
   "name": "user-web-client",
   "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
-  },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~12.1.0-",
     "@angular/common": "~12.1.0-",
@@ -34,6 +26,15 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "prettier": "^2.3.2",
     "typescript": "~4.3.2"
+  },
+  "private": true,
+  "scripts": {
+    "build": "ng build",
+    "ng": "ng",
+    "start": "ng serve",
+    "test": "ng test",
+    "watch": "ng build --watch --configuration development"
   }
 }
