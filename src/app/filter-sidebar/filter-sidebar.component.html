@@ -1,0 +1,46 @@
+<div
+  class="side-nav-bar"
+  [ngClass]="{ 'side-nav-bar-collapsed': !(showSideNav | async) }"
+>
+  <!-- overlay -->
+  <div
+    class="side-nav-bar-overlay"
+    [ngStyle]="{
+      transition:
+        'background-color ' + duration + 's, visibility ' + duration + 's'
+    }"
+    [ngClass]="{ 'side-nav-bar-overlay-collapsed': !(showSideNav | async) }"
+    (click)="onSidebarClose()"
+  ></div>
+
+  <!-- side bar-->
+  <div
+    class="side-nav-bar-menu-container"
+    [ngStyle]="getSideNavBarStyle(showSideNav | async)"
+  >
+    <!-- close button -->
+
+    <div class="side-nav-bar-menu-container-header">
+      <div class="clr-row">
+        <div class="clr-col-6 side-nav-bar-badge">
+          <h5><clr-icon shape="filter"></clr-icon> FILTERS</h5>
+        </div>
+        <div class="clr-col-6 side-nav-bar-close clr-align-self-center">
+          <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- side bar content -->
+    <div class="side-nav-bar-content-container">
+      <ng-container *ngTemplateOutlet="sidenavTemplateRef"></ng-container>
+    </div>
+  </div>
+</div>
+<div
+  (click)="onSidebarOpen()"
+  class="side-nav-bar-flag"
+  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav | async) }"
+>
+  <h5><clr-icon shape="filter"></clr-icon></h5>
+</div>
