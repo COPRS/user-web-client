@@ -1,0 +1,32 @@
+<form class="clr-form clr-form-vertical">
+  <div class="clr-form-control">
+    <label for="example5" class="clr-control-label">Mission</label>
+    <div class="clr-control-container">
+      <div class="clr-input-wrapper">
+        <select clrSelect name="options" (change)="missionChanged($event)">
+          <option value="">Choose a mission</option>
+          <option *ngFor="let mission of missions" [value]="mission">
+            {{ mission }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="clr-form-control" *ngIf="selectedMission">
+    <label for="example5" class="clr-control-label">Product Type</label>
+    <div class="clr-control-container">
+      <div class="clr-input-wrapper">
+        <select clrSelect name="options" [(ngModel)]="selectedProductType">
+          <option value="">Choose a product type</option>
+          <option
+            *ngFor="let productType of productTypes"
+            [value]="productType"
+          >
+            {{ productType }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+</form>

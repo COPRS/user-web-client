@@ -22,10 +22,10 @@
 
     <div class="side-nav-bar-menu-container-header">
       <div class="clr-row">
-        <div class="clr-col-6 side-nav-bar-badge">
-          <h5><clr-icon shape="filter"></clr-icon> FILTERS</h5>
+        <div class="clr-col-9 side-nav-bar-badge">
+          <clr-icon shape="filter"></clr-icon> FILTERS
         </div>
-        <div class="clr-col-6 side-nav-bar-close clr-align-self-center">
+        <div class="clr-col-3 side-nav-bar-close clr-align-self-center">
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
         </div>
       </div>
@@ -33,14 +33,30 @@
 
     <!-- side bar content -->
     <div class="side-nav-bar-content-container">
-      <ng-container *ngTemplateOutlet="sidenavTemplateRef"></ng-container>
+      <hr />
+      <div class="side-nav-bar-content-element">
+        <h3>
+          <img src="assets/images/tabler-satellite.svg" />
+          Product Selection
+        </h3>
+        <app-filter-product-selection></app-filter-product-selection>
+      </div>
+      <hr />
+      <div class="side-nav-bar-content-element">
+        <h3>
+          <clr-icon shape="filter-2" size="21"></clr-icon>
+          Attribute Filters
+        </h3>
+        Please first choose mission and product type
+      </div>
     </div>
   </div>
 </div>
+
 <div
   (click)="onSidebarOpen()"
   class="side-nav-bar-flag"
   [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav | async) }"
 >
-  <h5><clr-icon shape="filter"></clr-icon></h5>
+  <div><clr-icon shape="filter"></clr-icon></div>
 </div>

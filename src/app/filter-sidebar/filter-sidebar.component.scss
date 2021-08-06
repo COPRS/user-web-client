@@ -1,6 +1,7 @@
 $side-bar-background-color: rgba(255, 255, 255, 0.8);
 $side-bar-top-distance: 30px;
-$container-content-padding: 32px;
+$container-content-padding-side: 32px;
+$container-content-padding-top-bottom: 20px;
 
 app-filter-sidebar {
   position: relative;
@@ -30,24 +31,38 @@ app-filter-sidebar {
     flex-direction: column;
 
     .side-nav-bar-menu-container-header {
-      padding-left: 15px;
-      padding-right: 15px;
+      padding: 15px;
     }
 
-    .side-nav-bar-badge {
+    side-nav-bar-content-element .side-nav-bar-badge {
       text-align: left;
     }
 
     .side-nav-bar-close {
       text-align: right;
     }
+
     .side-nav-bar-close > clr-icon {
       cursor: pointer;
       transform: rotate(-90deg);
     }
 
     .side-nav-bar-content-container {
-      padding: $container-content-padding;
+      hr {
+        margin: 0;
+        border: 0;
+        border-top: 1px solid #c0c0c0;
+      }
+      .side-nav-bar-content-element {
+        // background-color: pink;
+        padding: $container-content-padding-top-bottom
+          $container-content-padding-side $container-content-padding-top-bottom
+          $container-content-padding-side;
+
+        h3 {
+          margin: 0;
+        }
+      }
     }
   }
 }
@@ -63,8 +78,7 @@ app-filter-sidebar {
 .side-nav-bar-flag {
   position: absolute;
   background: $side-bar-background-color;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 15px;
   // width: 150px;
   // height: 50px;
   z-index: 1001;
@@ -72,7 +86,6 @@ app-filter-sidebar {
   top: $side-bar-top-distance;
   //   bottom: 0;
   left: 0;
-  padding-bottom: 24px;
   border-radius: 0 3px 3px 0;
   // right: 0;
 }

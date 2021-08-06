@@ -11,7 +11,6 @@ import { FilterSidebarNavigationService } from '../services/filter-sidebar-navig
 export class FilterSidebarComponent implements OnInit {
   showSideNav: Observable<boolean>;
 
-  @Input() sidenavTemplateRef: any;
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
 
