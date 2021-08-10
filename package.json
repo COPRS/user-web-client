@@ -27,8 +27,6 @@
     "@cypress/schematic": "^1.5.0",
     "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
-    "clarity-icons": "^0.10.28",
-    "clarity-ui": "^0.10.28",
     "concurrently": "^6.2.0",
     "cypress": "^8.1.0",
     "jasmine-core": "~3.8.0",
