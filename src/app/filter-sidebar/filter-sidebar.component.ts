@@ -10,6 +10,7 @@ import { FilterSidebarNavigationService } from '../services/filter-sidebar-navig
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav: Observable<boolean>;
+  selectedProduct: any;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -25,6 +26,10 @@ export class FilterSidebarComponent implements OnInit {
   }
   onSidebarOpen() {
     this.navService.setShowNav(true);
+  }
+
+  onSelectedProductChanged(event) {
+    this.selectedProduct = event;
   }
 
   getSideNavBarStyle(showNav: boolean) {

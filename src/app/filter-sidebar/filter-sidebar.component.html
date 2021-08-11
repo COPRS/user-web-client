@@ -18,7 +18,7 @@
     class="side-nav-bar-menu-container"
     [ngStyle]="getSideNavBarStyle(showSideNav | async)"
   >
-    <!-- close button -->
+    <!-- side bar header -->
 
     <div class="side-nav-bar-menu-container-header">
       <div class="clr-row">
@@ -39,7 +39,9 @@
           <img src="assets/images/tabler-satellite.svg" />
           Product Selection
         </h3>
-        <app-filter-product-selection></app-filter-product-selection>
+        <app-filter-product-selection
+          (selected)="onSelectedProductChanged($event)"
+        ></app-filter-product-selection>
       </div>
       <hr />
       <div class="side-nav-bar-content-element">
@@ -47,12 +49,16 @@
           <clr-icon shape="filter-2" size="21"></clr-icon>
           Attribute Filters
         </h3>
-        Please first choose mission and product type
+        <div *ngIf="!selectedProduct">
+          Please first choose mission and product type
+        </div>
+        <div *ngIf="selectedProduct">{{ selectedProduct | json }}</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- side bar flag -->
 <div
   (click)="onSidebarOpen()"
   class="side-nav-bar-flag"

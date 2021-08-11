@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ProductType } from './ProductType';
 
 @Component({
@@ -50,6 +50,9 @@ export class FilterProductSelectionComponent implements OnInit {
     },
   ];
 
+  @Output()
+  selected = new EventEmitter<any>();
+
   public missionChanged(event) {
     this.selectedMission = event.target.value;
     console.log(event.target.value);
@@ -57,6 +60,15 @@ export class FilterProductSelectionComponent implements OnInit {
     this.productTypes = this.availableProductTypes.find(
       (pt) => pt.missionName == this.selectedMission
     ).productTypes;
+  }
+
+  public productTypeChanged(event) {
+    this.selectedProductType = event.target.value;
+    console.log(event.target.value);
+    this.selected.emit({
+      mission: this.selectedMission,
+      productType: this.selectedProductType,
+    });
   }
 
   public productTypes: String[];

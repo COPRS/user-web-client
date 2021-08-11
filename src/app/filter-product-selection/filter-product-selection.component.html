@@ -17,7 +17,7 @@
     <label for="example5" class="clr-control-label">Product Type</label>
     <div class="clr-control-container">
       <div class="clr-input-wrapper">
-        <select clrSelect name="options" [(ngModel)]="selectedProductType">
+        <select clrSelect name="options" (change)="productTypeChanged($event)">
           <option value="">Choose a product type</option>
           <option
             *ngFor="let productType of productTypes"
