@@ -43,16 +43,17 @@
           (selected)="onSelectedProductChanged($event)"
         ></app-filter-product-selection>
       </div>
-      <hr />
-      <div class="side-nav-bar-content-element">
+      <hr *ngIf="selectedProduct" [@panelInOut] />
+      <div
+        *ngIf="selectedProduct"
+        [@panelInOut]
+        class="side-nav-bar-content-element"
+      >
         <h3>
           <clr-icon shape="filter-2" size="21"></clr-icon>
           Attribute Filters
         </h3>
-        <div *ngIf="!selectedProduct">
-          Please first choose mission and product type
-        </div>
-        <div *ngIf="selectedProduct">{{ selectedProduct | json }}</div>
+        <div>{{ selectedProduct | json }}</div>
       </div>
     </div>
   </div>

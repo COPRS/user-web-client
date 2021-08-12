@@ -1,3 +1,4 @@
+import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { FilterSidebarNavigationService } from '../services/filter-sidebar-navigation.service';
@@ -6,6 +7,15 @@ import { FilterSidebarNavigationService } from '../services/filter-sidebar-navig
   selector: 'app-filter-sidebar',
   templateUrl: './filter-sidebar.component.html',
   styleUrls: ['./filter-sidebar.component.scss'],
+  animations: [
+    trigger('panelInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('0.5s', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [animate('0.1s', style({ opacity: 0 }))]),
+    ]),
+  ],
   encapsulation: ViewEncapsulation.None,
 })
 export class FilterSidebarComponent implements OnInit {
@@ -29,7 +39,12 @@ export class FilterSidebarComponent implements OnInit {
   }
 
   onSelectedProductChanged(event) {
-    this.selectedProduct = event;
+    console.log('asd', event);
+    if (event) {
+      this.selectedProduct = event;
+    } else {
+      delete this.selectedProduct;
+    }
   }
 
   getSideNavBarStyle(showNav: boolean) {

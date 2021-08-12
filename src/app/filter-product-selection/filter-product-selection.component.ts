@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { RsApiMetatdataService } from '../rs-api-metatdata.service';
 import { ProductType } from './ProductType';
 
 @Component({
@@ -7,68 +8,53 @@ import { ProductType } from './ProductType';
   styleUrls: ['./filter-product-selection.component.scss'],
 })
 export class FilterProductSelectionComponent implements OnInit {
-  constructor() {}
+  constructor(private rsApi: RsApiMetatdataService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.rsApi.getMissions().then(async (missions: { missions: String[] }) => {
+      this.missions = missions.missions;
+      for (const m in missions.missions) {
+        const cur_mission = missions.missions[m];
 
-  public missions: String[] = ['Sentinel 1', 'Sentinel 2', 'Sentinel 3'];
+        let productTypes = await this.rsApi.getProductTypes(cur_mission);
+
+        this.availableProductTypes.push({
+          missionName: cur_mission,
+          productTypes: productTypes.productTypes,
+        });
+      }
+    });
+  }
+
+  public missions: String[] = [];
   public selectedMission: String;
 
-  private availableProductTypes: ProductType[] = [
-    {
-      missionName: 'Sentinel 1',
-      productTypes: [
-        'S1_RAW__0S:L0_SLICE',
-        'S1_RAW__0S:L0_SLICE',
-        'S1_RAW__0S:L0_SLICE',
-        'S1_RAW__0S:L0_SLICE',
-        'S1_RAW__0S:L0_SLICE',
-        'S1_RAW__0S:L0_SLICE',
-      ],
-    },
-    {
-      missionName: 'Sentinel 2',
-      productTypes: [
-        'S2_RAW__0S:L0_SLICE',
-        'S2_RAW__0S:L0_SLICE',
-        'S2_RAW__0S:L0_SLICE',
-        'S2_RAW__0S:L0_SLICE',
-        'S2_RAW__0S:L0_SLICE',
-        'S2_RAW__0S:L0_SLICE',
-      ],
-    },
-    {
-      missionName: 'Sentinel 3',
-      productTypes: [
-        'S3_RAW__0S:L0_SLICE',
-        'S3_RAW__0S:L0_SLICE',
-        'S3_RAW__0S:L0_SLICE',
-        'S3_RAW__0S:L0_SLICE',
-        'S3_RAW__0S:L0_SLICE',
-        'S3_RAW__0S:L0_SLICE',
-      ],
-    },
-  ];
+  public availableProductTypes: ProductType[] = [];
 
   @Output()
   selected = new EventEmitter<any>();
 
   public missionChanged(event) {
     this.selectedMission = event.target.value;
-    console.log(event.target.value);
-
-    this.productTypes = this.availableProductTypes.find(
-      (pt) => pt.missionName == this.selectedMission
-    ).productTypes;
+    console.log('SELECTED ', event.target.value);
+    if (this.selectedMission) {
+      this.productTypes = this.availableProductTypes.find(
+        (pt) => pt.missionName == this.selectedMission
+      ).productTypes;
+    }
   }
 
   public productTypeChanged(event) {
     this.selectedProductType = event.target.value;
-    console.log(event.target.value);
-    this.selected.emit({
-      mission: this.selectedMission,
-      productType: this.selectedProductType,
-    });
+    console.log('SELECTED ', event.target.value);
+    if (this.selectedProductType) {
+      this.selected.emit({
+        mission: this.selectedMission,
+        productType: this.selectedProductType,
+      });
+    } else {
+      this.selected.emit(undefined);
+    }
   }
 
   public productTypes: String[];

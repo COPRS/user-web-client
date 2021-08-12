@@ -9,12 +9,14 @@ import { MapViewerModule } from './map-viewer/map-viewer.module';
 import { FilterSidebarComponent } from './filter-sidebar/filter-sidebar.component';
 import { FilterProductSelectionComponent } from './filter-product-selection/filter-product-selection.component';
 import { FormsModule } from '@angular/forms';
+import { FilterAttributeSelectionComponent } from './filter-attribute-selection/filter-attribute-selection.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FilterSidebarComponent,
     FilterProductSelectionComponent,
+    FilterAttributeSelectionComponent,
   ],
   imports: [
     BrowserModule,
