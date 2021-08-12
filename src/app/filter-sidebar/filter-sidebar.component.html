@@ -43,9 +43,9 @@
           (selected)="onSelectedProductChanged($event)"
         ></app-filter-product-selection>
       </div>
-      <hr *ngIf="selectedProduct" [@panelInOut] />
+      <hr *ngIf="selectedProduct$ | async" [@panelInOut] />
       <div
-        *ngIf="selectedProduct"
+        *ngIf="selectedProduct$ | async"
         [@panelInOut]
         class="side-nav-bar-content-element"
       >
@@ -53,7 +53,9 @@
           <clr-icon shape="filter-2" size="21"></clr-icon>
           Attribute Filters
         </h3>
-        <div>{{ selectedProduct | json }}</div>
+        <app-filter-attribute-selection
+          [selectedMissionAndProduct$]="selectedProduct$"
+        ></app-filter-attribute-selection>
       </div>
     </div>
   </div>

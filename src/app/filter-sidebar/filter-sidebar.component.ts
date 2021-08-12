@@ -1,6 +1,7 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { SelectedMissionAndProduct } from '../filter-product-selection/SelectedMissionAndProduct';
 import { FilterSidebarNavigationService } from '../services/filter-sidebar-navigation.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { FilterSidebarNavigationService } from '../services/filter-sidebar-navig
     trigger('panelInOut', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('0.5s', style({ opacity: 1 })),
+        animate('0.8s', style({ opacity: 1 })),
       ]),
       transition(':leave', [animate('0.1s', style({ opacity: 0 }))]),
     ]),
@@ -20,7 +21,8 @@ import { FilterSidebarNavigationService } from '../services/filter-sidebar-navig
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav: Observable<boolean>;
-  selectedProduct: any;
+  selectedProduct$: BehaviorSubject<SelectedMissionAndProduct> =
+    new BehaviorSubject<SelectedMissionAndProduct>(undefined);
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -38,12 +40,11 @@ export class FilterSidebarComponent implements OnInit {
     this.navService.setShowNav(true);
   }
 
-  onSelectedProductChanged(event) {
-    console.log('asd', event);
+  onSelectedProductChanged(event: SelectedMissionAndProduct) {
     if (event) {
-      this.selectedProduct = event;
+      this.selectedProduct$.next(event);
     } else {
-      delete this.selectedProduct;
+      this.selectedProduct$.next(undefined);
     }
   }
 

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { RsApiMetatdataService } from '../rs-api-metatdata.service';
 import { ProductType } from './ProductType';
+import { SelectedMissionAndProduct } from './SelectedMissionAndProduct';
 
 @Component({
   selector: 'app-filter-product-selection',
@@ -32,7 +33,7 @@ export class FilterProductSelectionComponent implements OnInit {
   public availableProductTypes: ProductType[] = [];
 
   @Output()
-  selected = new EventEmitter<any>();
+  selected = new EventEmitter<SelectedMissionAndProduct>();
 
   public missionChanged(event) {
     this.selectedMission = event.target.value;
@@ -42,6 +43,7 @@ export class FilterProductSelectionComponent implements OnInit {
         (pt) => pt.missionName == this.selectedMission
       ).productTypes;
     }
+    this.selected.emit(undefined);
   }
 
   public productTypeChanged(event) {
