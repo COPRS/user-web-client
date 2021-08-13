@@ -42,14 +42,16 @@
   "private": true,
   "scripts": {
     "build": "ng build",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "docker:build": "docker build -t \"rs-user-client:dev\" -f Dockerfile .",
+    "docker:run": "docker run -it --rm -p 4201:80 rs-user-client:dev",
+    "e2e": "ng e2e",
+    "e2e:ci": "concurrently \"npm run start\" \"wait-on http-get://localhost:4200 && npm run cypress:run\" --kill-others --success first",
     "ng": "ng",
     "start": "ng serve",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
-    "watch": "ng build --watch --configuration development",
-    "e2e": "ng e2e",
-    "e2e:ci": "concurrently \"npm run start\" \"wait-on http-get://localhost:4200 && npm run cypress:run\" --kill-others --success first",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "watch": "ng build --watch --configuration development"
   }
 }

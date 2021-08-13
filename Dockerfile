@@ -23,6 +23,7 @@ RUN npm install --audit=false
 # add app
 COPY . /app
 
+RUN ls -alh .
 # run tests
 ENV CHROME_BIN=chromium
 RUN npm run test:ci

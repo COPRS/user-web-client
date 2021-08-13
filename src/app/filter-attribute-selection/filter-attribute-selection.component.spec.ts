@@ -1,6 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RsApiMetatdataService } from '../rs-api-metatdata.service';
 import { FilterAttributeSelectionComponent } from './filter-attribute-selection.component';
+
+class MockRsApiMetatdataService {
+  getMissions() {
+    return new Promise((r) => {
+      return {
+        missions: {
+          missions: ['m1', 'm2'],
+        },
+      };
+    });
+  }
+}
 
 describe('FilterAttributeSelectionComponent', () => {
   let component: FilterAttributeSelectionComponent;
@@ -8,9 +20,12 @@ describe('FilterAttributeSelectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FilterAttributeSelectionComponent ]
-    })
-    .compileComponents();
+      declarations: [FilterAttributeSelectionComponent],
+      providers: [
+        FilterAttributeSelectionComponent,
+        { provide: RsApiMetatdataService, useClass: MockRsApiMetatdataService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

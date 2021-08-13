@@ -17,9 +17,7 @@ export class FilterAttributeSelectionComponent implements OnInit {
   availableAttributes: String[];
 
   async ngOnInit(): Promise<void> {
-    console.log('ngONINit');
     this.selectedMissionAndProduct$.subscribe(async (m) => {
-      console.log('ngONINit - 22222');
       if (m) {
         this.availableAttributes = await this.api.getAttributes(
           m.mission,
