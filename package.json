@@ -1,5 +1,5 @@
 {
-  "name": "user-web-client",
+  "name": "web-interface",
   "version": "0.0.0",
   "dependencies": {
     "@angular/animations": "~12.1.0-",
