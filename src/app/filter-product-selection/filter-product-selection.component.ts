@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { RsApiMetatdataService } from '../rs-api-metatdata.service';
+import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
 import { ProductType } from './ProductType';
 import { SelectedMissionAndProduct } from './SelectedMissionAndProduct';
 
@@ -12,16 +12,16 @@ export class FilterProductSelectionComponent implements OnInit {
   constructor(private rsApi: RsApiMetatdataService) {}
 
   ngOnInit(): void {
-    this.rsApi.getMissions().then(async (missions: { missions: String[] }) => {
-      this.missions = missions.missions;
-      for (const m in missions.missions) {
-        const cur_mission = missions.missions[m];
+    this.rsApi.getMissions().then(async (missions) => {
+      this.missions = missions;
+      for (const m in missions) {
+        const cur_mission = missions[m];
 
         let productTypes = await this.rsApi.getProductTypes(cur_mission);
 
         this.availableProductTypes.push({
           missionName: cur_mission,
-          productTypes: productTypes.productTypes,
+          productTypes,
         });
       }
     });

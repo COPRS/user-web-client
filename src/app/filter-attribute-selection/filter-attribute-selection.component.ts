@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SelectedMissionAndProduct } from '../filter-product-selection/SelectedMissionAndProduct';
-import { RsApiMetatdataService } from '../rs-api-metatdata.service';
+import { ProductAttribute } from '../services/ProductAttribute';
+import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
 
 @Component({
   selector: 'app-filter-attribute-selection',
@@ -14,7 +15,7 @@ export class FilterAttributeSelectionComponent implements OnInit {
   @Input()
   selectedMissionAndProduct$: Observable<SelectedMissionAndProduct>;
 
-  availableAttributes: String[];
+  availableAttributes: ProductAttribute[];
 
   async ngOnInit(): Promise<void> {
     this.selectedMissionAndProduct$.subscribe(async (m) => {

@@ -1,2 +1,40 @@
-<h2>{{ selectedMissionAndProduct$ | async | json }}</h2>
-<h4>{{ availableAttributes | json }}</h4>
+<!-- <h2>{{ selectedMissionAndProduct$ | async | json }}</h2> -->
+<!-- {{ availableAttributes | json }} -->
+<form class="clr-form clr-form-vertical">
+  <div *ngFor="let attr of availableAttributes">
+    <div [ngSwitch]="attr.datatype">
+      <div *ngSwitchCase="'string'">
+        <clr-input-container>
+          <label>{{ attr.name }}</label>
+          <input clrInput placeholder="Fill in a text" name="{{ attr.name }}" />
+        </clr-input-container>
+      </div>
+      <p *ngSwitchCase="'long'">
+        <clr-input-container>
+          <label>{{ attr.name }}</label>
+          <input
+            clrInput
+            placeholder="Fill in a number"
+            name="{{ attr.name }}"
+          />
+        </clr-input-container>
+      </p>
+      <div *ngSwitchCase="'date'">
+        <clr-date-container>
+          <label>{{ attr.name }}</label>
+          <input type="date" clrDate placeholder="Pick a date" name="today" />
+        </clr-date-container>
+      </div>
+      <div *ngSwitchCase="'boolean'">
+        <clr-checkbox-container>
+          <label>{{ attr.name }}</label>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="{{ attr.name }}" />
+            <label>{{ attr.name }}</label>
+          </clr-checkbox-wrapper>
+        </clr-checkbox-container>
+      </div>
+      <p *ngSwitchDefault>{{ attr.name }} DEFAULT</p>
+    </div>
+  </div>
+</form>

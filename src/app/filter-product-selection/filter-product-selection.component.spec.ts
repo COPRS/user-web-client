@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RsApiMetatdataService } from '../rs-api-metatdata.service';
+import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
 import { FilterProductSelectionComponent } from './filter-product-selection.component';
 
 class MockRsApiMetatdataService {
