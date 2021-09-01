@@ -1,6 +1,6 @@
-#############
-### build ###
-#############
+####################
+### test & build ###
+####################
 
 # base image
 FROM node:14 as build
@@ -8,7 +8,8 @@ FROM node:14 as build
 # install chrome for tests
 RUN apt-get update && apt-get install -yq chromium \
     # Cypress dependencies
-    libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+    libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb \
+    gettext-base
 
 # set working directory
 WORKDIR /app
@@ -40,11 +41,17 @@ RUN npm run ng build -- --output-path=dist
 # base image
 FROM nginx:1.21.0-alpine
 
+RUN apk add gettext
+
 # copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
+
+RUN rm /usr/share/nginx/html/assets/config.json
+
+ADD ./docker/entrypoint.sh /entrypoint.sh
 
 # expose port 80
 EXPOSE 80
 
 # run nginx
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "/entrypoint.sh" ]

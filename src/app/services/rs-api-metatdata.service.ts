@@ -1,25 +1,29 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ConfigService } from '../services/config.service';
 import { ProductAttribute } from './ProductAttribute';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RsApiMetatdataService {
-  private rsApiUrl = 'http://localhost:8888';
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private config: ConfigService) {}
 
   async getMissions(): Promise<String[]> {
     const m = await this.http
-      .get(this.rsApiUrl + '/api/v1/missions')
+      .get(this.config.settings.rsApiBaseUrl + 'missions')
       .toPromise<any>();
     return m.missions;
   }
 
   async getProductTypes(mission: String): Promise<String[]> {
     const p = await this.http
-      .get(this.rsApiUrl + '/api/v1/missions/' + mission + '/productTypes')
+      .get(
+        this.config.settings.rsApiBaseUrl +
+          'missions/' +
+          mission +
+          '/productTypes'
+      )
       .toPromise<any>();
     return p.productTypes;
   }
@@ -30,8 +34,8 @@ export class RsApiMetatdataService {
   ): Promise<ProductAttribute[]> {
     const a: { attributes: String[] } = await this.http
       .get(
-        this.rsApiUrl +
-          '/api/v1/missions/' +
+        this.config.settings.rsApiBaseUrl +
+          'missions/' +
           mission +
           '/productTypes/' +
           productType +

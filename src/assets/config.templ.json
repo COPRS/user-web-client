@@ -1,0 +1,3 @@
+{
+  "rsApiBaseUrl": "${RS_API_URL}"
+}

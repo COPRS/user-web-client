@@ -20,6 +20,8 @@ Run `npm run ng generate component component-name` to generate a new component. 
 
 ## Build
 
+### Build - local
+
 Run `npm run ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ### Build - docker
@@ -28,17 +30,27 @@ Run `npm run docker:build` to make a production build and package this app into 
 
 Run `npm run docker:run` to start this app as a docker container after building it. Navigate to `http://localhost:4201/`.
 
-## Running unit tests
+## Tests
+
+### Running unit tests
 
 Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+### Running end-to-end tests
 
 Run `npm run e2e` to execute the end-to-end tests via [Cypress](https://www.cypress.io/).
 
-## Running CI tests
+### Running CI tests
 
 Use `npm run test:ci` as also `npm run e2e:ci` to run automateable tests on ci systems. Usage can also be seen in [Dockerfile](Dockerfile).
+
+## Deploy
+
+### Configuration
+
+The app is being configured by filling the template file `assets/config.templ.json` in order to generate the configuration file `assets/config.json`.
+
+During runtime the configuration can be accessed by using the `ConfigService`.
 
 ## Further help
 

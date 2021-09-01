@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,6 +10,11 @@ import { FilterSidebarComponent } from './filter-sidebar/filter-sidebar.componen
 import { FilterProductSelectionComponent } from './filter-product-selection/filter-product-selection.component';
 import { FormsModule } from '@angular/forms';
 import { FilterAttributeSelectionComponent } from './filter-attribute-selection/filter-attribute-selection.component';
+import { ConfigService } from './services/config.service';
+
+export function initializeApp(configService: ConfigService) {
+  return () => configService.load();
+}
 
 @NgModule({
   declarations: [
@@ -26,7 +31,15 @@ import { FilterAttributeSelectionComponent } from './filter-attribute-selection/
     MapViewerModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [
+    ConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [ConfigService],
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
