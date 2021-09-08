@@ -9,5 +9,10 @@
 
 <div class="content-container">
   <app-filter-sidebar [navWidth]="420" [duration]="0.5"></app-filter-sidebar>
-  <app-map-viewer class="content-area"> </app-map-viewer>
+  <app-map-viewer
+    (selectedFeature)="onSelectedFeatureChanged($event)"
+    class="content-area"
+  >
+  </app-map-viewer>
+  <div>{{ selectedFeature }}</div>
 </div>

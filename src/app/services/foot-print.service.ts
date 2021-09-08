@@ -1,10 +1,32 @@
 import { Injectable } from '@angular/core';
+import { data } from './prip-testdata';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FootPrintService {
   constructor() {}
+
+  public getExampleFootprints(): Promise<any> {
+    return new Promise((r) =>
+      r({
+        type: 'FeatureCollection',
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
+          },
+        },
+        features: data.map((d) => {
+          return {
+            type: 'Feature',
+            properties: { id: d.id },
+            geometry: d.footprint,
+          };
+        }),
+      })
+    );
+  }
 
   public getSimplePoints(): Promise<any> {
     return new Promise((r) => r(this.simplePoints));

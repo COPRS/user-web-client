@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class FilterSidebarNavigationService {
   private showNav$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
+    false
   );
 
   constructor() {}
