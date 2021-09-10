@@ -3,57 +3,50 @@ $side-bar-top-distance: 30px;
 $container-content-padding-side: 32px;
 $container-content-padding-top-bottom: 20px;
 
-app-filter-sidebar {
+:host {
   position: relative;
 }
 
-.side-nav-bar {
+.side-details-bar {
   position: absolute;
-  z-index: 1001;
+  z-index: 1000;
   top: 0px;
   // bottom: 0px;
-  left: 0;
+  right: 0;
   // right: 0;
 
-  .side-nav-bar-overlay {
-    background: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    height: 100%;
-    position: fixed;
-  }
-
-  .side-nav-bar-menu-container {
-    position: absolute;
+  .side-details-bar-menu-container {
+    // position: absolute;
     top: $side-bar-top-distance;
     background: $side-bar-background-color;
     border-radius: 0 3px 3px 0;
     display: flex;
     flex-direction: column;
 
-    .side-nav-bar-menu-container-header {
+    .side-details-bar-menu-container-header {
       padding: 15px;
     }
 
-    side-nav-bar-content-element .side-nav-bar-badge {
+    side-details-bar-content-element .side-details-bar-badge {
       text-align: left;
     }
 
-    .side-nav-bar-close {
+    .side-details-bar-close {
       text-align: right;
     }
 
-    .side-nav-bar-close > clr-icon {
+    .side-details-bar-close > clr-icon {
       cursor: pointer;
-      transform: rotate(-90deg);
+      transform: rotate(90deg);
     }
 
-    .side-nav-bar-content-container {
+    .side-details-bar-content-container {
       hr {
         margin: 0;
         border: 0;
         border-top: 1px solid #c0c0c0;
       }
-      .side-nav-bar-content-element {
+      .side-details-bar-content-element {
         // background-color: pink;
         padding: $container-content-padding-top-bottom
           $container-content-padding-side $container-content-padding-top-bottom
@@ -67,25 +60,21 @@ app-filter-sidebar {
   }
 }
 
-.side-nav-bar-overlay-collapsed {
-  background: transparent !important;
-}
-
-.side-nav-bar-collapsed {
+.side-details-bar-collapsed {
   visibility: collapse !important;
 }
 
-.side-nav-bar-flag {
-  position: absolute;
-  background: $side-bar-background-color;
-  padding: 15px;
-  // width: 150px;
-  // height: 50px;
-  z-index: 1001;
-  // padding: 15px;
-  top: $side-bar-top-distance;
-  //   bottom: 0;
-  left: 0;
-  border-radius: 0 3px 3px 0;
-  // right: 0;
-}
+// .side-details-bar-flag {
+//   position: absolute;
+//   background: $side-bar-background-color;
+//   padding: 15px;
+//   // width: 150px;
+//   // height: 50px;
+//   z-index: 1001;
+//   // padding: 15px;
+//   top: $side-bar-top-distance;
+//   //   bottom: 0;
+//   left: 0;
+//   border-radius: 0 3px 3px 0;
+//   // right: 0;
+// }

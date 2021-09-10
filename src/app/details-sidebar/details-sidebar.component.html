@@ -1,0 +1,32 @@
+<div
+  class="side-details-bar"
+  [ngClass]="{ 'side-nav-bar-collapsed': !(showSideNav$ | async) }"
+>
+  <!-- side bar-->
+
+  <div
+    class="side-details-bar-menu-container"
+    [ngStyle]="getSideNavBarStyle(showSideNav$ | async)"
+  >
+    <!-- side bar header -->
+
+    <div class="side-details-bar-menu-container-header">
+      <div class="clr-row">
+        <div class="clr-col-9 side-details-bar-badge">
+          <clr-icon shape="details"></clr-icon> Details
+        </div>
+        <div class="clr-col-3 side-details-bar-close clr-align-self-center">
+          <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- side bar content -->
+    <div class="side-details-bar-content-container">
+      <hr />
+      <div class="side-details-bar-content-element">
+        {{ showSideNav$ | async }}
+      </div>
+    </div>
+  </div>
+</div>

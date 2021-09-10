@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  AfterViewInit,
+  Output,
+} from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
@@ -9,17 +15,22 @@ import { fromLonLat } from 'ol/proj';
 import { FootPrintService } from '../services/foot-print.service';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
+import { DetailsSidebarNavigationService } from '../services/details-sidebar-navigation.service';
 
 @Component({
   selector: 'app-map-viewer',
   templateUrl: './map-viewer.component.html',
   styleUrls: ['./map-viewer.component.scss'],
 })
-export class MapViewerComponent implements OnInit {
+export class MapViewerComponent implements OnInit, AfterViewInit {
   map: Map;
-  @Output() selectedFeature = new EventEmitter<String>();
 
-  constructor(private api: FootPrintService) {}
+  constructor(
+    private api: FootPrintService,
+    private detailsSideBarNav: DetailsSidebarNavigationService
+  ) {}
+
+  ngAfterViewInit(): void {}
 
   ngOnInit(): void {
     // INIT MAP - BEGIN
@@ -55,12 +66,18 @@ export class MapViewerComponent implements OnInit {
       this.map.addInteraction(select);
       select.on('select', (e) => {
         if (e.selected.length !== 0) {
-          this.selectedFeature.emit(e.selected[0].values_.id);
+          this.detailsSideBarNav.setShowNav(e.selected[0].values_.id);
         } else {
-          this.selectedFeature.emit(undefined);
+          this.detailsSideBarNav.setShowNav(undefined);
         }
       });
     }
+
+    this.detailsSideBarNav.getShowNav().subscribe((f) => {
+      if (!f) {
+        select.getFeatures().clear();
+      }
+    });
     // CLICK SELECT - END
 
     // LOAD EXAMPLE DATA -BEGIN

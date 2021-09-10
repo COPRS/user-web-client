@@ -11,6 +11,7 @@ import { FilterProductSelectionComponent } from './filter-product-selection/filt
 import { FormsModule } from '@angular/forms';
 import { FilterAttributeSelectionComponent } from './filter-attribute-selection/filter-attribute-selection.component';
 import { ConfigService } from './services/config.service';
+import { DetailsSidebarComponent } from './details-sidebar/details-sidebar.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -22,6 +23,7 @@ export function initializeApp(configService: ConfigService) {
     FilterSidebarComponent,
     FilterProductSelectionComponent,
     FilterAttributeSelectionComponent,
+    DetailsSidebarComponent,
   ],
   imports: [
     BrowserModule,

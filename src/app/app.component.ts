@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'user-web-client';
-  selectedFeature: string = '';
+  selectedFeature$: BehaviorSubject<String> = new BehaviorSubject<String>(
+    '2134567890ß1234567890ß'
+  );
 
   onSelectedFeatureChanged(event: any) {
-    this.selectedFeature = event;
-    console.log(event);
+    this.selectedFeature$.next(event);
   }
 }
