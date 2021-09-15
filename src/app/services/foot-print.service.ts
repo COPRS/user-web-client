@@ -7,6 +7,8 @@ import { data } from './prip-testdata';
 export class FootPrintService {
   constructor() {}
 
+  // TODO: base-url/api/v1/products?filter=attr1 eq value1&attr2 gt value2
+
   public getExampleFootprints(): Promise<any> {
     return new Promise((r) =>
       r({

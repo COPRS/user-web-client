@@ -1,0 +1,19 @@
+.icon-from-to {
+  text-align: center;
+}
+.icon-from-to > clr-icon {
+  vertical-align: middle;
+  transform: rotate(90deg);
+}
+
+.icon-remove {
+  text-align: right;
+}
+
+.icon-remove:hover > clr-icon {
+  color: red;
+}
+
+.add-filter-button {
+  text-align: right;
+}

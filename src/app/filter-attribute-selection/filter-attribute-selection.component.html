@@ -1,5 +1,31 @@
-<!-- <h2>{{ selectedMissionAndProduct$ | async | json }}</h2> -->
-<!-- {{ availableAttributes | json }} -->
+<div class="clr-row">
+  <div class="clr-col-8">
+    <clr-select-container>
+      <label>Select Attribute</label>
+      <select
+        clrSelect
+        name="options"
+        (change)="chosenAttributeChanged($event)"
+      >
+        <option
+          *ngFor="let availableAttribute of availableAttributes"
+          [value]="availableAttribute.name"
+        >
+          {{ availableAttribute.name }}
+        </option>
+      </select>
+    </clr-select-container>
+  </div>
+  <div class="clr-col-4 clr-align-self-end add-filter-button">
+    <button class="btn btn-primary btn-icon">
+      <clr-icon shape="plus-circle"></clr-icon>
+      Add Filter
+    </button>
+  </div>
+</div>
+<br />
+<hr />
+<h4>Selected Filters</h4>
 <form class="clr-form clr-form-vertical">
   <div *ngFor="let attr of availableAttributes">
     <div [ngSwitch]="attr.datatype">
@@ -9,12 +35,45 @@
           <input clrInput placeholder="Fill in a text" name="{{ attr.name }}" />
         </clr-input-container>
       </div>
-      <p *ngSwitchCase="'long'">
+      <div *ngSwitchCase="'long'" class="clr-row clr-align-items-end">
+        <div class="clr-col-5">
+          <clr-input-container>
+            <label>{{ attr.name }}</label>
+            <input
+              clrInput
+              placeholder="Fill in a number FROM"
+              name="{{ attr.name }}"
+            />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-1 icon-from-to">
+          <clr-icon shape="arrow"></clr-icon>
+        </div>
+        <div class="clr-col-5">
+          <clr-input-container>
+            <label>{{ attr.name }}</label>
+            <input
+              clrInput
+              placeholder="Fill in a number TO"
+              name="{{ attr.name }}"
+            />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-1 icon-remove">
+          <clr-icon shape="remove" status="danger"></clr-icon>
+        </div>
+      </div>
+      <!-- <p>
+       
+
+      <
+    </p> -->
+      <p *ngSwitchCase="'double'">
         <clr-input-container>
           <label>{{ attr.name }}</label>
           <input
             clrInput
-            placeholder="Fill in a number"
+            placeholder="Fill in a floating point number"
             name="{{ attr.name }}"
           />
         </clr-input-container>
@@ -34,7 +93,7 @@
           </clr-checkbox-wrapper>
         </clr-checkbox-container>
       </div>
-      <p *ngSwitchDefault>{{ attr.name }} DEFAULT</p>
+      <p *ngSwitchDefault>{{ attr.name }} DEFAULT ({{ attr.datatype }})</p>
     </div>
   </div>
 </form>

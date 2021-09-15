@@ -4,6 +4,7 @@ import { SelectedMissionAndProduct } from '../filter-product-selection/SelectedM
 import { ProductAttribute } from '../services/ProductAttribute';
 import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
 
+// TODO: base-url/api/v1/products?filter=attr1 eq value1&attr2 gt value2
 @Component({
   selector: 'app-filter-attribute-selection',
   templateUrl: './filter-attribute-selection.component.html',
@@ -26,5 +27,9 @@ export class FilterAttributeSelectionComponent implements OnInit {
         );
       }
     });
+  }
+
+  chosenAttributeChanged(_attributeName) {
+    // Do nothing
   }
 }

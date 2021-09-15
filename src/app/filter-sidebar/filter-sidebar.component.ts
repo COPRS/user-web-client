@@ -22,7 +22,10 @@ import { FilterSidebarNavigationService } from '../services/filter-sidebar-navig
 export class FilterSidebarComponent implements OnInit {
   showSideNav: Observable<boolean>;
   selectedProduct$: BehaviorSubject<SelectedMissionAndProduct> =
-    new BehaviorSubject<SelectedMissionAndProduct>(undefined);
+    new BehaviorSubject<SelectedMissionAndProduct>({
+      mission: 's1',
+      productType: 'l0-cal',
+    });
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
