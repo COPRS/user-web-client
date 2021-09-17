@@ -17,6 +17,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.0
         with:
@@ -24,9 +27,6 @@ jobs:
           node-version: 14.x
           # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm
           cache: npm
-
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
   
       # Install dependencies
       - name: Run Unit Tests
