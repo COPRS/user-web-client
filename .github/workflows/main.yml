@@ -29,9 +29,13 @@ jobs:
           cache: npm
   
       # Install dependencies
-      - name: Run Unit Tests
+      - name: Install dependencies
         run: npm install
 
-      # Run Unit Tests
+      # Run Unit tests
       - name: Run Unit Tests
         run: npm run test:ci
+
+       # Run e2e tests
+      - name: Run e2e Tests
+        run: npm run e2e:ci
