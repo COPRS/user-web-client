@@ -1,6 +1,12 @@
 {
   "name": "web-interface",
   "version": "0.0.0",
+  "browser": {
+    "fs": false,
+    "http": false,
+    "https": false
+  },
+  "browser-comment": "The 'browser' value is only set as a temporary fix, see: https://github.com/geotiffjs/geotiff.js/pull/234",
   "dependencies": {
     "@angular/animations": "^12.2.1",
     "@angular/common": "^12.2.1",
