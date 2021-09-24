@@ -6,10 +6,16 @@ env:
   rsApiUrl: http://localhost:8888/api/v1/
 
 image:
-  repository: rs-user-client
-  pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: dev
+  # use image from COPRS repository
+  repository: ghcr.io/coprs/user-web-client
+  tag: main
+  pullPolicy: Always
+  
+  # use image from local computer
+  #repository: rs-user-client
+  #tag: dev # use image from local computer
+  #pullPolicy: Never
 
 imagePullSecrets: []
 nameOverride: ""
