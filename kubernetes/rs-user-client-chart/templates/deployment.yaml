@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rs-user-client-chart.fullname" . }}
+  name: {{ .Release.Name }}
   labels:
     {{- include "rs-user-client-chart.labels" . | nindent 4 }}
 spec:
@@ -15,7 +15,7 @@ spec:
         {{- include "rs-user-client-chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Release.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
