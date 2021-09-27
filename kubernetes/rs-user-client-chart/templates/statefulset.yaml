@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}
   labels:
@@ -9,11 +9,13 @@ spec:
   selector:
     matchLabels:
       {{- include "rs-user-client-chart.selectorLabels" . | nindent 6 }}
+  serviceName: {{ .Release.Name }}
   template:
     metadata:
       labels:
         {{- include "rs-user-client-chart.selectorLabels" . | nindent 8 }}
     spec:
+      terminationGracePeriodSeconds: 10
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
