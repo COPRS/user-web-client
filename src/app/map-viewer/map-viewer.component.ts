@@ -12,10 +12,10 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { OSM, Vector as VectorSource } from 'ol/source';
 import { Zoom } from 'ol/control';
 import { fromLonLat } from 'ol/proj';
-import { FootPrintService } from '../services/foot-print.service';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
 import { DetailsSidebarNavigationService } from '../services/details-sidebar-navigation.service';
+import { RsApiService } from '../services/rs-api.service';
 
 @Component({
   selector: 'app-map-viewer',
@@ -26,8 +26,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
   map: Map;
 
   constructor(
-    private api: FootPrintService,
-    private detailsSideBarNav: DetailsSidebarNavigationService
+    private detailsSideBarNav: DetailsSidebarNavigationService,
+    private rsApiService: RsApiService
   ) {}
 
   ngAfterViewInit(): void {}
@@ -37,7 +37,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
     this.map = new Map({
       view: new View({
         center: fromLonLat([10.439822673797607, 53.25974365592727]),
-        zoom: 4,
+        zoom: 3,
       }),
       layers: [
         new TileLayer({
@@ -80,20 +80,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
     });
     // CLICK SELECT - END
 
-    // LOAD EXAMPLE DATA -BEGIN
-    this.api.getSimplePoints().then((features) => {
-      this.map.addLayer(
-        new VectorLayer({
-          source: new VectorSource({
-            features: new GeoJSON().readFeatures(features, {
-              featureProjection: 'EPSG:3857',
-            }),
-          }),
-        })
-      );
-    });
-
-    this.api.getExampleFootprints().then((features) => {
+    // LOAD DATA FROM RS-API - END
+    this.rsApiService.getProducts('s1', 'L0_SEGMENT_ZIP').then((features) => {
       console.log(features);
       this.map.addLayer(
         new VectorLayer({
@@ -105,7 +93,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
         })
       );
     });
-
-    // LOAD EXAMPLE DATA - END
+    // LOAD DATA FROM RS-API - END
   }
 }
