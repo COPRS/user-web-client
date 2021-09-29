@@ -14,8 +14,8 @@ import { Zoom } from 'ol/control';
 import { fromLonLat } from 'ol/proj';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
-import { DetailsSidebarNavigationService } from '../services/details-sidebar-navigation.service';
 import { RsApiService } from '../services/rs-api.service';
+import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 
 @Component({
   selector: 'app-map-viewer',

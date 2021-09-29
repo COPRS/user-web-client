@@ -6,12 +6,12 @@ import { AppComponent } from './app.component';
 import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapViewerModule } from './map-viewer/map-viewer.module';
-import { FilterSidebarComponent } from './filter-sidebar/filter-sidebar.component';
-import { FilterProductSelectionComponent } from './filter-product-selection/filter-product-selection.component';
 import { FormsModule } from '@angular/forms';
-import { FilterAttributeSelectionComponent } from './filter-attribute-selection/filter-attribute-selection.component';
+import { FilterAttributeSelectionComponent } from './filter-sidebar/components/filter-attribute-selection/filter-attribute-selection.component';
 import { ConfigService } from './services/config.service';
-import { DetailsSidebarComponent } from './details-sidebar/details-sidebar.component';
+import { FilterSidebarComponent } from './filter-sidebar/components/filter-sidebar/filter-sidebar.component';
+import { FilterProductSelectionComponent } from './filter-sidebar/components/filter-product-selection/filter-product-selection.component';
+import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();

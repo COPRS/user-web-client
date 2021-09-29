@@ -1,8 +1,8 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { SelectedMissionAndProduct } from '../filter-product-selection/SelectedMissionAndProduct';
-import { FilterSidebarNavigationService } from '../services/filter-sidebar-navigation.service';
+import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
+import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
 
 @Component({
   selector: 'app-filter-sidebar',

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
-import { ProductType } from './ProductType';
-import { SelectedMissionAndProduct } from './SelectedMissionAndProduct';
+import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
+import { ProductType } from '../../models/ProductType';
+import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
 
 @Component({
   selector: 'app-filter-product-selection',

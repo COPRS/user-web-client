@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
-import { SelectedMissionAndProduct } from '../filter-product-selection/SelectedMissionAndProduct';
-import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
+import { RsApiMetatdataService } from '../../../services/rs-api-metatdata.service';
+import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
 import { FilterAttributeSelectionComponent } from './filter-attribute-selection.component';
 
 class SelectedMissionAndProductMock {

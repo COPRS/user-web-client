@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SelectedMissionAndProduct } from '../filter-product-selection/SelectedMissionAndProduct';
-import { ProductAttribute } from '../services/ProductAttribute';
-import { RsApiMetatdataService } from '../services/rs-api-metatdata.service';
+import { RsApiMetatdataService } from '../../../services/rs-api-metatdata.service';
+import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
+import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
 
 // TODO: base-url/api/v1/products?filter=attr1 eq value1&attr2 gt value2
 @Component({

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from '../services/config.service';
-import { ProductAttribute } from './ProductAttribute';
+import { ProductAttribute } from './models/ProductAttribute';
 
 @Injectable({
   providedIn: 'root',

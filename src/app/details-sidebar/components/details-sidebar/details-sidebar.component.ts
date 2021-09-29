@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { DetailsSidebarNavigationService } from '../services/details-sidebar-navigation.service';
+import { Observable } from 'rxjs';
+import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';
 
 @Component({
   selector: 'app-details-sidebar',
