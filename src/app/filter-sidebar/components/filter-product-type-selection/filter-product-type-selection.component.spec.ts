@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
-import { FilterProductSelectionComponent } from './filter-product-selection.component';
+import { FilterProductTypeSelectionComponent } from './filter-product-type-selection.component';
 
 class MockRsApiMetatdataService {
-  getMissions() {
+  getMissionNames() {
     return new Promise((r) => {
       return {
         missions: {
@@ -14,22 +14,22 @@ class MockRsApiMetatdataService {
   }
 }
 
-describe('FilterProductSelectionComponent', () => {
-  let component: FilterProductSelectionComponent;
-  let fixture: ComponentFixture<FilterProductSelectionComponent>;
+describe('FilterProductTypeSelectionComponent', () => {
+  let component: FilterProductTypeSelectionComponent;
+  let fixture: ComponentFixture<FilterProductTypeSelectionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FilterProductSelectionComponent],
+      declarations: [FilterProductTypeSelectionComponent],
       providers: [
-        FilterProductSelectionComponent,
+        FilterProductTypeSelectionComponent,
         { provide: RsApiMetatdataService, useClass: MockRsApiMetatdataService },
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FilterProductSelectionComponent);
+    fixture = TestBed.createComponent(FilterProductTypeSelectionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

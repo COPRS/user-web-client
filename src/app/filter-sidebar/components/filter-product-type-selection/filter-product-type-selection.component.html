@@ -3,9 +3,9 @@
     <div class="clr-control-container">
       <label for="example5" class="clr-control-label">Mission</label>
       <div class="clr-input-wrapper">
-        <select clrSelect name="options" (change)="missionChanged($event)">
+        <select clrSelect name="options" (change)="missionNameChanged($event)">
           <option value="">Choose a mission</option>
-          <option *ngFor="let mission of missions" [value]="mission">
+          <option *ngFor="let mission of availableMissions" [value]="mission">
             {{ mission }}
           </option>
         </select>

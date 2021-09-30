@@ -39,9 +39,7 @@
           <img src="assets/images/tabler-satellite.svg" />
           Product Selection
         </h3>
-        <app-filter-product-selection
-          (selected)="onSelectedProductChanged($event)"
-        ></app-filter-product-selection>
+        <app-filter-product-type-selection></app-filter-product-type-selection>
       </div>
       <hr *ngIf="selectedProduct$ | async" [@panelInOut] />
       <div

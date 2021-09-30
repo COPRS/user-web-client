@@ -2,22 +2,28 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
 import { ProductType } from '../../models/ProductType';
 import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
+import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
 @Component({
-  selector: 'app-filter-product-selection',
-  templateUrl: './filter-product-selection.component.html',
-  styleUrls: ['./filter-product-selection.component.scss'],
+  selector: 'app-filter-product-type-selection',
+  templateUrl: './filter-product-type-selection.component.html',
+  styleUrls: ['./filter-product-type-selection.component.scss'],
 })
-export class FilterProductSelectionComponent implements OnInit {
-  constructor(private rsApi: RsApiMetatdataService) {}
+export class FilterProductTypeSelectionComponent implements OnInit {
+  constructor(
+    private rsMetadataApi: RsApiMetatdataService,
+    private selectionService: FilterSidebarSelectionService
+  ) {}
 
   ngOnInit(): void {
-    this.rsApi.getMissions().then(async (missions) => {
-      this.missions = missions;
+    this.rsMetadataApi.getMissionNames().then(async (missions) => {
+      this.availableMissions = missions;
       for (const m in missions) {
         const cur_mission = missions[m];
 
-        let productTypes = await this.rsApi.getProductTypes(cur_mission);
+        let productTypes = await this.rsMetadataApi.getProductTypes(
+          cur_mission
+        );
 
         this.availableProductTypes.push({
           missionName: cur_mission,
@@ -27,35 +33,29 @@ export class FilterProductSelectionComponent implements OnInit {
     });
   }
 
-  public missions: String[] = [];
-  public selectedMission: String;
-
+  public availableMissions: String[] = [];
   public availableProductTypes: ProductType[] = [];
 
-  @Output()
-  selected = new EventEmitter<SelectedMissionAndProduct>();
+  public selectedMission: String;
 
-  public missionChanged(event) {
+  public missionNameChanged(event) {
     this.selectedMission = event.target.value;
-    console.log('SELECTED ', event.target.value);
     if (this.selectedMission) {
       this.productTypes = this.availableProductTypes.find(
         (pt) => pt.missionName == this.selectedMission
       ).productTypes;
+      this.selectionService.setMissionName(this.selectedMission);
+    } else {
+      this.selectionService.resetMissionName();
     }
-    this.selected.emit(undefined);
   }
 
   public productTypeChanged(event) {
     this.selectedProductType = event.target.value;
-    console.log('SELECTED ', event.target.value);
     if (this.selectedProductType) {
-      this.selected.emit({
-        mission: this.selectedMission,
-        productType: this.selectedProductType,
-      });
+      this.selectionService.setProductType(this.selectedProductType);
     } else {
-      this.selected.emit(undefined);
+      this.selectionService.resetProductType();
     }
   }
 

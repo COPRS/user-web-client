@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { FilterAttributeSelectionComponent } from './filter-sidebar/components/filter-attribute-selection/filter-attribute-selection.component';
 import { ConfigService } from './services/config.service';
 import { FilterSidebarComponent } from './filter-sidebar/components/filter-sidebar/filter-sidebar.component';
-import { FilterProductSelectionComponent } from './filter-sidebar/components/filter-product-selection/filter-product-selection.component';
+import { FilterProductTypeSelectionComponent } from './filter-sidebar/components/filter-product-type-selection/filter-product-type-selection.component';
 import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
 
 export function initializeApp(configService: ConfigService) {
@@ -21,7 +21,7 @@ export function initializeApp(configService: ConfigService) {
   declarations: [
     AppComponent,
     FilterSidebarComponent,
-    FilterProductSelectionComponent,
+    FilterProductTypeSelectionComponent,
     FilterAttributeSelectionComponent,
     DetailsSidebarComponent,
   ],

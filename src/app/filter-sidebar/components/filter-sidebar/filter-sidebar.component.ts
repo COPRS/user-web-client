@@ -1,8 +1,9 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
 import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
+import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -30,7 +31,10 @@ export class FilterSidebarComponent implements OnInit {
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
 
-  constructor(private navService: FilterSidebarNavigationService) {}
+  constructor(
+    private navService: FilterSidebarNavigationService,
+    private selectionService: FilterSidebarSelectionService
+  ) {}
 
   ngOnInit(): void {
     this.showSideNav = this.navService.getShowNav();

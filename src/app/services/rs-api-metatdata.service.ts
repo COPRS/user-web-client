@@ -9,7 +9,7 @@ import { ProductAttribute } from './models/ProductAttribute';
 export class RsApiMetatdataService {
   constructor(private http: HttpClient, private config: ConfigService) {}
 
-  async getMissions(): Promise<String[]> {
+  async getMissionNames(): Promise<String[]> {
     const m = await this.http
       .get(this.config.settings.rsApiBaseUrl + 'missions')
       .toPromise<any>();
