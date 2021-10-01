@@ -1,32 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RsApiMetatdataService } from '../../../services/rs-api-metatdata.service';
 import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
-import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
+import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
-// TODO: base-url/api/v1/products?filter=attr1 eq value1&attr2 gt value2
 @Component({
   selector: 'app-filter-attribute-selection',
   templateUrl: './filter-attribute-selection.component.html',
   styleUrls: ['./filter-attribute-selection.component.scss'],
 })
 export class FilterAttributeSelectionComponent implements OnInit {
-  constructor(private api: RsApiMetatdataService) {}
+  constructor(private selectionService: FilterSidebarSelectionService) {}
 
-  @Input()
-  selectedMissionAndProduct$: Observable<SelectedMissionAndProduct>;
+  availableAttributes$: Observable<ProductAttribute[]>;
 
-  availableAttributes: ProductAttribute[];
-
-  async ngOnInit(): Promise<void> {
-    this.selectedMissionAndProduct$.subscribe(async (m) => {
-      if (m) {
-        this.availableAttributes = await this.api.getAttributes(
-          m.mission,
-          m.productType
-        );
-      }
-    });
+  ngOnInit(): void {
+    this.availableAttributes$ = this.selectionService.getAvailableAttributes();
   }
 
   chosenAttributeChanged(_attributeName) {

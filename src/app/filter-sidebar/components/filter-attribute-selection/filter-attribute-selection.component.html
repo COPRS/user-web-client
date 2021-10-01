@@ -8,7 +8,7 @@
         (change)="chosenAttributeChanged($event)"
       >
         <option
-          *ngFor="let availableAttribute of availableAttributes"
+          *ngFor="let availableAttribute of availableAttributes$ | async"
           [value]="availableAttribute.name"
         >
           {{ availableAttribute.name }}
@@ -27,8 +27,8 @@
 <hr />
 <h4>Selected Filters</h4>
 <form class="clr-form clr-form-vertical">
-  <div *ngFor="let attr of availableAttributes">
-    <div [ngSwitch]="attr.datatype">
+  <div *ngFor="let attr of availableAttributes$ | async">
+    <div [ngSwitch]="attr.dataType">
       <div *ngSwitchCase="'string'">
         <clr-input-container>
           <label>{{ attr.name }}</label>
@@ -93,7 +93,7 @@
           </clr-checkbox-wrapper>
         </clr-checkbox-container>
       </div>
-      <p *ngSwitchDefault>{{ attr.name }} DEFAULT ({{ attr.datatype }})</p>
+      <p *ngSwitchDefault>{{ attr.name }} DEFAULT ({{ attr.dataType }})</p>
     </div>
   </div>
 </form>

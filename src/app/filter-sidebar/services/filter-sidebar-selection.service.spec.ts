@@ -1,13 +1,30 @@
 import { TestBed } from '@angular/core/testing';
-
 import { FilterSidebarSelectionService } from './filter-sidebar-selection.service';
 import { take } from 'rxjs/operators';
+import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
+import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
+
+class MockRsApiMetatdataService {
+  getMissions(): Promise<String[]> {
+    return Promise.resolve(['m1', 'm2']);
+  }
+  getAttributes(): Promise<ProductAttribute[]> {
+    return Promise.resolve([
+      { name: 'some_attr1', dataType: 'some_datatype1' },
+    ]);
+  }
+}
 
 describe('FilterSidebarSelectionService', () => {
   let service: FilterSidebarSelectionService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        FilterSidebarSelectionService,
+        { provide: RsApiMetatdataService, useClass: MockRsApiMetatdataService },
+      ],
+    });
     service = TestBed.inject(FilterSidebarSelectionService);
   });
 
@@ -60,33 +77,81 @@ describe('FilterSidebarSelectionService', () => {
     expect(productType).toEqual('some_product_type');
   });
 
-  it('should allow to set the attributes', async () => {
-    service.addAttribute({ name: 'attribute1', datatype: 'datatype1' });
-    service.addAttribute({ name: 'attribute2', datatype: 'datatype2' });
-    const productType = await service.getAttributes().pipe(take(1)).toPromise();
-    expect(productType).toEqual([
-      { name: 'attribute1', datatype: 'datatype1' },
-      { name: 'attribute2', datatype: 'datatype2' },
+  it('should get no attributes when missionName is not selected', async () => {
+    service.setProductType('some_prod_typ');
+    let attributes = await service
+      .getAvailableAttributes()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributes).toEqual(undefined);
+  });
+
+  it('should get no attributes when productType is not selected', async () => {
+    service.setMissionName('some_miss_name');
+    let attributes = await service
+      .getAvailableAttributes()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributes).toEqual(undefined);
+  });
+
+  it('should allow to get the available attributes', async () => {
+    service.setMissionName('some_miss_name');
+    service.setProductType('some_prod_typ');
+    let attributes = await service
+      .getAvailableAttributes()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributes).toEqual([
+      {
+        name: 'some_attr1',
+        dataType: 'some_datatype1',
+      },
     ]);
   });
 
-  it('should allow to reset the attributes', async () => {
-    service.addAttribute({ name: 'attribute1', datatype: 'datatype1' });
-    service.addAttribute({ name: 'attribute2', datatype: 'datatype2' });
-    let attributes = await service.getAttributes().pipe(take(1)).toPromise();
+  it('should allow to set the attributes', async () => {
+    service.addSelectedAttribute({ name: 'attribute1', dataType: 'datatype1' });
+    service.addSelectedAttribute({ name: 'attribute2', dataType: 'datatype2' });
+    const productType = await service
+      .getSelectedAttributes()
+      .pipe(take(1))
+      .toPromise();
+    expect(productType).toEqual([
+      { name: 'attribute1', dataType: 'datatype1' },
+      { name: 'attribute2', dataType: 'datatype2' },
+    ]);
+  });
+
+  it('should allow to reset the selected attributes', async () => {
+    service.addSelectedAttribute({ name: 'attribute1', dataType: 'datatype1' });
+    service.addSelectedAttribute({ name: 'attribute2', dataType: 'datatype2' });
+    let attributes = await service
+      .getSelectedAttributes()
+      .pipe(take(1))
+      .toPromise();
     expect(attributes.length).toEqual(2);
-    service.resetAttributes();
-    attributes = await service.getAttributes().pipe(take(1)).toPromise();
+    service.resetSelectedAttributes();
+    attributes = await service
+      .getSelectedAttributes()
+      .pipe(take(1))
+      .toPromise();
     expect(attributes).toEqual([]);
   });
 
-  it('should allow to remove an attribute', async () => {
-    service.addAttribute({ name: 'attribute1', datatype: 'datatype1' });
-    service.addAttribute({ name: 'attribute2', datatype: 'datatype2' });
-    let attributes = await service.getAttributes().pipe(take(1)).toPromise();
+  it('should allow to remove an selected attribute', async () => {
+    service.addSelectedAttribute({ name: 'attribute1', dataType: 'datatype1' });
+    service.addSelectedAttribute({ name: 'attribute2', dataType: 'datatype2' });
+    let attributes = await service
+      .getSelectedAttributes()
+      .pipe(take(1))
+      .toPromise();
     expect(attributes.length).toEqual(2);
-    service.resetAttributes();
-    attributes = await service.getAttributes().pipe(take(1)).toPromise();
+    service.resetSelectedAttributes();
+    attributes = await service
+      .getSelectedAttributes()
+      .pipe(take(1))
+      .toPromise();
     expect(attributes).toEqual([]);
   });
 });

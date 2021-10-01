@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  AfterViewInit,
-  Output,
-} from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
@@ -82,7 +76,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
 
     // LOAD DATA FROM RS-API - END
     this.rsApiService.getProducts('s1', 'L0_SEGMENT_ZIP').then((features) => {
-      console.log(features);
       this.map.addLayer(
         new VectorLayer({
           source: new VectorSource({

@@ -41,9 +41,9 @@
         </h3>
         <app-filter-product-type-selection></app-filter-product-type-selection>
       </div>
-      <hr *ngIf="selectedProduct$ | async" [@panelInOut] />
+      <hr *ngIf="availableAttributes$ | async" [@panelInOut] />
       <div
-        *ngIf="selectedProduct$ | async"
+        *ngIf="availableAttributes$ | async"
         [@panelInOut]
         class="side-nav-bar-content-element"
       >
@@ -51,9 +51,7 @@
           <clr-icon shape="filter-2" size="21"></clr-icon>
           Attribute Filters
         </h3>
-        <app-filter-attribute-selection
-          [selectedMissionAndProduct$]="selectedProduct$"
-        ></app-filter-attribute-selection>
+        <app-filter-attribute-selection></app-filter-attribute-selection>
       </div>
     </div>
   </div>

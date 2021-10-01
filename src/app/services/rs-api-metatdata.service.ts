@@ -29,14 +29,14 @@ export class RsApiMetatdataService {
   }
 
   async getAttributes(
-    mission: String,
+    missionName: String,
     productType: String
   ): Promise<ProductAttribute[]> {
     const a: { attributes: String[] } = await this.http
       .get(
         this.config.settings.rsApiBaseUrl +
           'missions/' +
-          mission +
+          missionName +
           '/productTypes/' +
           productType +
           '/attributes'
@@ -45,7 +45,7 @@ export class RsApiMetatdataService {
 
     const s: ProductAttribute[] = a.attributes.map((a) => {
       const g = a.split('_');
-      return { name: g[1], datatype: g[2] };
+      return { name: g[1], dataType: g[2] };
     });
 
     return s;

@@ -1,14 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
 import { RsApiMetatdataService } from '../../../services/rs-api-metatdata.service';
-import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
 import { FilterAttributeSelectionComponent } from './filter-attribute-selection.component';
-
-class SelectedMissionAndProductMock {
-  public subscribe() {
-    return;
-  }
-}
 
 class MockRsApiMetatdataService {
   getMissions() {
@@ -39,8 +31,6 @@ describe('FilterAttributeSelectionComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FilterAttributeSelectionComponent);
     component = fixture.componentInstance;
-    component.selectedMissionAndProduct$ =
-      new SelectedMissionAndProductMock() as Observable<SelectedMissionAndProduct>;
     fixture.detectChanges();
   });
 

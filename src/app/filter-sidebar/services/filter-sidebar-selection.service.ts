@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { debounceTime, map, mergeMap, scan } from 'rxjs/operators';
 import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
+import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +22,7 @@ export class FilterSidebarSelectionService {
 
   private selectedAttributes: Array<ProductAttribute> = [];
 
-  constructor() {}
+  constructor(private rsMetadataApi: RsApiMetatdataService) {}
 
   // MissionName Methods
   public getMissionName(): Observable<String> {
@@ -28,6 +30,7 @@ export class FilterSidebarSelectionService {
   }
   public setMissionName(missionName: String): void {
     this.selectedMissionName$.next(missionName);
+    this.resetProductType();
   }
   public resetMissionName(): void {
     this.selectedMissionName$.next(undefined);
@@ -44,15 +47,51 @@ export class FilterSidebarSelectionService {
     this.selectedProductType$.next(undefined);
   }
 
-  // Attribute Methods
-  public getAttributes(): Observable<Array<ProductAttribute>> {
+  // Available Attribute Methods
+  public getAvailableAttributes(): Observable<Array<ProductAttribute>> {
+    return merge(
+      this.getMissionName().pipe(
+        map((m) => {
+          return {
+            missionName: m,
+          };
+        })
+      ),
+      this.getProductType().pipe(
+        map((p) => {
+          return {
+            productType: p,
+          };
+        })
+      )
+    )
+      .pipe<{ missionName: String; productType: String }>(
+        scan((acc, curr) => Object.assign({}, acc, curr), {} as any)
+      )
+      .pipe(debounceTime(1))
+      .pipe(
+        mergeMap((mp) => {
+          if (mp.missionName && mp.productType) {
+            return this.rsMetadataApi.getAttributes(
+              mp.missionName,
+              mp.productType
+            );
+          } else {
+            return Promise.resolve(undefined);
+          }
+        })
+      );
+  }
+
+  // Selected Attribute Methods
+  public getSelectedAttributes(): Observable<Array<ProductAttribute>> {
     return this.selectedAttributes$.asObservable();
   }
-  public addAttribute(attribute: ProductAttribute): void {
+  public addSelectedAttribute(attribute: ProductAttribute): void {
     this.selectedAttributes.push(attribute);
     this.selectedAttributes$.next(this.selectedAttributes);
   }
-  public removeAttribute(attributeName: String): void {
+  public removeSelectedAttribute(attributeName: String): void {
     const indexToRemove = this.selectedAttributes.findIndex(
       (e) => e.name == attributeName
     );
@@ -61,7 +100,7 @@ export class FilterSidebarSelectionService {
       this.selectedAttributes$.next(this.selectedAttributes);
     }
   }
-  public resetAttributes(): void {
+  public resetSelectedAttributes(): void {
     this.selectedAttributes = [];
     this.selectedAttributes$.next(this.selectedAttributes);
   }

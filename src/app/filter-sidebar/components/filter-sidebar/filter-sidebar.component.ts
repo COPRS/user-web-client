@@ -1,7 +1,6 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
+import { Observable } from 'rxjs';
 import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
 import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
@@ -22,11 +21,7 @@ import { FilterSidebarSelectionService } from '../../services/filter-sidebar-sel
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav: Observable<boolean>;
-  selectedProduct$: BehaviorSubject<SelectedMissionAndProduct> =
-    new BehaviorSubject<SelectedMissionAndProduct>({
-      mission: 's1',
-      productType: 'l0-cal',
-    });
+  availableAttributes$: Observable<any>;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -38,6 +33,7 @@ export class FilterSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.showSideNav = this.navService.getShowNav();
+    this.availableAttributes$ = this.selectionService.getAvailableAttributes();
   }
 
   onSidebarClose() {
@@ -45,14 +41,6 @@ export class FilterSidebarComponent implements OnInit {
   }
   onSidebarOpen() {
     this.navService.setShowNav(true);
-  }
-
-  onSelectedProductChanged(event: SelectedMissionAndProduct) {
-    if (event) {
-      this.selectedProduct$.next(event);
-    } else {
-      this.selectedProduct$.next(undefined);
-    }
   }
 
   getSideNavBarStyle(showNav: boolean) {
