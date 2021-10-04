@@ -10,7 +10,11 @@ class MockRsApiMetatdataService {
   }
   getAttributes(): Promise<ProductAttribute[]> {
     return Promise.resolve([
-      { name: 'some_attr1', dataType: 'some_datatype1' },
+      {
+        id: 'attr_some_attr1_some_datatype1',
+        name: 'some_attr1',
+        dataType: 'some_datatype1',
+      },
     ]);
   }
 }
@@ -104,6 +108,7 @@ describe('FilterSidebarSelectionService', () => {
       .toPromise();
     expect(attributes).toEqual([
       {
+        id: 'attr_some_attr1_some_datatype1',
         name: 'some_attr1',
         dataType: 'some_datatype1',
       },
@@ -111,21 +116,45 @@ describe('FilterSidebarSelectionService', () => {
   });
 
   it('should allow to set the attributes', async () => {
-    service.addSelectedAttribute({ name: 'attribute1', dataType: 'datatype1' });
-    service.addSelectedAttribute({ name: 'attribute2', dataType: 'datatype2' });
+    service.addSelectedAttribute({
+      id: 'attr_attribute1_datatype1',
+      name: 'attribute1',
+      dataType: 'datatype1',
+    });
+    service.addSelectedAttribute({
+      id: 'attr_attribute2_datatype2',
+      name: 'attribute2',
+      dataType: 'datatype2',
+    });
     const productType = await service
       .getSelectedAttributes()
       .pipe(take(1))
       .toPromise();
     expect(productType).toEqual([
-      { name: 'attribute1', dataType: 'datatype1' },
-      { name: 'attribute2', dataType: 'datatype2' },
+      {
+        id: 'attr_attribute1_datatype1',
+        name: 'attribute1',
+        dataType: 'datatype1',
+      },
+      {
+        id: 'attr_attribute2_datatype2',
+        name: 'attribute2',
+        dataType: 'datatype2',
+      },
     ]);
   });
 
   it('should allow to reset the selected attributes', async () => {
-    service.addSelectedAttribute({ name: 'attribute1', dataType: 'datatype1' });
-    service.addSelectedAttribute({ name: 'attribute2', dataType: 'datatype2' });
+    service.addSelectedAttribute({
+      id: 'attr_attribute1_datatype1',
+      name: 'attribute1',
+      dataType: 'datatype1',
+    });
+    service.addSelectedAttribute({
+      id: 'attr_attribute2_datatype2',
+      name: 'attribute2',
+      dataType: 'datatype2',
+    });
     let attributes = await service
       .getSelectedAttributes()
       .pipe(take(1))
@@ -140,8 +169,16 @@ describe('FilterSidebarSelectionService', () => {
   });
 
   it('should allow to remove an selected attribute', async () => {
-    service.addSelectedAttribute({ name: 'attribute1', dataType: 'datatype1' });
-    service.addSelectedAttribute({ name: 'attribute2', dataType: 'datatype2' });
+    service.addSelectedAttribute({
+      id: 'attr_attribute1_datatype1',
+      name: 'attribute1',
+      dataType: 'datatype1',
+    });
+    service.addSelectedAttribute({
+      id: 'attr_attribute2_datatype2',
+      name: 'attribute2',
+      dataType: 'datatype2',
+    });
     let attributes = await service
       .getSelectedAttributes()
       .pipe(take(1))

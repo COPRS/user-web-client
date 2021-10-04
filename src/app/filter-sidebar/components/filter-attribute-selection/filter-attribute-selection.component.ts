@@ -24,7 +24,6 @@ export class FilterAttributeSelectionComponent implements OnInit {
   }
 
   addFilter(attributeName: String) {
-    console.log({ attributeName });
     if (attributeName) {
       this.selectionService.addSelectedAttribute(
         this.rsMetadataService.splitAttributeName(attributeName)

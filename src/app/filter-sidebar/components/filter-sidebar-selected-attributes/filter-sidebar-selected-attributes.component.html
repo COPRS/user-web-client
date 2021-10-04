@@ -7,6 +7,11 @@
           <label>{{ attr.name }}</label>
           <input clrInput placeholder="Fill in a text" name="{{ attr.name }}" />
         </clr-input-container>
+        <ng-container
+          [ngTemplateOutlet]="deleteButton"
+          [ngTemplateOutletContext]="{ $implicit: attr }"
+        >
+        </ng-container>
       </div>
       <div *ngSwitchCase="'long'" class="clr-row clr-align-items-end">
         <div class="clr-col-5">
@@ -32,15 +37,12 @@
             />
           </clr-input-container>
         </div>
-        <div class="clr-col-1 icon-remove">
-          <clr-icon shape="remove" status="danger"></clr-icon>
-        </div>
+        <ng-container
+          [ngTemplateOutlet]="deleteButton"
+          [ngTemplateOutletContext]="{ $implicit: attr }"
+        >
+        </ng-container>
       </div>
-      <!-- <p>
-       
-
-      <
-    </p> -->
       <p *ngSwitchCase="'double'">
         <clr-input-container>
           <label>{{ attr.name }}</label>
@@ -50,12 +52,22 @@
             name="{{ attr.name }}"
           />
         </clr-input-container>
+        <ng-container
+          [ngTemplateOutlet]="deleteButton"
+          [ngTemplateOutletContext]="{ $implicit: attr }"
+        >
+        </ng-container>
       </p>
       <div *ngSwitchCase="'date'">
         <clr-date-container>
           <label>{{ attr.name }}</label>
           <input type="date" clrDate placeholder="Pick a date" name="today" />
         </clr-date-container>
+        <ng-container
+          [ngTemplateOutlet]="deleteButton"
+          [ngTemplateOutletContext]="{ $implicit: attr }"
+        >
+        </ng-container>
       </div>
       <div *ngSwitchCase="'boolean'">
         <clr-checkbox-container>
@@ -65,8 +77,24 @@
             <label>{{ attr.name }}</label>
           </clr-checkbox-wrapper>
         </clr-checkbox-container>
+        <ng-container
+          [ngTemplateOutlet]="deleteButton"
+          [ngTemplateOutletContext]="{ $implicit: attr }"
+        >
+        </ng-container>
       </div>
       <p *ngSwitchDefault>{{ attr.name }} DEFAULT ({{ attr.dataType }})</p>
     </div>
   </div>
 </form>
+
+<ng-template #deleteButton let-attr>
+  <div class="clr-col-1 icon-remove">
+    <clr-icon
+      class="remove-attribute-button"
+      shape="remove"
+      status="danger"
+      (click)="removeAttribute(attr.name)"
+    ></clr-icon>
+  </div>
+</ng-template>

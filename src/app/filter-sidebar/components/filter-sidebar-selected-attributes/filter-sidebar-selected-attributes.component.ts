@@ -16,4 +16,8 @@ export class FilterSidebarSelectedAttributesComponent implements OnInit {
   ngOnInit(): void {
     this.selectedAttributes$ = this.selectionService.getSelectedAttributes();
   }
+
+  removeAttribute(attributeName: String) {
+    this.selectionService.removeSelectedAttribute(attributeName);
+  }
 }

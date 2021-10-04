@@ -96,7 +96,7 @@ export class FilterSidebarSelectionService {
     const indexToRemove = this.selectedAttributes.findIndex(
       (e) => e.name == attributeName
     );
-    if (indexToRemove) {
+    if (indexToRemove >= 0) {
       this.selectedAttributes.splice(indexToRemove, 1);
       this.selectedAttributes$.next(this.selectedAttributes);
     }
