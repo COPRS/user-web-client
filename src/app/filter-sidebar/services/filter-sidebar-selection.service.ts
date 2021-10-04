@@ -84,6 +84,7 @@ export class FilterSidebarSelectionService {
   }
 
   // Selected Attribute Methods
+  // TODO: do not show already added attributes in available attributes
   public getSelectedAttributes(): Observable<Array<ProductAttribute>> {
     return this.selectedAttributes$.asObservable();
   }

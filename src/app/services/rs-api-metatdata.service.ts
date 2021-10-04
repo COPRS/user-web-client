@@ -43,11 +43,13 @@ export class RsApiMetatdataService {
       )
       .toPromise<any>();
 
-    const s: ProductAttribute[] = a.attributes.map((a) => {
-      const g = a.split('_');
-      return { name: g[1], dataType: g[2] };
-    });
+    const s: ProductAttribute[] = a.attributes.map(this.splitAttributeName);
 
     return s;
+  }
+
+  splitAttributeName(attributeName: String) {
+    const g = attributeName.split('_');
+    return { id: attributeName, name: g[1], dataType: g[2] };
   }
 }

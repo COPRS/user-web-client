@@ -12,6 +12,7 @@ import { ConfigService } from './services/config.service';
 import { FilterSidebarComponent } from './filter-sidebar/components/filter-sidebar/filter-sidebar.component';
 import { FilterProductTypeSelectionComponent } from './filter-sidebar/components/filter-product-type-selection/filter-product-type-selection.component';
 import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
+import { FilterSidebarSelectedAttributesComponent } from './filter-sidebar/components/filter-sidebar-selected-attributes/filter-sidebar-selected-attributes.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -24,6 +25,7 @@ export function initializeApp(configService: ConfigService) {
     FilterProductTypeSelectionComponent,
     FilterAttributeSelectionComponent,
     DetailsSidebarComponent,
+    FilterSidebarSelectedAttributesComponent,
   ],
   imports: [
     BrowserModule,

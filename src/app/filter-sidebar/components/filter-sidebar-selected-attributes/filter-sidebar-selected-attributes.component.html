@@ -1,0 +1,72 @@
+<h4>Selected Filters</h4>
+<form class="clr-form clr-form-vertical">
+  <div *ngFor="let attr of selectedAttributes$ | async">
+    <div [ngSwitch]="attr.dataType">
+      <div *ngSwitchCase="'string'">
+        <clr-input-container>
+          <label>{{ attr.name }}</label>
+          <input clrInput placeholder="Fill in a text" name="{{ attr.name }}" />
+        </clr-input-container>
+      </div>
+      <div *ngSwitchCase="'long'" class="clr-row clr-align-items-end">
+        <div class="clr-col-5">
+          <clr-input-container>
+            <label>{{ attr.name }}</label>
+            <input
+              clrInput
+              placeholder="Fill in a number FROM"
+              name="{{ attr.name }}"
+            />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-1 icon-from-to">
+          <clr-icon shape="arrow"></clr-icon>
+        </div>
+        <div class="clr-col-5">
+          <clr-input-container>
+            <label>{{ attr.name }}</label>
+            <input
+              clrInput
+              placeholder="Fill in a number TO"
+              name="{{ attr.name }}"
+            />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-1 icon-remove">
+          <clr-icon shape="remove" status="danger"></clr-icon>
+        </div>
+      </div>
+      <!-- <p>
+       
+
+      <
+    </p> -->
+      <p *ngSwitchCase="'double'">
+        <clr-input-container>
+          <label>{{ attr.name }}</label>
+          <input
+            clrInput
+            placeholder="Fill in a floating point number"
+            name="{{ attr.name }}"
+          />
+        </clr-input-container>
+      </p>
+      <div *ngSwitchCase="'date'">
+        <clr-date-container>
+          <label>{{ attr.name }}</label>
+          <input type="date" clrDate placeholder="Pick a date" name="today" />
+        </clr-date-container>
+      </div>
+      <div *ngSwitchCase="'boolean'">
+        <clr-checkbox-container>
+          <label>{{ attr.name }}</label>
+          <clr-checkbox-wrapper>
+            <input type="checkbox" clrCheckbox name="{{ attr.name }}" />
+            <label>{{ attr.name }}</label>
+          </clr-checkbox-wrapper>
+        </clr-checkbox-container>
+      </div>
+      <p *ngSwitchDefault>{{ attr.name }} DEFAULT ({{ attr.dataType }})</p>
+    </div>
+  </div>
+</form>
