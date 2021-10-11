@@ -42,7 +42,7 @@ RUN npm run ng build -- --output-path=dist
 # base image
 FROM nginx:1.21.0-alpine
 
-RUN apk add gettext
+RUN apk upgrade --no-cache && apk add --no-cache gettext
 
 # copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
