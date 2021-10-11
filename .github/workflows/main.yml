@@ -13,7 +13,6 @@ env:
 
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -27,13 +26,13 @@ jobs:
           node-version: 14.x
           # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm
           cache: npm
-  
+
       # Install dependencies
       - name: Install dependencies
         run: npm install
 
       # Run production build
-      - name: Run Unit Tests
+      - name: Run build
         run: npm run build
 
   # This workflow contains a single job called "build"
@@ -54,7 +53,7 @@ jobs:
           node-version: 14.x
           # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm
           cache: npm
-  
+
       # Install dependencies
       - name: Install dependencies
         run: npm install
@@ -63,9 +62,22 @@ jobs:
       - name: Run Unit Tests
         run: npm run test:ci
 
-       # Run e2e tests
+        # Run e2e tests
       - name: Run e2e Tests
         run: npm run e2e:ci
+
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
 
   build-docker:
     needs: test
@@ -94,7 +106,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Scan image 
+      - name: Scan image
         uses: anchore/scan-action@v2
         id: scan
         with:
@@ -133,21 +145,21 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      
+
     steps:
       - name: Download json report from build job
         uses: actions/download-artifact@v2
         with:
           name: vulnerabilities
-          
+
       - name: Generate CSV and intermediate HTML report
-        run: |  
+        run: |
           echo "SEVERITY;ID;PACKAGE;VERSION;LINK" > vulnerabilities.csv
           cat vulnerabilities.json | jq -r '.matches[] | "\(.vulnerability.severity);\(.vulnerability.id);\(.artifact.name);\(.artifact.version);\(.vulnerability.links[0])"' >> vulnerabilities.csv
           echo -e '<table>\n<thead>\n<tr class="header">\n<th><p>SEVERITY</p></th>\n<th><p>ID</p></th>\n<th><p>PACKAGE</p></th>\n<th><p>VERSION</p></th>\n</tr>\n</thead>\n<tbody>' > vulnerabilities.html
           cat vulnerabilities.json | jq -r '.matches[] | "<tr>;<td><p>\(.vulnerability.severity)</p></td>;<td><p><a href=\"\(.vulnerability.links[0])\">\(.vulnerability.id)</a></p></td>;<td><p>\(.artifact.name)</p></td>;<td><p>\(.artifact.version)</p></td>;</tr>"' | tr -s ';' '\n' | sed 's!><p>Negligible! style="background-color:#FFFFFF;"><p>Negligible!g' | sed 's!><p>Low! style="background-color:#FFFC9E;"><p>Low!g' | sed 's!><p>Medium! style="background-color:#FE996B;"><p>Medium!g' | sed 's!><p>High! style="background-color:#FD6864;"><p>High!g' | sed 's!><p>Critical! style="background-color:#FE0000;"><p>Critical!g' >> vulnerabilities.html
           echo -e '</tbody>\n</table>' >> vulnerabilities.html
-          
+
       - name: Convert HTLM to PDF
         uses: docker://ghcr.io/coprs/reference-system:dependencies_wkhtmltopdf
         with:
