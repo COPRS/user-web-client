@@ -70,14 +70,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      # - name: Extract branch name
+      #   shell: bash
+      #   run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      #   id: extract_branch
+
       - uses: actions/checkout@v2
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.0
         with:
@@ -86,9 +88,12 @@ jobs:
           # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm
           cache: npm
 
-      # Install dependencies
       - name: Install dependencies
         run: npm install
+
+      - name: Read package.json
+        uses: dutscher/read-package-json-endpoint-actions@v1.33.7
+        id: package-json-endpoint
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
@@ -96,7 +101,7 @@ jobs:
           projectsBaseDir: ./src
           args: >
             -Dsonar.projectKey=user-web-client
-            -Dsonar.projectVersion=${{ github.sha }}
+            -Dsonar.projectVersion=${{ steps.package-json-endpoint.outputs.version }}
           # -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
