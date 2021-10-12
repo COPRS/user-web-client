@@ -96,7 +96,7 @@ jobs:
           projectsBaseDir: ./src
           args: >
             -Dsonar.projectKey=user-web-client
-            -Dsonar.projectVersion=$GITHUB_SHA
+            -Dsonar.projectVersion=${{ github.sha }}
           # -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
