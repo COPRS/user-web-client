@@ -81,9 +81,11 @@ jobs:
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         with:
-          projectsBaseDir: app/src
+          projectsBaseDir: ./src
           args: >
-            -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
+            -Dsonar.projectKey=user-web-client
+            -Dsonar.projectVersion=${GITHUB_SHA}
+          # -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
