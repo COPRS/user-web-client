@@ -92,8 +92,8 @@ jobs:
         run: npm install
 
       - name: Read package.json
-        uses: dutscher/read-package-json-endpoint-actions@v1.33.7
-        id: package-json-endpoint
+        run: '##[set-output name=version;]$(echo $(jq -r ".version" package.json))'
+        id: package-json
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
@@ -101,7 +101,7 @@ jobs:
           projectsBaseDir: ./src
           args: >
             -Dsonar.projectKey=user-web-client
-            -Dsonar.projectVersion=${{ steps.package-json-endpoint.outputs.version }}
+            -Dsonar.projectVersion=${{ steps.package-json.outputs.version }}
           # -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
