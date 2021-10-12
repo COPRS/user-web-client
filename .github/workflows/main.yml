@@ -78,13 +78,25 @@ jobs:
         with:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.4.0
+        with:
+          # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+          node-version: 14.x
+          # Used to specify a package manager for caching in the default directory. Supported values: npm, yarn, pnpm
+          cache: npm
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         with:
           projectsBaseDir: ./src
           args: >
             -Dsonar.projectKey=user-web-client
-            -Dsonar.projectVersion=${GITHUB_SHA}
+            -Dsonar.projectVersion=$GITHUB_SHA
           # -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
