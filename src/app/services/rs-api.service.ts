@@ -14,13 +14,13 @@ export class RsApiService {
     const a = await this.http
       .get<Array<Product>>(
         this.config.settings.rsApiBaseUrl +
-          'products?missionName=' +
+          'missions/' +
           missionName +
-          '&productType=' +
-          productType
+          '/productTypes/' +
+          productType +
+          '/products'
       )
       .toPromise();
-
     return {
       type: 'FeatureCollection',
       crs: {

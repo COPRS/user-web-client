@@ -75,7 +75,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
     // CLICK SELECT - END
 
     // LOAD DATA FROM RS-API - END
-    this.rsApiService.getProducts('s1', 'L0_SEGMENT_ZIP').then((features) => {
+    this.rsApiService.getProducts('s1', 'L1_SLICE_ZIP').then((features) => {
       this.map.addLayer(
         new VectorLayer({
           source: new VectorSource({
