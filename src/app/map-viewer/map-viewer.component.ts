@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
@@ -21,10 +21,12 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
 
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
-    private rsApiService: RsApiService
+    private rsApiService: RsApiService,
+    private elementRef: ElementRef
   ) {}
-
-  ngAfterViewInit(): void {}
+  ngAfterViewInit() {
+    this.map.setTarget(this.elementRef.nativeElement);
+  }
 
   ngOnInit(): void {
     // INIT MAP - BEGIN

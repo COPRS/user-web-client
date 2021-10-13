@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { MapComponent } from './components/map/map.component';
 import { MapViewerComponent } from './map-viewer.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  declarations: [MapComponent, MapViewerComponent],
+  declarations: [MapViewerComponent],
   imports: [CommonModule, HttpClientModule],
   providers: [DecimalPipe],
   exports: [MapViewerComponent],
