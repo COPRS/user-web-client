@@ -99,7 +99,7 @@ jobs:
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         with:
-          projectsBaseDir: ./src
+          projectBaseDir: ./src
           args: >
             -Dsonar.projectKey=user-web-client
             -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
