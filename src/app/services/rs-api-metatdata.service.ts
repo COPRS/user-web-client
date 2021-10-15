@@ -43,7 +43,9 @@ export class RsApiMetatdataService {
       )
       .toPromise<any>();
 
-    const s: ProductAttribute[] = a.attributes.map(this.splitAttributeName);
+    const s: ProductAttribute[] = a.attributes
+      .filter((e) => e.includes('_'))
+      .map(this.splitAttributeName);
 
     return s;
   }
