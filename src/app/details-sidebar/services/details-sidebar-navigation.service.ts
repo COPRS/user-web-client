@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,8 +9,6 @@ export class DetailsSidebarNavigationService {
     new BehaviorSubject<string>(undefined);
 
   constructor() {}
-
-  ngOnInit() {}
 
   getShowNav() {
     return this.selectedFeature$.asObservable();

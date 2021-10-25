@@ -8,11 +8,11 @@
 </header>
 
 <div class="content-container">
-  <!-- <app-filter-sidebar [navWidth]="590" [duration]="0.5"></app-filter-sidebar> -->
+  <app-filter-sidebar [navWidth]="590" [duration]="0.5"></app-filter-sidebar>
   <app-map-viewer
     (selectedFeature)="onSelectedFeatureChanged($event)"
     class="content-area"
   >
   </app-map-viewer>
-  <!-- <app-details-sidebar [navWidth]="420" [duration]="0.0"></app-details-sidebar> -->
+  <app-details-sidebar [navWidth]="420" [duration]="0.0"></app-details-sidebar>
 </div>

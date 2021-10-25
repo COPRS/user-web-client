@@ -1,6 +1,6 @@
 <div
   class="side-details-bar"
-  [ngClass]="{ 'side-nav-bar-collapsed': !(showSideNav$ | async) }"
+  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) === undefined }"
 >
   <!-- side bar-->
 

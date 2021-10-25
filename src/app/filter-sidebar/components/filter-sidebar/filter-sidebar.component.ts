@@ -20,7 +20,7 @@ import { FilterSidebarSelectionService } from '../../services/filter-sidebar-sel
   encapsulation: ViewEncapsulation.None,
 })
 export class FilterSidebarComponent implements OnInit {
-  showSideNav: Observable<boolean>;
+  showSideNav$: Observable<boolean>;
   availableAttributes$: Observable<any>;
 
   @Input() duration: number = 0.25;
@@ -32,7 +32,7 @@ export class FilterSidebarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showSideNav = this.navService.getShowNav();
+    this.showSideNav$ = this.navService.getShowNav();
     this.availableAttributes$ = this.selectionService.getAvailableAttributes();
   }
 

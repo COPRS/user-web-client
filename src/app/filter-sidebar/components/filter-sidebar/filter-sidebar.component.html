@@ -1,6 +1,6 @@
 <div
   class="side-nav-bar"
-  [ngClass]="{ 'side-nav-bar-collapsed': !(showSideNav | async) }"
+  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) === false }"
 >
   <!-- overlay -->
   <div
@@ -9,14 +9,16 @@
       transition:
         'background-color ' + duration + 's, visibility ' + duration + 's'
     }"
-    [ngClass]="{ 'side-nav-bar-overlay-collapsed': !(showSideNav | async) }"
+    [ngClass]="{
+      'side-nav-bar-overlay-collapsed': (showSideNav$ | async) === false
+    }"
     (click)="onSidebarClose()"
   ></div>
 
   <!-- side bar-->
   <div
     class="side-nav-bar-menu-container"
-    [ngStyle]="getSideNavBarStyle(showSideNav | async)"
+    [ngStyle]="getSideNavBarStyle(showSideNav$ | async)"
   >
     <!-- side bar header -->
 
@@ -64,7 +66,7 @@
 <div
   (click)="onSidebarOpen()"
   class="side-nav-bar-flag"
-  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav | async) }"
+  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) }"
 >
   <clr-icon shape="filter"></clr-icon>
   <span class="badge badge-info">9</span>
