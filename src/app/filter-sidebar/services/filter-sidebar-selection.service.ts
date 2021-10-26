@@ -3,6 +3,7 @@ import { BehaviorSubject, merge, Observable } from 'rxjs';
 import { debounceTime, map, mergeMap, scan } from 'rxjs/operators';
 import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
 import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
+import { AttributeQueryParameter } from '../models/AttributeQuery';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +20,12 @@ export class FilterSidebarSelectionService {
   // Attribute persistance
   private selectedAttributes$: BehaviorSubject<Array<ProductAttribute>> =
     new BehaviorSubject([]);
-
   private selectedAttributes: Array<ProductAttribute> = [];
+
+  // Attribute query persistance
+  private attributeQuery$: BehaviorSubject<Array<AttributeQueryParameter>> =
+    new BehaviorSubject([]);
+  private attributeQuery: Array<AttributeQueryParameter> = [];
 
   constructor(private rsMetadataApi: RsApiMetatdataService) {}
 
@@ -104,5 +109,27 @@ export class FilterSidebarSelectionService {
   public resetSelectedAttributes(): void {
     this.selectedAttributes = [];
     this.selectedAttributes$.next(this.selectedAttributes);
+  }
+
+  // Query Methods
+  public addAttributeQuery(attributeQuery: AttributeQueryParameter): void {
+    this.attributeQuery.push(attributeQuery);
+    this.attributeQuery$.next(this.attributeQuery);
+  }
+
+  public removeAttributeQuery(attributeName: String): void {
+    this.attributeQuery = this.attributeQuery.filter(
+      (e) => e.attributeName !== attributeName
+    );
+    this.attributeQuery$.next(this.attributeQuery);
+  }
+
+  public resetAttributeQuery(): void {
+    this.attributeQuery = [];
+    this.attributeQuery$.next(this.attributeQuery);
+  }
+
+  public getAttributeQuery(): Observable<Array<AttributeQueryParameter>> {
+    return this.attributeQuery$;
   }
 }

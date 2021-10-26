@@ -77,17 +77,26 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
     // CLICK SELECT - END
 
     // LOAD DATA FROM RS-API - END
-    this.rsApiService.getProducts('s1', 'L1_SLICE_ZIP').then((features) => {
-      this.map.addLayer(
-        new VectorLayer({
-          source: new VectorSource({
-            features: new GeoJSON().readFeatures(features, {
-              featureProjection: 'EPSG:3857',
+    this.rsApiService
+      .getProducts({
+        missionName: 's1',
+        productType: 'L1_SLICE_ZIP',
+        attributes: [
+          { attributeName: 'orbitNumber', operator: 'gt', value: '4711' },
+          { attributeName: 'orbitDirection', operator: 'eq', value: "'asdf'" },
+        ],
+      })
+      .then((features) => {
+        this.map.addLayer(
+          new VectorLayer({
+            source: new VectorSource({
+              features: new GeoJSON().readFeatures(features, {
+                featureProjection: 'EPSG:3857',
+              }),
             }),
-          }),
-        })
-      );
-    });
+          })
+        );
+      });
     // LOAD DATA FROM RS-API - END
   }
 }

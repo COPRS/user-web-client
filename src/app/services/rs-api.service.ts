@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ProductQuery } from '../filter-sidebar/models/ProductQuery';
 import { ConfigService } from './config.service';
 import { Product } from './models/Product';
 
@@ -9,18 +10,19 @@ import { Product } from './models/Product';
 export class RsApiService {
   constructor(private http: HttpClient, private config: ConfigService) {}
 
-  // TODO: add filter (e.g. base-url/api/v1/products?filter=attr1 eq value1&attr2 gt value2)
-  async getProducts(missionName: String, productType: String): Promise<any> {
-    const a = await this.http
-      .get<Array<Product>>(
-        this.config.settings.rsApiBaseUrl +
-          'missions/' +
-          missionName +
-          '/productTypes/' +
-          productType +
-          '/products'
-      )
-      .toPromise();
+  async getProducts(productQuery: ProductQuery): Promise<any> {
+    const filter = productQuery.attributes
+      .map((e) => `${e.attributeName} ${e.operator} ${e.value}`)
+      .join(' AND ');
+    const url =
+      this.config.settings.rsApiBaseUrl +
+      'missions/' +
+      productQuery.missionName +
+      '/productTypes/' +
+      productQuery.productType +
+      '/products' +
+      (filter ? `?${filter}` : '');
+    const a = await this.http.get<Array<Product>>(url).toPromise();
     return {
       type: 'FeatureCollection',
       crs: {

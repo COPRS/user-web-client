@@ -36,6 +36,7 @@ describe('FilterSidebarSelectionService', () => {
     expect(service).toBeTruthy();
   });
 
+  // MissionName Tests
   it('should allow to set the setMissionName', async () => {
     service.setMissionName('some_mission_Name');
     const missionName = await service
@@ -54,6 +55,7 @@ describe('FilterSidebarSelectionService', () => {
     expect(missionName).toBeFalsy();
   });
 
+  // ProductType Tests
   it('should allow to set the productType', async () => {
     service.setProductType('some_product_type');
     const productType = await service
@@ -81,6 +83,7 @@ describe('FilterSidebarSelectionService', () => {
     expect(productType).toEqual('some_product_type');
   });
 
+  // Available Attributes Tests
   it('should get no attributes when missionName is not selected', async () => {
     service.setProductType('some_prod_typ');
     let attributes = await service
@@ -115,6 +118,7 @@ describe('FilterSidebarSelectionService', () => {
     ]);
   });
 
+  // Selected Attributes Tests
   it('should allow to set the attributes', async () => {
     service.addSelectedAttribute({
       id: 'attr_attribute1_datatype1',
@@ -187,6 +191,88 @@ describe('FilterSidebarSelectionService', () => {
     service.resetSelectedAttributes();
     attributes = await service
       .getSelectedAttributes()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributes).toEqual([]);
+  });
+
+  // Attributes Query Tests
+  it('should allow to add attribute query', async () => {
+    service.addAttributeQuery({
+      attributeName: 'attr_attribute1_datatype1',
+      operator: 'eq',
+      value: 'datatype1',
+    });
+    let attributesQuery = await service
+      .getAttributeQuery()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributesQuery.length).toEqual(1);
+    service.resetSelectedAttributes();
+  });
+
+  it('should allow to remove attribute query', async () => {
+    service.addAttributeQuery({
+      attributeName: 'attr_attribute1_datatype1',
+      operator: 'eq',
+      value: 'datatype1',
+    });
+    let attributesQuery = await service
+      .getAttributeQuery()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributesQuery.length).toEqual(1);
+    service.removeAttributeQuery('attr_attribute1_datatype1');
+    let attributes = await service
+      .getAttributeQuery()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributes).toEqual([]);
+  });
+
+  it('should allow to remove only specified attribute query', async () => {
+    service.addAttributeQuery({
+      attributeName: 'attr_attribute1_datatype1',
+      operator: 'eq',
+      value: 'datatype1',
+    });
+    service.addAttributeQuery({
+      attributeName: 'attr_attribute2_datatype1',
+      operator: 'eq',
+      value: 'datatype1',
+    });
+    let attributesQuery = await service
+      .getAttributeQuery()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributesQuery.length).toEqual(2);
+    service.removeAttributeQuery('attr_attribute1_datatype1');
+    let attributes = await service
+      .getAttributeQuery()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributes.length).toEqual(1);
+  });
+
+  it('should allow to reset attribute query', async () => {
+    service.addAttributeQuery({
+      attributeName: 'attr_attribute1_datatype1',
+      operator: 'eq',
+      value: 'datatype1',
+    });
+    service.addAttributeQuery({
+      attributeName: 'attr_attribute2_datatype1',
+      operator: 'eq',
+      value: 'datatype1',
+    });
+    let attributesQuery = await service
+      .getAttributeQuery()
+      .pipe(take(1))
+      .toPromise();
+    expect(attributesQuery.length).toEqual(2);
+    service.resetAttributeQuery();
+    let attributes = await service
+      .getAttributeQuery()
       .pipe(take(1))
       .toPromise();
     expect(attributes).toEqual([]);
