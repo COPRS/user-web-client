@@ -17,13 +17,13 @@ export class FilterAttributeSelectionComponent implements OnInit {
 
   availableAttributes$: Observable<ProductAttribute[]>;
 
-  currentlyChosenAttribute: String;
+  currentlyChosenAttribute: string;
 
   ngOnInit(): void {
     this.availableAttributes$ = this.selectionService.getAvailableAttributes();
   }
 
-  addFilter(attributeName: String) {
+  addFilter(attributeName: string) {
     if (attributeName) {
       this.selectionService.addSelectedAttribute(
         this.rsMetadataService.splitAttributeName(attributeName)

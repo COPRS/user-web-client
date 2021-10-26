@@ -9,14 +9,14 @@ import { ProductAttribute } from './models/ProductAttribute';
 export class RsApiMetatdataService {
   constructor(private http: HttpClient, private config: ConfigService) {}
 
-  async getMissionNames(): Promise<String[]> {
+  async getMissionNames(): Promise<string[]> {
     const m = await this.http
       .get(this.config.settings.rsApiBaseUrl + 'missions')
       .toPromise<any>();
     return m.missions;
   }
 
-  async getProductTypes(mission: String): Promise<String[]> {
+  async getProductTypes(mission: string): Promise<string[]> {
     const p = await this.http
       .get(
         this.config.settings.rsApiBaseUrl +
@@ -29,10 +29,10 @@ export class RsApiMetatdataService {
   }
 
   async getAttributes(
-    missionName: String,
-    productType: String
+    missionName: string,
+    productType: string
   ): Promise<ProductAttribute[]> {
-    const a: { attributes: String[] } = await this.http
+    const a: { attributes: string[] } = await this.http
       .get(
         this.config.settings.rsApiBaseUrl +
           'missions/' +
@@ -50,7 +50,7 @@ export class RsApiMetatdataService {
     return s;
   }
 
-  splitAttributeName(attributeName: String) {
+  splitAttributeName(attributeName: string) {
     const g = attributeName.split('_');
     return { id: attributeName, name: g[1], dataType: g[2] };
   }

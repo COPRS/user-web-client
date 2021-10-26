@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class AppComponent {
   title = 'user-web-client';
-  selectedFeature$: BehaviorSubject<String> = new BehaviorSubject<String>(
+  selectedFeature$: BehaviorSubject<string> = new BehaviorSubject<string>(
     '2134567890ß1234567890ß'
   );
 

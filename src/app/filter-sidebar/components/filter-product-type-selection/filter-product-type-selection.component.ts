@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
 import { ProductType } from '../../models/ProductType';
-import { SelectedMissionAndProduct } from '../../models/SelectedMissionAndProduct';
 import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
 @Component({
@@ -33,10 +32,10 @@ export class FilterProductTypeSelectionComponent implements OnInit {
     });
   }
 
-  public availableMissions: String[] = [];
+  public availableMissions: string[] = [];
   public availableProductTypes: ProductType[] = [];
 
-  public selectedMission: String;
+  public selectedMission: string;
 
   public missionNameChanged(event) {
     this.selectedMission = event.target.value;
@@ -59,6 +58,6 @@ export class FilterProductTypeSelectionComponent implements OnInit {
     }
   }
 
-  public productTypes: String[];
-  public selectedProductType: String = '';
+  public productTypes: string[];
+  public selectedProductType: string = '';
 }

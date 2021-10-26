@@ -1,4 +1,4 @@
 export type ProductType = {
-  missionName: String;
-  productTypes: String[];
+  missionName: string;
+  productTypes: string[];
 };

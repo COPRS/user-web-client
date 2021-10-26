@@ -1,7 +1,7 @@
 export interface AttributeQueryParameter {
-  attributeName: String;
-  operator: String;
-  value: String;
+  attributeName: string;
+  operator: string;
+  value: string;
 }
 
 export interface TextAttributeQueryParameter extends AttributeQueryParameter {

@@ -9,11 +9,11 @@ import { AttributeQueryParameter } from '../models/AttributeQuery';
   providedIn: 'root',
 })
 export class FilterSidebarSelectionService {
-  private selectedMissionName$: BehaviorSubject<String> = new BehaviorSubject(
+  private selectedMissionName$: BehaviorSubject<string> = new BehaviorSubject(
     undefined
   );
 
-  private selectedProductType$: BehaviorSubject<String> = new BehaviorSubject(
+  private selectedProductType$: BehaviorSubject<string> = new BehaviorSubject(
     undefined
   );
 
@@ -30,10 +30,10 @@ export class FilterSidebarSelectionService {
   constructor(private rsMetadataApi: RsApiMetatdataService) {}
 
   // MissionName Methods
-  public getMissionName(): Observable<String> {
+  public getMissionName(): Observable<string> {
     return this.selectedMissionName$.asObservable();
   }
-  public setMissionName(missionName: String): void {
+  public setMissionName(missionName: string): void {
     this.selectedMissionName$.next(missionName);
     this.resetProductType();
   }
@@ -42,10 +42,10 @@ export class FilterSidebarSelectionService {
   }
 
   // ProductType Methods
-  public getProductType(): Observable<String> {
+  public getProductType(): Observable<string> {
     return this.selectedProductType$.asObservable();
   }
-  public setProductType(productType: String): void {
+  public setProductType(productType: string): void {
     this.selectedProductType$.next(productType);
   }
   public resetProductType(): void {
@@ -70,7 +70,7 @@ export class FilterSidebarSelectionService {
         })
       )
     )
-      .pipe<{ missionName: String; productType: String }>(
+      .pipe<{ missionName: string; productType: string }>(
         scan((acc, curr) => Object.assign({}, acc, curr), {} as any)
       )
       .pipe(debounceTime(1))
@@ -97,7 +97,7 @@ export class FilterSidebarSelectionService {
     this.selectedAttributes.push(attribute);
     this.selectedAttributes$.next(this.selectedAttributes);
   }
-  public removeSelectedAttribute(attributeName: String): void {
+  public removeSelectedAttribute(attributeName: string): void {
     const indexToRemove = this.selectedAttributes.findIndex(
       (e) => e.name == attributeName
     );
@@ -117,7 +117,7 @@ export class FilterSidebarSelectionService {
     this.attributeQuery$.next(this.attributeQuery);
   }
 
-  public removeAttributeQuery(attributeName: String): void {
+  public removeAttributeQuery(attributeName: string): void {
     this.attributeQuery = this.attributeQuery.filter(
       (e) => e.attributeName !== attributeName
     );

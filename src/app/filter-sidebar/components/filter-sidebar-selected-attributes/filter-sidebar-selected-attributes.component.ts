@@ -20,7 +20,7 @@ export class FilterSidebarSelectedAttributesComponent implements OnInit {
     this.attributeQuery$ = this.selectionService.getAttributeQuery();
   }
 
-  removeAttribute(attributeName: String) {
+  removeAttribute(attributeName: string) {
     this.selectionService.removeSelectedAttribute(attributeName);
   }
 

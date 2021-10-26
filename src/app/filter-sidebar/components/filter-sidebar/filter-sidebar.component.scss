@@ -34,7 +34,7 @@ app-filter-sidebar {
       padding: 15px;
     }
 
-    side-nav-bar-content-element .side-nav-bar-badge {
+    .side-nav-bar-badge {
       text-align: left;
     }
 
@@ -54,7 +54,6 @@ app-filter-sidebar {
         border-top: 1px solid #c0c0c0;
       }
       .side-nav-bar-content-element {
-        // background-color: pink;
         padding: $container-content-padding-top-bottom
           $container-content-padding-side $container-content-padding-top-bottom
           $container-content-padding-side;
