@@ -1,5 +1,5 @@
 export class ProductAttribute {
-  id: String;
-  name: String;
-  dataType: String;
+  id: string;
+  name: string;
+  dataType: string;
 }

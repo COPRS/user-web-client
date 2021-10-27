@@ -13,6 +13,7 @@ import { FilterSidebarComponent } from './filter-sidebar/components/filter-sideb
 import { FilterProductTypeSelectionComponent } from './filter-sidebar/components/filter-product-type-selection/filter-product-type-selection.component';
 import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
 import { FilterSidebarSelectedAttributesComponent } from './filter-sidebar/components/filter-sidebar-selected-attributes/filter-sidebar-selected-attributes.component';
+import { TextAttributeFilterComponent } from './filter-sidebar/components/text-attribute-filter/text-attribute-filter.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -26,6 +27,7 @@ export function initializeApp(configService: ConfigService) {
     FilterAttributeSelectionComponent,
     DetailsSidebarComponent,
     FilterSidebarSelectedAttributesComponent,
+    TextAttributeFilterComponent,
   ],
   imports: [
     BrowserModule,
