@@ -30,7 +30,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // INIT MAP - BEGIN
-    const bounds = [-180, -90, 180, 90];
+    const bounds = [-180, -89, 180, 89];
     this.map = new Map({
       view: new View({
         // center: fromLonLat([10.439822673797607, 53.25974365592727]),
