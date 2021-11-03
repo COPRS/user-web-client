@@ -5,7 +5,7 @@ import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import GeoJSON from 'ol/format/GeoJSON';
 import { OSM, Vector as VectorSource } from 'ol/source';
 import { Zoom } from 'ol/control';
-import { fromLonLat } from 'ol/proj';
+import { fromLonLat, transformExtent } from 'ol/proj';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
 import { RsApiService } from '../services/rs-api.service';
@@ -30,14 +30,19 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // INIT MAP - BEGIN
+    const bounds = [-180, -90, 180, 90];
     this.map = new Map({
       view: new View({
-        center: fromLonLat([10.439822673797607, 53.25974365592727]),
-        zoom: 3,
+        // center: fromLonLat([10.439822673797607, 53.25974365592727]),
+        center: [0, 0],
+        zoom: 1.8,
+        extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
+        constrainOnlyCenter: true,
       }),
       layers: [
         new TileLayer({
           source: new OSM(),
+          extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
         }),
       ],
     });
@@ -89,6 +94,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
       .then((features) => {
         this.map.addLayer(
           new VectorLayer({
+            extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
             source: new VectorSource({
               features: new GeoJSON().readFeatures(features, {
                 featureProjection: 'EPSG:3857',
