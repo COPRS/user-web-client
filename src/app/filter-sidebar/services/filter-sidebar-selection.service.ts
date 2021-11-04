@@ -105,6 +105,8 @@ export class FilterSidebarSelectionService {
       this.selectedAttributes.splice(indexToRemove, 1);
       this.selectedAttributes$.next(this.selectedAttributes);
     }
+
+    this.removeAttributeQuery(attributeName);
   }
   public resetSelectedAttributes(): void {
     this.selectedAttributes = [];
