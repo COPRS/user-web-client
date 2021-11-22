@@ -27,12 +27,16 @@ $container-content-padding-top-bottom: 20px;
       padding: 15px;
     }
 
+    .metadatalist {
+      margin-left: 20px;
+    }
+
     side-details-bar-content-element .side-details-bar-badge {
       text-align: left;
     }
 
     .side-details-bar-close {
-      text-align: right;
+      text-align: left;
     }
 
     .side-details-bar-close > clr-icon {
