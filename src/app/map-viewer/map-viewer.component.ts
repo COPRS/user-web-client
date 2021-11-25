@@ -3,12 +3,14 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import GeoJSON from 'ol/format/GeoJSON';
+import GML from 'ol/format/GML';
 import { OSM, Vector as VectorSource } from 'ol/source';
 import { Zoom } from 'ol/control';
 import { fromLonLat, transformExtent } from 'ol/proj';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
 import { RsApiService } from '../services/rs-api.service';
+import { DdipService } from '../services/ddip.service';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 
 @Component({
@@ -22,9 +24,10 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
     private rsApiService: RsApiService,
+    private ddipService: DdipService,
     private elementRef: ElementRef
   ) {}
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
   }
 
@@ -81,28 +84,46 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
     });
     // CLICK SELECT - END
 
-    // LOAD DATA FROM RS-API - END
-    this.rsApiService
-      .getProducts({
-        missionName: 's1',
-        productType: 'L1_SLICE_ZIP',
-        attributes: [
-          { attributeName: 'orbitNumber', operator: 'gt', value: '4711' },
-          { attributeName: 'orbitDirection', operator: 'eq', value: "'asdf'" },
-        ],
-      })
-      .then((features) => {
-        this.map.addLayer(
-          new VectorLayer({
-            extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
-            source: new VectorSource({
-              features: new GeoJSON().readFeatures(features, {
-                featureProjection: 'EPSG:3857',
-              }),
+    // LOAD DATA FROM DDIP-API - START
+    this.ddipService.tryScuHub().then((data) => {
+      const features = data.map((e) => e.ContentGeometry);
+      console.log(features);
+      this.map.addLayer(
+        new VectorLayer({
+          extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
+          source: new VectorSource({
+            features: new GML().readFeatures(features, {
+              featureProjection: 'EPSG:3857',
             }),
-          })
-        );
-      });
+          }),
+        })
+      );
+    });
+
+    // LOAD DATA FROM DDIP-API - END
+
+    // LOAD DATA FROM RS-API - START
+    // this.rsApiService
+    //   .getProducts({
+    //     missionName: 's1',
+    //     productType: 'L1_SLICE_ZIP',
+    //     attributes: [
+    //       { attributeName: 'orbitNumber', operator: 'gt', value: '4711' },
+    //       { attributeName: 'orbitDirection', operator: 'eq', value: "'asdf'" },
+    //     ],
+    //   })
+    //   .then((features) => {
+    //     this.map.addLayer(
+    //       new VectorLayer({
+    //         extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
+    //         source: new VectorSource({
+    //           features: new GeoJSON().readFeatures(features, {
+    //             featureProjection: 'EPSG:3857',
+    //           }),
+    //         }),
+    //       })
+    //     );
+    //   });
     // LOAD DATA FROM RS-API - END
   }
 }
