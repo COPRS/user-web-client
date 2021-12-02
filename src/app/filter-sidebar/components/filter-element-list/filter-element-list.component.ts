@@ -1,0 +1,41 @@
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+import { filter } from 'rxjs/operators';
+import { FilterElement } from '../../models/FilterElement';
+import { FilterElementsService } from '../../services/filter-elements.service';
+
+@Component({
+  selector: 'app-filter-element-list',
+  templateUrl: './filter-element-list.component.html',
+  styleUrls: ['./filter-element-list.component.scss'],
+})
+export class FilterElementListComponent implements OnInit {
+  constructor(private filterElementsService: FilterElementsService) {}
+
+  filters: Array<FilterElement> = [];
+
+  onAddFilterClick(): void {
+    this.filters.push({ attributeName: '', operator: '', value: '' });
+  }
+
+  onRemoveFilterClick(index): void {
+    this.filters.splice(index, 1);
+    this.onUpdated();
+  }
+
+  onFilterElementChanged(index: number, filterElement: FilterElement) {
+    this.filters[index] = filterElement;
+    this.onUpdated();
+  }
+
+  ngOnInit(): void {
+    this.onUpdated();
+  }
+
+  onUpdated(): void {
+    this.filterElementsService.updateFilters(
+      this.filters.filter((e) => e.attributeName && e.operator && e.value)
+    );
+  }
+}

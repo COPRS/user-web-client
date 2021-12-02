@@ -1,6 +1,8 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
+import { FilterElement } from '../../models/FilterElement';
+import { FilterElementsService } from '../../services/filter-elements.service';
 import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
 import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
@@ -22,16 +24,19 @@ import { FilterSidebarSelectionService } from '../../services/filter-sidebar-sel
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
   availableAttributes$: Observable<any>;
+  queryFromService$: Observable<FilterElement[]>;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
 
   constructor(
     private navService: FilterSidebarNavigationService,
-    private selectionService: FilterSidebarSelectionService
+    private selectionService: FilterSidebarSelectionService,
+    private filterElementsService: FilterElementsService
   ) {}
 
   ngOnInit(): void {
+    this.queryFromService$ = this.filterElementsService.getQuery();
     this.showSideNav$ = this.navService.getShowNav();
     this.availableAttributes$ = this.selectionService.getAvailableAttributes();
   }

@@ -37,26 +37,28 @@
     <div class="side-nav-bar-content-container">
       <hr />
       <div class="side-nav-bar-content-element">
-        <h3>
+        <app-filter-element-list></app-filter-element-list>
+
+        <!-- <h3>
           <img alt="Satellite icon" src="assets/images/tabler-satellite.svg" />
           Product Selection
         </h3>
-        <app-filter-product-type-selection></app-filter-product-type-selection>
+        <app-filter-product-type-selection></app-filter-product-type-selection> -->
       </div>
       <hr *ngIf="availableAttributes$ | async" [@panelInOut] />
-      <div
-        *ngIf="availableAttributes$ | async"
-        [@panelInOut]
-        class="side-nav-bar-content-element"
-      >
-        <h3>
-          <clr-icon shape="filter-2" size="21"></clr-icon>
-          Attribute Filters
-        </h3>
-        <app-filter-attribute-selection></app-filter-attribute-selection>
-        <br />
-        <hr />
-        <app-filter-sidebar-selected-attributes></app-filter-sidebar-selected-attributes>
+      <div class="side-nav-bar-content-element">
+        <form class="clr-form clr-form-vertical">
+          <clr-textarea-container>
+            <label class="clr-col-12">Filter Query</label>
+            <textarea
+              class="clr-col-12"
+              clrTextarea
+              style="width: 100%"
+              required
+              [value]="queryFromService$ | async"
+            ></textarea>
+          </clr-textarea-container>
+        </form>
       </div>
     </div>
   </div>
