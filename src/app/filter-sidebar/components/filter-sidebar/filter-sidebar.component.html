@@ -55,7 +55,7 @@
               clrTextarea
               style="width: 100%"
               required
-              [value]="queryFromService$ | async"
+              [value]="queryFromService$ | async | json"
             ></textarea>
           </clr-textarea-container>
         </form>

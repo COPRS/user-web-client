@@ -24,7 +24,7 @@ import { FilterSidebarSelectionService } from '../../services/filter-sidebar-sel
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
   availableAttributes$: Observable<any>;
-  queryFromService$: Observable<FilterElement[]>;
+  queryFromService$: Observable<string[]>;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
