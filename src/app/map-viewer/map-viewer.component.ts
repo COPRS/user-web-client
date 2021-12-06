@@ -82,20 +82,19 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
     // CLICK SELECT - END
 
     // LOAD DATA FROM DDIP-API - START
-    this.ddipService.tryScuHub().then((data) => {
-      const features = data.map((e) => e.ContentGeometry);
-      console.log(features);
-      this.map.addLayer(
-        new VectorLayer({
-          extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
-          source: new VectorSource({
-            features: new GML().readFeatures(features, {
-              featureProjection: 'EPSG:3857',
-            }),
-          }),
-        })
-      );
-    });
+    // this.ddipService.trySciHub().then((data) => {
+    //   const features = data.map((e) => e.ContentGeometry);
+    //   this.map.addLayer(
+    //     new VectorLayer({
+    //       extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
+    //       source: new VectorSource({
+    //         features: new GML().readFeatures(features, {
+    //           featureProjection: 'EPSG:3857',
+    //         }),
+    //       }),
+    //     })
+    //   );
+    // });
 
     // LOAD DATA FROM DDIP-API - END
   }

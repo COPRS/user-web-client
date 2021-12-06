@@ -1,7 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
-import { filter } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
 import { FilterElement } from '../../models/FilterElement';
 import { FilterElementsService } from '../../services/filter-elements.service';
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { FilterElement } from '../models/FilterElement';
 
 @Injectable({
@@ -16,24 +16,19 @@ export class FilterElementsService {
   public updateFilters(filterElements: FilterElement[]): void {
     this.filterElements = filterElements;
     this.filterElements$.next(this.filterElements);
-    console.log('updateFilters', this.filterElements);
   }
 
-  public getQuery(): Observable<string[]> {
+  public getQuery(): Observable<string> {
     return this.filterElements$.pipe(
-      tap((e) => console.log(e)),
-      map(this.convertFilterElementToOdataFilter),
-      tap((e) => console.log(e))
+      map(this.convertFilterElementToOdataFilter)
     );
   }
 
   private convertFilterElementToOdataFilter(
     filterElements: FilterElement[]
-  ): string[] {
+  ): string {
     let result: string[] = [];
-    console.log('asdasdasd', filterElements);
     filterElements.forEach((filterElement) => {
-      console.log(filterElement.operator);
       switch (filterElement.operator) {
         case 'contains':
           result.push(
@@ -45,27 +40,13 @@ export class FilterElementsService {
             `endsWith(${filterElement.attributeName},'${filterElement.value}')`
           );
           break;
-        case 'eq':
-          result.push(filterElement.operator);
-          break;
-        case 'ge':
-          result.push(filterElement.operator);
-          break;
-        // case 'gt':
-        // handled by default
-        // break;
-        case 'le':
-          result.push(filterElement.operator);
-          break;
-        case 'lt':
-          result.push(filterElement.operator);
-          break;
         case 'startswith':
           result.push(
             `startswith(${filterElement.attributeName},'${filterElement.value}')`
           );
           break;
-
+        // case 'gt' | 'ge'|  'eq'| 'le' | 'lt':
+        // handled by default
         default:
           result.push(
             `${filterElement.attributeName} ${filterElement.operator} ${filterElement.value}`
@@ -74,6 +55,6 @@ export class FilterElementsService {
       }
     });
 
-    return result;
+    return result.join(' and ');
   }
 }

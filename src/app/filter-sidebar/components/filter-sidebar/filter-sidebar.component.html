@@ -39,7 +39,7 @@
       <div class="side-nav-bar-content-element">
         <app-filter-element-list></app-filter-element-list>
       </div>
-      <hr [@panelInOut] />
+      <hr />
       <div class="side-nav-bar-content-element">
         <form class="clr-form clr-form-vertical">
           <clr-textarea-container>
@@ -49,7 +49,22 @@
               clrTextarea
               style="width: 100%"
               required
-              [value]="queryFromService$ | async"
+              [value]="queryFilterFromService$ | async"
+            ></textarea>
+          </clr-textarea-container>
+        </form>
+      </div>
+      <hr />
+      <div class="side-nav-bar-content-element">
+        <form class="clr-form clr-form-vertical">
+          <clr-textarea-container>
+            <label class="clr-col-12">Query Result</label>
+            <textarea
+              class="clr-col-12"
+              clrTextarea
+              style="width: 100%"
+              required
+              [value]="queryResultFromService"
             ></textarea>
           </clr-textarea-container>
         </form>

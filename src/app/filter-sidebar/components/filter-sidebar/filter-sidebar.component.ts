@@ -2,6 +2,7 @@ import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DdipService } from 'src/app/services/ddip.service';
 import { FilterElementsService } from '../../services/filter-elements.service';
 import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
 
@@ -22,21 +23,25 @@ import { FilterSidebarNavigationService } from '../../services/filter-sidebar-na
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
-  queryFromService$: Observable<string>;
+  queryFilterFromService$: Observable<string>;
+  queryResultFromService: any;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
 
   constructor(
     private navService: FilterSidebarNavigationService,
-    private filterElementsService: FilterElementsService
+    private filterElementsService: FilterElementsService,
+    private ddipService: DdipService
   ) {}
 
   ngOnInit(): void {
-    this.queryFromService$ = this.filterElementsService
-      .getQuery()
-      .pipe(map((l) => l.join(' and ')));
+    this.queryFilterFromService$ = this.filterElementsService.getQuery();
     this.showSideNav$ = this.navService.getShowNav();
+    this.queryFilterFromService$.subscribe(
+      async (f) =>
+        (this.queryResultFromService = await this.ddipService.getProducts(f))
+    );
   }
 
   onSidebarClose() {
