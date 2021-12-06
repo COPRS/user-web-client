@@ -15,7 +15,7 @@ export class DdipService {
       // }),
     });
     const res = await g
-      .get('Products')
+      .get(this.config.settings.resourceName)
       .query({ $format: 'json', $top: 5, $filter: filter });
 
     return res.d.results;

@@ -1,8 +1,9 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ConfigService } from 'src/app/services/config.service';
 import { DdipService } from 'src/app/services/ddip.service';
+import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
 import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
 
@@ -25,6 +26,7 @@ export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
+  settings: IAppConfig;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -32,7 +34,8 @@ export class FilterSidebarComponent implements OnInit {
   constructor(
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
-    private ddipService: DdipService
+    private ddipService: DdipService,
+    private configService: ConfigService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +45,7 @@ export class FilterSidebarComponent implements OnInit {
       async (f) =>
         (this.queryResultFromService = await this.ddipService.getProducts(f))
     );
+    this.settings = this.configService.settings;
   }
 
   onSidebarClose() {
@@ -60,5 +64,16 @@ export class FilterSidebarComponent implements OnInit {
     navBarStyle.left = (showNav ? 0 : this.navWidth * -1) + 'px';
 
     return navBarStyle;
+  }
+
+  onApiUrlChange(target: any) {
+    console.log('onApiUrlChange', target.value);
+
+    this.configService.setApiBaseUrl(target.value);
+  }
+
+  onApiResourceChange(target: any) {
+    console.log('onApiResourceChange', target.value);
+    this.configService.setResourceType(target.value);
   }
 }
