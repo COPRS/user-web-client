@@ -1,11 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigService } from 'src/app/services/config.service';
+import { DdipService } from 'src/app/services/ddip.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterSidebarComponent } from './filter-sidebar.component';
 
 class MockConfigService {
   settings: IAppConfig = { apiBaseUrl: 'http://test', resourceName: 'res' };
+}
+
+class MockDdipService {
+  getProducts() {}
 }
 
 describe('FilterSidebarComponent', () => {
@@ -18,6 +23,7 @@ describe('FilterSidebarComponent', () => {
       providers: [
         FilterSidebarComponent,
         { provide: ConfigService, useClass: MockConfigService },
+        { provide: DdipService, useClass: MockDdipService },
       ],
     }).compileComponents();
   });
