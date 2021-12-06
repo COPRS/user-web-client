@@ -8,7 +8,6 @@ import { Zoom } from 'ol/control';
 import { transformExtent } from 'ol/proj';
 import { click } from 'ol/events/condition';
 import Select from 'ol/interaction/Select';
-import { DdipService } from '../services/ddip.service';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 
 @Component({
@@ -21,7 +20,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
 
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
-    private ddipService: DdipService,
     private elementRef: ElementRef
   ) {}
   async ngAfterViewInit() {
