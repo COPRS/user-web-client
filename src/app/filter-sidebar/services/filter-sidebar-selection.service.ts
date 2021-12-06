@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
-import { debounceTime, map, mergeMap, scan } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
-import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
 import { AttributeQueryParameter } from '../models/AttributeQuery';
 
 @Injectable({
@@ -27,7 +25,7 @@ export class FilterSidebarSelectionService {
     new BehaviorSubject([]);
   private attributeQuery: Array<AttributeQueryParameter> = [];
 
-  constructor(private rsMetadataApi: RsApiMetatdataService) {}
+  constructor() {}
 
   // MissionName Methods
   public getMissionName(): Observable<string> {
@@ -50,42 +48,6 @@ export class FilterSidebarSelectionService {
   }
   public resetProductType(): void {
     this.selectedProductType$.next(undefined);
-  }
-
-  // Available Attribute Methods
-  public getAvailableAttributes(): Observable<Array<ProductAttribute>> {
-    return merge(
-      this.getMissionName().pipe(
-        map((m) => {
-          return {
-            missionName: m,
-          };
-        })
-      ),
-      this.getProductType().pipe(
-        map((p) => {
-          return {
-            productType: p,
-          };
-        })
-      )
-    )
-      .pipe<{ missionName: string; productType: string }>(
-        scan((acc, curr) => Object.assign({}, acc, curr), {} as any)
-      )
-      .pipe(debounceTime(1))
-      .pipe(
-        mergeMap((mp) => {
-          if (mp.missionName && mp.productType) {
-            return this.rsMetadataApi.getAttributes(
-              mp.missionName,
-              mp.productType
-            );
-          } else {
-            return Promise.resolve(undefined);
-          }
-        })
-      );
   }
 
   // Selected Attribute Methods

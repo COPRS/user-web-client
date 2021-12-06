@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 env:
-  rsApiUrl: http://localhost:8888/api/v1/
+  apiUrl: http://localhost:8888/api/v1/
 
 image:
   # Overrides the image tag whose default is the chart appVersion.
@@ -11,7 +11,7 @@ image:
   repository: ghcr.io/coprs/user-web-client
   tag: main
   pullPolicy: Always
-  
+
   # use image from local computer
   #repository: rs-user-client
   #tag: dev # use image from local computer
@@ -28,7 +28,8 @@ service:
 ingress:
   enabled: true
   className: ""
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -36,4 +37,3 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-

@@ -1,34 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { FilterSidebarSelectionService } from './filter-sidebar-selection.service';
 import { take } from 'rxjs/operators';
-import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
 import { ProductAttribute } from 'src/app/services/models/ProductAttribute';
-
-class MockRsApiMetatdataService {
-  getMissions(): Promise<String[]> {
-    return Promise.resolve(['m1', 'm2']);
-  }
-  getAttributes(): Promise<ProductAttribute[]> {
-    return Promise.resolve([
-      {
-        id: 'attr_some_attr1_some_datatype1',
-        name: 'some_attr1',
-        dataType: 'some_datatype1',
-      },
-    ]);
-  }
-}
 
 describe('FilterSidebarSelectionService', () => {
   let service: FilterSidebarSelectionService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        FilterSidebarSelectionService,
-        { provide: RsApiMetatdataService, useClass: MockRsApiMetatdataService },
-      ],
-    });
+    TestBed.configureTestingModule({});
     service = TestBed.inject(FilterSidebarSelectionService);
   });
 
