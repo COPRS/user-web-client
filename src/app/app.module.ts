@@ -10,10 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { FilterAttributeSelectionComponent } from './filter-sidebar/components/filter-attribute-selection/filter-attribute-selection.component';
 import { ConfigService } from './services/config.service';
 import { FilterSidebarComponent } from './filter-sidebar/components/filter-sidebar/filter-sidebar.component';
-import { FilterProductTypeSelectionComponent } from './filter-sidebar/components/filter-product-type-selection/filter-product-type-selection.component';
 import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
-import { FilterSidebarSelectedAttributesComponent } from './filter-sidebar/components/filter-sidebar-selected-attributes/filter-sidebar-selected-attributes.component';
-import { TextAttributeFilterComponent } from './filter-sidebar/components/text-attribute-filter/text-attribute-filter.component';
+import { FilterElementComponent } from './filter-sidebar/components/filter-element/filter-element.component';
+import { FilterElementListComponent } from './filter-sidebar/components/filter-element-list/filter-element-list.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -23,11 +22,10 @@ export function initializeApp(configService: ConfigService) {
   declarations: [
     AppComponent,
     FilterSidebarComponent,
-    FilterProductTypeSelectionComponent,
     FilterAttributeSelectionComponent,
     DetailsSidebarComponent,
-    FilterSidebarSelectedAttributesComponent,
-    TextAttributeFilterComponent,
+    FilterElementComponent,
+    FilterElementListComponent,
   ],
   imports: [
     BrowserModule,

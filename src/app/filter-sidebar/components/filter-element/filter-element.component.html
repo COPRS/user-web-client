@@ -1,0 +1,50 @@
+<div class="clr-row clr-align-items-end">
+  <div class="clr-col-4">
+    <clr-datalist-container>
+      <label>Attribute Name</label>
+      <input
+        name="Option"
+        required
+        clrDatalistInput
+        (change)="onChange()"
+        [(ngModel)]="attributeName"
+      />
+      <datalist>
+        <option
+          *ngFor="let attributeName of attributeNameSuggestions"
+          [value]="attributeName"
+        ></option>
+      </datalist>
+    </clr-datalist-container>
+  </div>
+  <div class="clr-col-4">
+    <clr-datalist-container>
+      <label>Operator</label>
+      <input
+        name="Option"
+        required
+        clrDatalistInput
+        (change)="onChange()"
+        [(ngModel)]="operator"
+      />
+      <datalist>
+        <option
+          *ngFor="let operator of operatorSuggestions"
+          [value]="operator"
+        ></option>
+      </datalist>
+    </clr-datalist-container>
+  </div>
+  <div class="clr-col-4">
+    <clr-input-container>
+      <label>Value</label>
+      <input
+        style="width: 100%"
+        clrInput
+        name="value"
+        (change)="onChange()"
+        [(ngModel)]="value"
+      />
+    </clr-input-container>
+  </div>
+</div>

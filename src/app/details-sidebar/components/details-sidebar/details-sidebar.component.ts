@@ -32,4 +32,34 @@ export class DetailsSidebarComponent implements OnInit {
 
     return navBarStyle;
   }
+
+  rootDirectory: any[] = [
+    {
+      name: 'Files',
+      icon: 'folder',
+      expanded: true,
+      files: [
+        {
+          icon: 'file',
+          name: 'file',
+          active: false,
+        },
+        {
+          icon: 'file',
+          name: 'file',
+          active: false,
+        },
+        {
+          icon: 'file',
+          name: 'file',
+          active: false,
+        },
+        {
+          icon: 'file',
+          name: 'file',
+          active: false,
+        },
+      ],
+    },
+  ];
 }

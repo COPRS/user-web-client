@@ -12,11 +12,11 @@
 
     <div class="side-details-bar-menu-container-header">
       <div class="clr-row">
-        <div class="clr-col-9 side-details-bar-badge">
-          <clr-icon shape="details"></clr-icon> Details
-        </div>
-        <div class="clr-col-3 side-details-bar-close clr-align-self-center">
+        <div class="clr-col-1 side-details-bar-close clr-align-self-center">
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
+        </div>
+        <div class="clr-col-11 side-details-bar-badge">
+          {{ showSideNav$ | async }}
         </div>
       </div>
     </div>
@@ -25,7 +25,56 @@
     <div class="side-details-bar-content-container">
       <hr />
       <div class="side-details-bar-content-element">
-        {{ showSideNav$ | async }}
+        <div class="clr-row">
+          <div class="clr-example-col-value clr-col">
+            <h4>Footprint</h4>
+            <clr-icon shape="image" size="180"></clr-icon>
+          </div>
+          <div class="clr-example-col-value clr-col">
+            <h4>Quicklook</h4>
+            <clr-icon shape="image" size="180"></clr-icon>
+          </div>
+        </div>
+        <div class="clr-row">
+          <div class="clr-example-col-value clr-col">
+            <h4>Attributes</h4>
+
+            <ul class="list-unstyled metadatalist">
+              <li><b>data:</b> Id est laborum</li>
+              <li><b>data:</b> Dolore eu fugiat</li>
+              <li><b>data:</b> Occaecat cupidatat</li>
+              <li><b>data:</b> Deserunt mollit anim</li>
+            </ul>
+          </div>
+          <div class="clr-example-col-value clr-col">
+            <h4>Files</h4>
+            <span>
+              <clr-tree>
+                <clr-tree-node
+                  *ngFor="let directory of rootDirectory"
+                  [(clrExpanded)]="directory.expanded"
+                >
+                  <clr-icon [attr.shape]="directory.icon"></clr-icon>
+                  {{ directory.name }}
+                  <clr-tree-node *ngFor="let file of directory.files">
+                    <button
+                      class="clr-treenode-link"
+                      [class.active]="file.active"
+                    >
+                      <clr-icon [attr.shape]="file.icon"></clr-icon>
+                      {{ file.name }}
+                    </button>
+                  </clr-tree-node>
+                </clr-tree-node>
+              </clr-tree></span
+            >
+          </div>
+        </div>
+
+        <button class="btn btn-outline btn-icon">
+          <clr-icon shape="archive"></clr-icon>
+          Download Product
+        </button>
       </div>
     </div>
   </div>
