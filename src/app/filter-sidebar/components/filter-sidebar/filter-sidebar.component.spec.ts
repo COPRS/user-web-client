@@ -1,19 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RsApiMetatdataService } from 'src/app/services/rs-api-metatdata.service';
-import { FilterAttributeSelectionComponent } from '../filter-attribute-selection/filter-attribute-selection.component';
+import { ConfigService } from 'src/app/services/config.service';
+import { DdipService } from 'src/app/services/ddip.service';
+import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterSidebarComponent } from './filter-sidebar.component';
 
-class MockRsApiMetatdataService {
-  getMissions() {
-    return new Promise((r) => {
-      return {
-        missions: {
-          missions: ['m1', 'm2'],
-        },
-      };
-    });
-  }
+class MockConfigService {
+  settings: IAppConfig = { apiBaseUrl: 'http://test', resourceName: 'res' };
+}
+
+class MockDdipService {
+  getProducts() {}
 }
 
 describe('FilterSidebarComponent', () => {
@@ -22,12 +19,19 @@ describe('FilterSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule],
       declarations: [FilterSidebarComponent],
       providers: [
-        FilterAttributeSelectionComponent,
-        { provide: RsApiMetatdataService, useClass: MockRsApiMetatdataService },
+        FilterSidebarComponent,
+        { provide: ConfigService, useClass: MockConfigService },
+        { provide: DdipService, useClass: MockDdipService },
       ],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule],
+      declarations: [FilterSidebarComponent],
     }).compileComponents();
   });
 

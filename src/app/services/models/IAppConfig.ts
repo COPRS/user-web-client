@@ -1,3 +1,4 @@
 export interface IAppConfig {
-  rsApiBaseUrl: string;
+  apiBaseUrl: string;
+  resourceName: string;
 }

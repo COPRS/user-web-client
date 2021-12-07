@@ -1,10 +1,11 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterElement } from '../../models/FilterElement';
+import { ConfigService } from 'src/app/services/config.service';
+import { DdipService } from 'src/app/services/ddip.service';
+import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
 import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
-import { FilterSidebarSelectionService } from '../../services/filter-sidebar-selection.service';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -23,22 +24,28 @@ import { FilterSidebarSelectionService } from '../../services/filter-sidebar-sel
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
-  availableAttributes$: Observable<any>;
-  queryFromService$: Observable<string[]>;
+  queryFilterFromService$: Observable<string>;
+  queryResultFromService: any;
+  settings: IAppConfig;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
 
   constructor(
     private navService: FilterSidebarNavigationService,
-    private selectionService: FilterSidebarSelectionService,
-    private filterElementsService: FilterElementsService
+    private filterElementsService: FilterElementsService,
+    private ddipService: DdipService,
+    private configService: ConfigService
   ) {}
 
   ngOnInit(): void {
-    this.queryFromService$ = this.filterElementsService.getQuery();
+    this.queryFilterFromService$ = this.filterElementsService.getQuery();
     this.showSideNav$ = this.navService.getShowNav();
-    this.availableAttributes$ = this.selectionService.getAvailableAttributes();
+    this.queryFilterFromService$.subscribe(
+      async (f) =>
+        (this.queryResultFromService = await this.ddipService.getProducts(f))
+    );
+    this.settings = this.configService.settings;
   }
 
   onSidebarClose() {
@@ -57,5 +64,16 @@ export class FilterSidebarComponent implements OnInit {
     navBarStyle.left = (showNav ? 0 : this.navWidth * -1) + 'px';
 
     return navBarStyle;
+  }
+
+  onApiUrlChange(target: any) {
+    console.log('onApiUrlChange', target.value);
+
+    this.configService.setApiBaseUrl(target.value);
+  }
+
+  onApiResourceChange(target: any) {
+    console.log('onApiResourceChange', target.value);
+    this.configService.setResourceType(target.value);
   }
 }

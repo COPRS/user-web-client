@@ -40,7 +40,7 @@ RUN npm run ng build -- --output-path=dist
 ############
 
 # base image
-FROM nginx:1.21.0-alpine
+FROM nginx:1.21.4-alpine
 
 RUN apk upgrade --no-cache && apk add --no-cache gettext
 
