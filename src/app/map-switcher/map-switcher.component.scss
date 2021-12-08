@@ -1,0 +1,11 @@
+:host {
+  position: relative;
+}
+
+.map-switcher {
+  position: absolute;
+  background-color: white;
+  right: 20px;
+  top: 20px;
+  z-index: 900;
+}

@@ -12,6 +12,7 @@ import { FilterSidebarComponent } from './filter-sidebar/components/filter-sideb
 import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
 import { FilterElementComponent } from './filter-sidebar/components/filter-element/filter-element.component';
 import { FilterElementListComponent } from './filter-sidebar/components/filter-element-list/filter-element-list.component';
+import { MapSwitcherComponent } from './map-switcher/map-switcher.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -24,6 +25,7 @@ export function initializeApp(configService: ConfigService) {
     DetailsSidebarComponent,
     FilterElementComponent,
     FilterElementListComponent,
+    MapSwitcherComponent,
   ],
   imports: [
     BrowserModule,
