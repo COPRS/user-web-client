@@ -41,10 +41,10 @@ export class FilterSidebarComponent implements OnInit {
   ngOnInit(): void {
     this.queryFilterFromService$ = this.filterElementsService.getQuery();
     this.showSideNav$ = this.navService.getShowNav();
-    this.queryFilterFromService$.subscribe(
-      async (f) =>
-        (this.queryResultFromService = await this.ddipService.getProducts(f))
-    );
+    // this.queryFilterFromService$.subscribe(
+    //   async (f) =>
+    //     (this.queryResultFromService = await this.ddipService.getProducts(f))
+    // );
     this.settings = this.configService.settings;
   }
 

@@ -8,8 +8,14 @@
       <label class="dropdown-header" aria-hidden="true"
         >Change Map Background</label
       >
-      <div aria-label="Dropdown header OSM" clrDropdownItem>OSM</div>
-      <div aria-label="Dropdown header Other" clrDropdownItem>Other</div>
+      <div
+        *ngFor="let mapName of availableMaps"
+        [ngClass]="{ active: mapName === activeMap }"
+        (click)="onChangeMapClick(mapName)"
+        clrDropdownItem
+      >
+        {{ mapName }}
+      </div>
     </clr-dropdown-menu>
   </clr-dropdown>
 </div>
