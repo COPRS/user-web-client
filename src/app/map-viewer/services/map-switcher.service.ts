@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OSM, Stamen, XYZ } from 'ol/source';
+import { OSM, Stamen, TileWMS, XYZ } from 'ol/source';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -7,8 +7,26 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class MapSwitcherService {
   private maps: AvailableMap[] = [
-    { mapName: 'OSM', layer: new OSM() },
-    { mapName: 'Stamen', layer: new Stamen({ layer: 'watercolor' }) },
+    { mapName: 'OSM', sources: [new OSM()] },
+    {
+      mapName: 'Stamen',
+      sources: [
+        new Stamen({ layer: 'watercolor' }),
+        new Stamen({
+          layer: 'terrain-labels',
+        }),
+      ],
+    },
+    {
+      mapName: 'EOX',
+      sources: [
+        new TileWMS({
+          wrapX: false,
+          params: { TILED: true, LAYERS: 'osm_3857' },
+          url: 'https://tiles.esa.maps.eox.at/wms',
+        }),
+      ],
+    },
   ];
   private selectedMap$ = new BehaviorSubject<AvailableMap>(this.maps[0]);
 
@@ -30,4 +48,4 @@ export class MapSwitcherService {
   }
 }
 
-export type AvailableMap = { mapName: string; layer: XYZ };
+export type AvailableMap = { mapName: string; sources: XYZ[] };

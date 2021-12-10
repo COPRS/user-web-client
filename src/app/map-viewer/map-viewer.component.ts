@@ -52,13 +52,18 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
       });
 
     // Set new background
-    this.map.addLayer(
-      new TileLayer({
-        properties: { layerType: LayerType.Background, layerName: map.mapName },
-        source: map.layer,
-        extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
-      })
-    );
+    map.sources.forEach((source) => {
+      this.map.addLayer(
+        new TileLayer({
+          properties: {
+            layerType: LayerType.Background,
+            layerName: map.mapName,
+          },
+          source,
+          extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+        })
+      );
+    });
   }
 
   ngOnInit(): void {
