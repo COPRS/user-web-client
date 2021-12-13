@@ -1,3 +1,4 @@
 {
-  "apiBaseUrl": "${API_URL}"
+  "apiBaseUrl": "${API_URL}",
+  "mapBackgrounds": ${MAP_BACKGROUNDS}
 }
