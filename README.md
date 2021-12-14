@@ -6,7 +6,16 @@ It connects to the PRIP interface via OData in order to retrieve its data.
 
 ![user-web-client](./user-web-client.png "user-web-client")
 
-## Configuration in Kubernetes
+## Configuration
+
+The user-web-client configuration consists of two environment variables:
+
+| Environment Variable Name | Example                                                                                                            | Description                                                                                                                                                                                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| API_URL                   | http://prip.some.host:4711/api/v1/                                                                                 | A plain text url containing the base URL to the PRIP API.                                                                                                                                                                                                                                                        |
+| MAP_BACKGROUNDS           | `[{"name":"Terrain + Overlay","layers":[{"url":"https://tiles.esa.maps.eox.at/wms","layerName":"terrain_3857"}]}]` | A text string containing a JSON configuration object. See TypeScript interface definition file for details [IAppConfig.ts (IAppConfig_MapBackgrounds)](./src/app/services/models/IAppConfig.ts). Proper encoding/escaping of special characters must be taken care of when adding this setting to the container. |
+
+### Example Kubernetes
 
 values.yaml
 
