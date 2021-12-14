@@ -4,7 +4,11 @@ import { DdipService } from './ddip.service';
 import { IAppConfig } from './models/IAppConfig';
 
 class MockConfigService {
-  settings: IAppConfig = { apiBaseUrl: 'http://test', resourceName: 'res' };
+  settings: IAppConfig = {
+    apiBaseUrl: 'http://test',
+    resourceName: 'res',
+    mapBackgrounds: [],
+  };
 }
 
 describe('DdipService', () => {

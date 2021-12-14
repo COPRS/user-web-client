@@ -6,7 +6,11 @@ import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterSidebarComponent } from './filter-sidebar.component';
 
 class MockConfigService {
-  settings: IAppConfig = { apiBaseUrl: 'http://test', resourceName: 'res' };
+  settings: IAppConfig = {
+    apiBaseUrl: 'http://test',
+    resourceName: 'res',
+    mapBackgrounds: [],
+  };
 }
 
 class MockDdipService {

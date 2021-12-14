@@ -1,6 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ConfigService } from '../services/config.service';
+import { IAppConfig } from '../services/models/IAppConfig';
 import { MapViewerComponent } from './map-viewer.component';
+
+class MockConfigService {
+  settings: IAppConfig = {
+    apiBaseUrl: 'http://test',
+    resourceName: 'res',
+    mapBackgrounds: [],
+  };
+}
 
 describe('MapViewerComponent', () => {
   let component: MapViewerComponent;
@@ -9,6 +18,10 @@ describe('MapViewerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MapViewerComponent],
+      providers: [
+        MapViewerComponent,
+        { provide: ConfigService, useClass: MockConfigService },
+      ],
     }).compileComponents();
   });
 
