@@ -10,7 +10,7 @@ fi
 if [ -z "$ODATA_RESOURCE_NAME" ]
 then
     echo "ODATA_RESOURCE_NAME is unset";
-    return 1;
+    # return 1; // Not mandatory
 else
     echo "ODATA_RESOURCE_NAME is set to '$ODATA_RESOURCE_NAME'";
 fi
