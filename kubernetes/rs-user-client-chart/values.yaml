@@ -4,6 +4,7 @@
 
 env:
   apiUrl: http://localhost:8888/api/v1/
+  odataResourceName: Products
   mapBackgrounds: | 
     "[{\"name\":\"TESTING\",\"layers\":[{\"url\":\"testing_url\",\"layerName\":\"LayerName\"}]}]"
 

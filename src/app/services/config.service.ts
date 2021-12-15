@@ -32,7 +32,7 @@ export class ConfigService {
   public setApiBaseUrl(url: string): void {
     this.settings.apiBaseUrl = url;
   }
-  public setResourceType(resourceName: string): void {
+  public setResourceName(resourceName: string): void {
     this.settings.resourceName = resourceName;
   }
 }

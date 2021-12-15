@@ -74,6 +74,6 @@ export class FilterSidebarComponent implements OnInit {
 
   onApiResourceChange(target: any) {
     console.log('onApiResourceChange', target.value);
-    this.configService.setResourceType(target.value);
+    this.configService.setResourceName(target.value);
   }
 }

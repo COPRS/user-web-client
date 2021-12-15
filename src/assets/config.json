@@ -1,4 +1,5 @@
 {
-  "apiBaseUrl": "http://localhost:8088",
+  "apiBaseUrl": "http://localhost:8088/odata/v1/",
+  "resourceName": "Products",
   "mapBackgrounds": [{"name":"TESTING","layers":[{"url":"testing_url","layerName":"LayerName"}]}]
 }
