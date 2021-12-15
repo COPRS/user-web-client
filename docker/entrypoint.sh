@@ -15,6 +15,6 @@ else
     echo "MAP_BACKGROUNDS is set to '$MAP_BACKGROUNDS'";
 fi
 
-envsubst '$${MAP_BACKGROUNDS} $${MAP_BACKGROUNDS}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
+envsubst '$${API_URL} $${MAP_BACKGROUNDS}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
 
 exec nginx -g 'daemon off;'
