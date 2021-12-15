@@ -67,13 +67,16 @@ export class FilterSidebarComponent implements OnInit {
   }
 
   onApiUrlChange(target: any) {
-    console.log('onApiUrlChange', target.value);
-
     this.configService.setApiBaseUrl(target.value);
   }
 
   onApiResourceChange(target: any) {
-    console.log('onApiResourceChange', target.value);
     this.configService.setResourceName(target.value);
+  }
+
+  async onFilterQueryChange(target: any) {
+    this.queryResultFromService = await this.ddipService.getProducts(
+      target.value
+    );
   }
 }
