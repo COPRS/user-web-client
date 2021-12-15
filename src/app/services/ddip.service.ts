@@ -18,7 +18,7 @@ export class DdipService {
       .get(this.config.settings.resourceName)
       .query({ $format: 'json', $top: 5, $filter: filter });
 
-    return res.results;
+    return res;
   }
 }
 
