@@ -13,6 +13,7 @@ import { DetailsSidebarComponent } from './details-sidebar/components/details-si
 import { FilterElementComponent } from './filter-sidebar/components/filter-element/filter-element.component';
 import { FilterElementListComponent } from './filter-sidebar/components/filter-element-list/filter-element-list.component';
 import { MapSwitcherComponent } from './map-viewer/components/map-switcher/map-switcher.component';
+import { QueryResultGridComponent } from './query-result-grid/query-result-grid.component';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -26,6 +27,7 @@ export function initializeApp(configService: ConfigService) {
     FilterElementComponent,
     FilterElementListComponent,
     MapSwitcherComponent,
+    QueryResultGridComponent,
   ],
   imports: [
     BrowserModule,

@@ -5,7 +5,10 @@ import { ConfigService } from 'src/app/services/config.service';
 import { DdipService } from 'src/app/services/ddip.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
-import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
+import {
+  FilterSidebarNavigationService,
+  SideBarSubNav,
+} from '../../services/filter-sidebar-navigation.service';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -24,6 +27,8 @@ import { FilterSidebarNavigationService } from '../../services/filter-sidebar-na
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
+  selectedSubNav$: Observable<SideBarSubNav>;
+  SideBarSubNav = SideBarSubNav;
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
   settings: IAppConfig;
@@ -41,6 +46,7 @@ export class FilterSidebarComponent implements OnInit {
   ngOnInit(): void {
     this.queryFilterFromService$ = this.filterElementsService.getQuery();
     this.showSideNav$ = this.navService.getShowNav();
+    this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.queryFilterFromService$.subscribe(
       async (f) =>
         (this.queryResultFromService = await this.ddipService.getProducts(f))
@@ -78,5 +84,9 @@ export class FilterSidebarComponent implements OnInit {
     this.queryResultFromService = await this.ddipService.getProducts(
       target.value
     );
+  }
+
+  onSubNavClick(selectedSubNav: SideBarSubNav) {
+    this.navService.setSelectedSubNav(selectedSubNav);
   }
 }

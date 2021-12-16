@@ -39,6 +39,11 @@ app-filter-sidebar {
       text-align: left;
     }
 
+    .buttonSelected {
+      background-color: lightgrey;
+      border-bottom: thin solid darkgray;
+    }
+
     .side-nav-bar-close {
       text-align: right;
     }
