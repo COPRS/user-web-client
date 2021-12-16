@@ -45,6 +45,9 @@ $container-content-padding-top-bottom: 20px;
     }
 
     .side-details-bar-content-container {
+      overflow-y: auto;
+      max-height: 700px;
+
       hr {
         margin: 0;
         border: 0;
