@@ -33,7 +33,9 @@
           (click)="onSubNavClick(SideBarSubNav.FILTERS)"
         >
           <clr-icon shape="filter"></clr-icon> FILTERS
-          <span class="badge badge-info">9</span>
+          <span *ngIf="filterCount$ | async" class="badge badge-info">{{
+            filterCount$ | async
+          }}</span>
         </div>
         <div
           class="clr-col-5 side-nav-bar-badge"
@@ -43,7 +45,9 @@
           (click)="onSubNavClick(SideBarSubNav.RESULTS)"
         >
           <clr-icon shape="view-list"></clr-icon> RESULTS
-          <span class="badge badge-info">4711</span>
+          <span *ngIf="resultCount$ | async" class="badge badge-info">{{
+            resultCount$ | async
+          }}</span>
         </div>
         <div class="clr-col-1 side-nav-bar-close clr-align-self-center">
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
@@ -89,29 +93,14 @@
         <div class="side-nav-bar-content-element">
           <form class="clr-form clr-form-vertical">
             <clr-textarea-container>
-              <label class="clr-col-12">Filter Query</label>
+              <label class="clr-col-12">Used query</label>
               <textarea
                 class="clr-col-12"
                 clrTextarea
                 style="width: 100%"
                 required
                 [value]="queryFilterFromService$ | async"
-                (change)="onFilterQueryChange($event.target)"
-              ></textarea>
-            </clr-textarea-container>
-          </form>
-        </div>
-        <hr />
-        <div class="side-nav-bar-content-element">
-          <form class="clr-form clr-form-vertical">
-            <clr-textarea-container>
-              <label class="clr-col-12">Query Result</label>
-              <textarea
-                class="clr-col-12"
-                clrTextarea
-                style="width: 100%"
-                required
-                [value]="queryResultFromService | json"
+                (change)="onManualFilterQueryChange($event.target)"
               ></textarea>
             </clr-textarea-container>
           </form>
@@ -133,8 +122,12 @@
   [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) }"
 >
   <clr-icon shape="filter"></clr-icon>
-  <span class="badge badge-info">9</span>
+  <span *ngIf="filterCount$ | async" class="badge badge-info">{{
+    filterCount$ | async
+  }}</span>
   &nbsp;
   <clr-icon shape="view-list"></clr-icon>
-  <span class="badge badge-info">4711</span>
+  <span *ngIf="resultCount$ | async" class="badge badge-info">{{
+    resultCount$ | async
+  }}</span>
 </div>

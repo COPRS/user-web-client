@@ -1,14 +1,15 @@
 import { style, transition, trigger, animate } from '@angular/animations';
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
-import { DdipService } from 'src/app/services/ddip.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
 import {
   FilterSidebarNavigationService,
   SideBarSubNav,
 } from '../../services/filter-sidebar-navigation.service';
+import { QueryResultService } from '../../services/query-result.service';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -29,6 +30,8 @@ export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
   selectedSubNav$: Observable<SideBarSubNav>;
   SideBarSubNav = SideBarSubNav;
+  filterCount$: Observable<number | string>;
+  resultCount$: Observable<number>;
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
   settings: IAppConfig;
@@ -39,18 +42,18 @@ export class FilterSidebarComponent implements OnInit {
   constructor(
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
-    private ddipService: DdipService,
+    private dataService: QueryResultService,
     private configService: ConfigService
   ) {}
 
   ngOnInit(): void {
     this.queryFilterFromService$ = this.filterElementsService.getQuery();
+    this.filterCount$ = this.filterElementsService.getFilterCount();
+    this.resultCount$ = this.dataService
+      .getFilteredProducts()
+      .pipe(map((e) => e.totalCount));
     this.showSideNav$ = this.navService.getShowNav();
     this.selectedSubNav$ = this.navService.getSelectedSubNav();
-    this.queryFilterFromService$.subscribe(
-      async (f) =>
-        (this.queryResultFromService = await this.ddipService.getProducts(f))
-    );
     this.settings = this.configService.settings;
   }
 
@@ -80,10 +83,8 @@ export class FilterSidebarComponent implements OnInit {
     this.configService.setResourceName(target.value);
   }
 
-  async onFilterQueryChange(target: any) {
-    this.queryResultFromService = await this.ddipService.getProducts(
-      target.value
-    );
+  async onManualFilterQueryChange(target: any) {
+    this.filterElementsService.updateWithManualFilter(target.value);
   }
 
   onSubNavClick(selectedSubNav: SideBarSubNav) {
