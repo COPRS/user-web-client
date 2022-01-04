@@ -1,13 +1,17 @@
 <clr-datagrid (clrDgRefresh)="refresh($event)" [clrDgLoading]="loading">
   <clr-dg-column>Product ID</clr-dg-column>
   <clr-dg-column>Name</clr-dg-column>
+  <clr-dg-column>Content length</clr-dg-column>
   <clr-dg-column>Content date start</clr-dg-column>
+  <clr-dg-column>Content date end</clr-dg-column>
   <clr-dg-column>Checksum</clr-dg-column>
 
   <clr-dg-row *ngFor="let product of products">
-    <clr-dg-cell>{{ product.id }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.name }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.contentDateStart | date }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.Id }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.Name }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.ContentLength }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.ContentDate.Start | date }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.ContentDate.End | date }}</clr-dg-cell>
     <clr-dg-cell>{{ product.checksum[0].value }}</clr-dg-cell>
   </clr-dg-row>
 
