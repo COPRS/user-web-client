@@ -12,7 +12,7 @@ import { QueryResultService } from '../services/query-result.service';
 export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: any[];
   total: number;
-  pageSize: number = 9;
+  pageSize: number = 10;
   loading: boolean = false;
   private readonly onDestroy = new Subject<void>();
 

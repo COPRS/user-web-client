@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinct, mergeMap } from 'rxjs/operators';
+import { debounceTime, distinct, mergeMap, tap } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { FilterElementsService } from './filter-elements.service';
@@ -25,11 +25,17 @@ export class QueryResultService {
     debounceTime(10),
     mergeMap(async (c) => {
       const [filter, pageConfig] = c;
-      const result = await this.ddipService.getProducts(filter, pageConfig);
-      return {
-        products: result.value,
-        totalCount: result['@odata.count'],
-      };
+      const result = await this.ddipService
+        .getProducts(filter, pageConfig)
+        .catch((e) => console.error(e));
+      if (result) {
+        return {
+          products: result.value,
+          totalCount: result['@odata.count'],
+        };
+      } else {
+        return { products: [], totalCount: 0 };
+      }
     })
   );
 
