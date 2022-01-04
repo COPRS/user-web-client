@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { o } from 'odata';
+import { o, OdataQuery } from 'odata';
 import { PaginationConfig } from '../filter-sidebar/services/query-result.service';
 import { ConfigService } from './config.service';
 import { DdipProductResponse } from './models/DdipProductResponse';
@@ -19,13 +19,17 @@ export class DdipService {
       //   Authorization: 'Basic ADD_AUTH_HERE',
       // }),
     });
-    const res = await g.get(this.config.settings.resourceName).query({
+
+    const query = {
       $format: 'json',
       $count: true,
       $top: pageConfig.top,
-      $skip: pageConfig.skip,
       $filter: filter,
-    });
+    } as OdataQuery;
+    if (pageConfig.skip) {
+      query.$skip = pageConfig.skip;
+    }
+    const res = await g.get(this.config.settings.resourceName).query(query);
 
     return res.value;
   }

@@ -19,7 +19,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   constructor(private dataService: QueryResultService) {}
 
   ngOnInit(): void {
-    this.dataService.setPagination(0, this.pageSize);
+    this.dataService.setPagination(this.pageSize);
     this.dataService
       .getFilteredProducts()
       .pipe(takeUntil(this.onDestroy))
@@ -30,8 +30,9 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   refresh(state: ClrDatagridStateInterface) {
-    const skip = state.page.from >= 0 ? state.page.from : 0;
-    this.dataService.setPagination(skip, state.page.size);
+    const skip = state.page.from > 0 ? state.page.from : undefined;
+    console.log({ skip });
+    this.dataService.setPagination(state.page.size, skip);
   }
 
   ngOnDestroy() {

@@ -10,7 +10,6 @@ import { FilterElementsService } from './filter-elements.service';
 })
 export class QueryResultService {
   private pagination$ = new BehaviorSubject<PaginationConfig>({
-    skip: 0,
     top: 10,
   });
   private currentPageSubject$ = new BehaviorSubject<{
@@ -53,9 +52,13 @@ export class QueryResultService {
     return this.currentPageSubject$.asObservable();
   }
 
-  public setPagination(skip?: number, top?: number) {
-    this.pagination$.next({ skip, top });
+  public setPagination(top: number, skip?: number) {
+    if (skip) {
+      this.pagination$.next({ skip, top });
+    } else {
+      this.pagination$.next({ top });
+    }
   }
 }
 
-export type PaginationConfig = { skip: number; top: number };
+export type PaginationConfig = { skip?: number; top: number };
