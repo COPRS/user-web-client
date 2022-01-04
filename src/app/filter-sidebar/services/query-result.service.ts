@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
-import { debounceTime, distinct, map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { debounceTime, distinct, mergeMap } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip.service';
+import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { FilterElementsService } from './filter-elements.service';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class QueryResultService {
     top: 10,
   });
   private currentPageSubject$ = new BehaviorSubject<{
-    products: any[];
+    products: DdipProduct[];
     totalCount: number;
   }>({} as any);
   private currentPage$ = combineLatest([
@@ -22,11 +23,12 @@ export class QueryResultService {
   ]).pipe(
     distinct(),
     debounceTime(10),
-    map((c) => {
+    mergeMap(async (c) => {
       const [filter, pageConfig] = c;
+      const result = await this.ddipService.getProducts(filter, pageConfig);
       return {
-        products: this.ddipService.getExampleProducts(filter, pageConfig),
-        totalCount: this.ddipService.getExampleProductsCount(filter),
+        products: result.value,
+        totalCount: result['@odata.count'],
       };
     })
   );
