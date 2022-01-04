@@ -30,7 +30,8 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   refresh(state: ClrDatagridStateInterface) {
-    this.dataService.setPagination(state.page.from, state.page.size);
+    const skip = state.page.from >= 0 ? state.page.from : 0;
+    this.dataService.setPagination(skip, state.page.size);
   }
 
   ngOnDestroy() {
