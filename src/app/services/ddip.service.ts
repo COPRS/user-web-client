@@ -23,11 +23,11 @@ export class DdipService {
     const query = {
       $format: 'json',
       $count: true,
-      $top: pageConfig.top,
-      $filter: filter,
     } as OdataQuery;
     if (pageConfig.skip) {
       query.$skip = pageConfig.skip;
+      query.$top = pageConfig.top;
+      query.$filter = filter;
     }
     const res = await g.get(this.config.settings.resourceName).query(query);
 
