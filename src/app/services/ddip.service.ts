@@ -26,7 +26,11 @@ export class DdipService {
     } as OdataQuery;
     if (pageConfig.skip) {
       query.$skip = pageConfig.skip;
+    }
+    if (pageConfig.top) {
       query.$top = pageConfig.top;
+    }
+    if (filter) {
       query.$filter = filter;
     }
     const res = await g.get(this.config.settings.resourceName).query(query);
