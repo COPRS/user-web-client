@@ -10,9 +10,9 @@
     <clr-dg-cell>{{ product.Id }}</clr-dg-cell>
     <clr-dg-cell>{{ product.Name }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentLength }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.ContentDate.Start | date }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.ContentDate.End | date }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.checksum[0].value }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.ContentDate?.Start | date }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.ContentDate?.End | date }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.Checksum?.[0]?.value }}</clr-dg-cell>
   </clr-dg-row>
 
   <clr-dg-footer>
