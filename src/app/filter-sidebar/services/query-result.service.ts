@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinct, mergeMap, tap } from 'rxjs/operators';
-import { DdipService } from 'src/app/services/ddip.service';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { FilterElementsService } from './filter-elements.service';
 

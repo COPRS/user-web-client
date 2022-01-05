@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DdipService } from 'src/app/services/ddip.service';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { QueryResultService } from './query-result.service';
 
 class MockDdipService {
