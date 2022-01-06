@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { QueryResultService } from '../services/query-result.service';
 
 @Component({
@@ -10,10 +11,11 @@ import { QueryResultService } from '../services/query-result.service';
   styleUrls: ['./query-result-grid.component.scss'],
 })
 export class QueryResultGridComponent implements OnInit, OnDestroy {
-  products: any[];
+  products: DdipProduct[];
   total: number;
   pageSize: number = 10;
   loading: boolean = false;
+  selected: DdipProduct[];
   private readonly onDestroy = new Subject<void>();
 
   constructor(private dataService: QueryResultService) {}
@@ -31,7 +33,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
 
   refresh(state: ClrDatagridStateInterface) {
     const skip = state.page.from > 0 ? state.page.from : undefined;
-    console.log({ skip });
     this.dataService.setPagination(state.page.size, skip);
   }
 

@@ -1,19 +1,33 @@
-<clr-datagrid (clrDgRefresh)="refresh($event)" [clrDgLoading]="loading">
-  <clr-dg-column>Product ID</clr-dg-column>
+<clr-datagrid
+  class="datagrid-compact"
+  (clrDgRefresh)="refresh($event)"
+  [clrDgLoading]="loading"
+  [(clrDgSelected)]="selected"
+>
+  <clr-dg-column>Id</clr-dg-column>
   <clr-dg-column>Name</clr-dg-column>
   <clr-dg-column>Content length</clr-dg-column>
   <clr-dg-column>Content date start</clr-dg-column>
   <clr-dg-column>Content date end</clr-dg-column>
   <clr-dg-column>Checksum</clr-dg-column>
 
-  <clr-dg-row *ngFor="let product of products">
+  <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
     <clr-dg-cell>{{ product.Id }}</clr-dg-cell>
     <clr-dg-cell>{{ product.Name }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.ContentLength }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.ContentLength | fileSize }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentDate?.Start | date }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentDate?.End | date }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.Checksum?.[0]?.value }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.Checksum?.[0]?.Value }}</clr-dg-cell>
   </clr-dg-row>
+
+  <clr-dg-detail *clrIfDetail="let detail">
+    <clr-dg-detail-header>{{ detail.Name }}</clr-dg-detail-header>
+    <clr-dg-detail-body>
+      <pre>
+        {{ detail | json }}
+      </pre>
+    </clr-dg-detail-body>
+  </clr-dg-detail>
 
   <clr-dg-footer>
     {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of

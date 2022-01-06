@@ -14,6 +14,7 @@ import { FilterElementComponent } from './filter-sidebar/components/filter-eleme
 import { FilterElementListComponent } from './filter-sidebar/components/filter-element-list/filter-element-list.component';
 import { MapSwitcherComponent } from './map-viewer/components/map-switcher/map-switcher.component';
 import { QueryResultGridComponent } from './filter-sidebar/query-result-grid/query-result-grid.component';
+import { FileSizePipe } from './filter-sidebar/query-result-grid/file-size.pipe';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -28,6 +29,7 @@ export function initializeApp(configService: ConfigService) {
     FilterElementListComponent,
     MapSwitcherComponent,
     QueryResultGridComponent,
+    FileSizePipe,
   ],
   imports: [
     BrowserModule,

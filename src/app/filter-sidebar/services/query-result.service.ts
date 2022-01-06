@@ -26,7 +26,7 @@ export class QueryResultService {
       const [filter, pageConfig] = c;
       const result = await this.ddipService
         .getProducts(filter, pageConfig)
-        .catch((e) => console.error(e));
+        .catch((e) => console.error('Error while quering for data', e));
       if (result) {
         return {
           products: result.value,
@@ -46,7 +46,7 @@ export class QueryResultService {
   }
 
   public getFilteredProducts(): Observable<{
-    products: any[];
+    products: DdipProduct[];
     totalCount: number;
   }> {
     return this.currentPageSubject$.asObservable();
