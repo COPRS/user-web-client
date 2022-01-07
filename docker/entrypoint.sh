@@ -24,8 +24,6 @@ else
 fi
 
 envsubst '$${API_URL} $${MAP_BACKGROUNDS}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
-
-echo "BASE_HREF:" $BASE_HREF
 envsubst '$${BASE_HREF}' < /usr/share/nginx/html/index.templ.html > /usr/share/nginx/html/index.html
 
 exec nginx -g 'daemon off;'
