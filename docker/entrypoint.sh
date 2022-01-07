@@ -7,14 +7,6 @@ else
     echo "API_URL is set to '$API_URL'";
 fi
 
-if [ -z "$ODATA_RESOURCE_NAME" ]
-then
-    echo "ODATA_RESOURCE_NAME is unset";
-    # return 1; // Not mandatory
-else
-    echo "ODATA_RESOURCE_NAME is set to '$ODATA_RESOURCE_NAME'";
-fi
-
 if [ -z "$MAP_BACKGROUNDS" ]
 then
     echo "MAP_BACKGROUNDS is unset";
@@ -31,7 +23,7 @@ else
     echo "BASE_HREF is set to '$BASE_HREF'";
 fi
 
-envsubst '$${API_URL} $${ODATA_RESOURCE_NAME} $${MAP_BACKGROUNDS}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
+envsubst '$${API_URL} $${MAP_BACKGROUNDS}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
 
 echo "BASE_HREF:" $BASE_HREF
 envsubst '$${BASE_HREF}' < /usr/share/nginx/html/index.templ.html > /usr/share/nginx/html/index.html

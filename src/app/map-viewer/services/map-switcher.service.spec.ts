@@ -5,8 +5,7 @@ import { MapSwitcherService } from './map-switcher.service';
 
 class MockConfigService {
   settings: IAppConfig = {
-    apiBaseUrl: 'http://test',
-    resourceName: 'res',
+    apiUrl: 'http://test',
     mapBackgrounds: [],
   };
 }

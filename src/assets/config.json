@@ -1,5 +1,0 @@
-{
-  "apiBaseUrl": "http://coprs.werum.de/prip/odata/v1/",
-  "resourceName": "Products",
-  "mapBackgrounds": [{"name":"TESTING","layers":[{"url":"testing_url","layerName":"LayerName"}]}]
-}

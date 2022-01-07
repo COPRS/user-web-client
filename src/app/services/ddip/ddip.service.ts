@@ -41,11 +41,6 @@ export class DdipService {
     Object.keys(query).forEach((p) => {
       queryString.push(`${p}=${query[p]}`);
     });
-    return (
-      this.config.settings.apiBaseUrl +
-      this.config.settings.resourceName +
-      '?' +
-      queryString.join('&')
-    );
+    return this.config.settings.apiUrl + '?' + queryString.join('&');
   }
 }

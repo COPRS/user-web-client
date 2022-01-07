@@ -76,11 +76,7 @@ export class FilterSidebarComponent implements OnInit {
   }
 
   onApiUrlChange(target: any) {
-    this.configService.setApiBaseUrl(target.value);
-  }
-
-  onApiResourceChange(target: any) {
-    this.configService.setResourceName(target.value);
+    this.configService.setApiUrl(target.value);
   }
 
   async onManualFilterQueryChange(target: any) {

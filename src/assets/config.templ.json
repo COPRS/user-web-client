@@ -1,5 +1,4 @@
 {
-  "apiBaseUrl": "${API_URL}",
-  "resourceName": "${ODATA_RESOURCE_NAME}",
+  "apiUrl": "${API_URL}",
   "mapBackgrounds": ${MAP_BACKGROUNDS}
 }

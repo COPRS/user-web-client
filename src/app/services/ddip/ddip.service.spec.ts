@@ -6,8 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 class MockConfigService {
   settings: IAppConfig = {
-    apiBaseUrl: 'http://test:0815/',
-    resourceName: 'res',
+    apiUrl: 'http://test:0815/Products',
     mapBackgrounds: [],
   };
 }
@@ -32,7 +31,7 @@ describe('DdipService', () => {
 
   it('should construct a query string', () => {
     expect(service.constructURL({ $skip: 10, $top: 99 })).toEqual(
-      'http://test:0815/res?$skip=10&$top=99'
+      'http://test:0815/Products?$skip=10&$top=99'
     );
   });
 });

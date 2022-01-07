@@ -29,10 +29,7 @@ export class ConfigService {
     );
   }
 
-  public setApiBaseUrl(url: string): void {
-    this.settings.apiBaseUrl = url;
-  }
-  public setResourceName(resourceName: string): void {
-    this.settings.resourceName = resourceName;
+  public setApiUrl(url: string): void {
+    this.settings.apiUrl = url;
   }
 }

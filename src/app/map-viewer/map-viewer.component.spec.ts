@@ -5,8 +5,7 @@ import { MapViewerComponent } from './map-viewer.component';
 
 class MockConfigService {
   settings: IAppConfig = {
-    apiBaseUrl: 'http://test',
-    resourceName: 'res',
+    apiUrl: 'http://test',
     mapBackgrounds: [],
   };
 }
