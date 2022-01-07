@@ -23,6 +23,17 @@ else
     echo "MAP_BACKGROUNDS is set to '$MAP_BACKGROUNDS'";
 fi
 
+if [ -z "$BASE_HREF" ]
+then
+    export BASE_HREF=${BASE_HREF:-/}
+    echo "BASE_HREF is unset, set to default: " $BASE_HREF;
+else
+    echo "BASE_HREF is set to '$BASE_HREF'";
+fi
+
 envsubst '$${API_URL} $${ODATA_RESOURCE_NAME} $${MAP_BACKGROUNDS}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
+
+echo "BASE_HREF:" $BASE_HREF
+envsubst '$${BASE_HREF}' < /usr/share/nginx/html/index.templ.html > /usr/share/nginx/html/index.html
 
 exec nginx -g 'daemon off;'
