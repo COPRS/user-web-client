@@ -5,6 +5,7 @@
   [(clrDgSelected)]="selected"
 >
   <clr-dg-column>Id</clr-dg-column>
+  <clr-dg-column>Has Footprint</clr-dg-column>
   <clr-dg-column>Name</clr-dg-column>
   <clr-dg-column>Content length</clr-dg-column>
   <clr-dg-column>Content date start</clr-dg-column>
@@ -13,6 +14,9 @@
 
   <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
     <clr-dg-cell>{{ product.Id }}</clr-dg-cell>
+    <clr-dg-cell>
+      <clr-icon *ngIf="product.Footprint" shape="map-marker"></clr-icon>
+    </clr-dg-cell>
     <clr-dg-cell>{{ product.Name }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentLength | fileSize }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentDate?.Start | date }}</clr-dg-cell>

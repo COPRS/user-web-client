@@ -13,7 +13,7 @@ import { QueryResultService } from '../services/query-result.service';
 export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: DdipProduct[];
   total: number;
-  pageSize: number = 10;
+  pageSize: number = 20;
   loading: boolean = false;
   selected: DdipProduct[];
   private readonly onDestroy = new Subject<void>();
