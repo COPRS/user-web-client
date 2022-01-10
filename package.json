@@ -60,7 +60,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "docker:build": "docker build -t \"rs-user-client:dev\" -f ./Dockerfile .",
-    "docker:run": "docker run -it --rm -p 4201:80 -e BASE_HREF=/ -e API_URL=http://coprs.werum.de/prip/odata/v1/Products -e MAP_BACKGROUNDS=\"[{\\\"name\\\":\\\"TESTING\\\",\\\"layers\\\":[{\\\"url\\\":\\\"testing_url\\\",\\\"layerName\\\":\\\"LayerName\\\"}]}]\" rs-user-client:dev",
+    "docker:run": "docker run -it --rm -p 4201:80 --name user-web-client-dev -e BASE_HREF=/ -e API_URL=http://coprs.werum.de/prip/odata/v1/Products -e MAP_BACKGROUNDS=\"[{\\\"name\\\":\\\"TESTING\\\",\\\"layers\\\":[{\\\"url\\\":\\\"testing_url\\\",\\\"layerName\\\":\\\"LayerName\\\"}]}]\" rs-user-client:dev",
     "e2e": "ng e2e",
     "e2e:ci": "concurrently \"npm run start\" \"wait-on http-get://localhost:4200 && npm run cypress:run\" --kill-others --success first",
     "ng": "ng",

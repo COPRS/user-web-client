@@ -33,7 +33,8 @@ RUN npm run e2e:ci
 USER root
 
 # generate build
-RUN npm run ng build -- --output-path=dist
+RUN npm run build -- --output-path=dist
+RUN mv /app/dist/index.html /app/dist/index.templ.html
 
 ############
 ### prod ###
@@ -47,8 +48,8 @@ RUN apk upgrade --no-cache && apk add --no-cache gettext
 # copy artifact build from the 'build environment'
 COPY --from=build /app/dist /usr/share/nginx/html
 
-
 RUN rm /usr/share/nginx/html/assets/config.json
+RUN rm /usr/share/nginx/html/index.html
 
 ADD ./docker/entrypoint.sh /entrypoint.sh
 
