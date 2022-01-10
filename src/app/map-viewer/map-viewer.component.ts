@@ -1,15 +1,23 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import GeoJSON from 'ol/format/GeoJSON';
-import { Stamen, Vector as VectorSource, XYZ } from 'ol/source';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Zoom } from 'ol/control';
-import { transformExtent } from 'ol/proj';
 import { click } from 'ol/events/condition';
+import GeoJSON from 'ol/format/GeoJSON';
 import Select from 'ol/interaction/Select';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import Map from 'ol/Map';
+import { transformExtent } from 'ol/proj';
+import { Vector as VectorSource } from 'ol/source';
+import View from 'ol/View';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
-import { data } from './data';
+import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import {
   AvailableMap,
   MapSwitcherService,
@@ -20,14 +28,16 @@ import {
   templateUrl: './map-viewer.component.html',
   styleUrls: ['./map-viewer.component.scss'],
 })
-export class MapViewerComponent implements OnInit, AfterViewInit {
+export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private map: Map;
   private bounds = [-180, -89, 180, 89];
+  private readonly onDestroy = new Subject<void>();
 
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
     private elementRef: ElementRef,
-    private mapSwitcher: MapSwitcherService
+    private mapSwitcher: MapSwitcherService,
+    private queryResultService: QueryResultService
   ) {}
   async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
@@ -45,7 +55,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
         if (l) {
           const props = l.getProperties();
           if (props.layerType === LayerType.Background) {
-            console.log('remove', l);
             this.map.removeLayer(l);
           }
         }
@@ -115,61 +124,79 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
 
     // LOAD DATA FROM DDIP-API - START
 
-    // this.ddipService.trySciHub().then((data) => {
-    //   const features = data.map((e) => e.ContentGeometry);
-    //   this.map.addLayer(
-    //     new VectorLayer({
-    //       extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
-    //       source: new VectorSource({
-    //         features: new GML().readFeatures(features, {
-    //           featureProjection: 'EPSG:3857',
-    //         }),
-    //       }),
-    //     })
-    //   );
-    // });
+    this.queryResultService
+      .getFilteredProducts()
+      .pipe(
+        takeUntil(this.onDestroy),
+        map((products) => {
+          // Remove data layer
+          this.map
+            .getLayers()
+            .getArray()
+            .find((l) => {
+              if (l) {
+                const props = l.getProperties();
+                if (props.layerType === LayerType.Data) {
+                  this.map.removeLayer(l);
+                }
+              }
+            });
+
+          // Convert footprints
+          if (products?.products) {
+            const footprints = products.products
+              .filter((p) => p.Footprint)
+              .map((p) => {
+                return { id: p.Id, footprint: p.Footprint };
+              });
+            return footprints;
+          } else {
+            return undefined;
+          }
+        })
+      )
+      .subscribe((footprints) => {
+        console.log({ footprints });
+        if (!footprints) {
+          return;
+        }
+        // Add data layer with new data
+        this.map.addLayer(
+          new VectorLayer({
+            extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+            properties: { layerType: LayerType.Data },
+            source: new VectorSource({
+              features: new GeoJSON().readFeatures(
+                {
+                  type: 'FeatureCollection',
+                  crs: {
+                    type: 'name',
+                    properties: {
+                      name: 'urn:ogc:def:crs:EPSG::4326',
+                    },
+                  },
+
+                  features: footprints.map((d) => {
+                    return {
+                      type: 'Feature',
+                      properties: { id: d.id },
+                      geometry: d.footprint,
+                    };
+                  }),
+                },
+                {
+                  featureProjection: 'EPSG:3857',
+                }
+              ),
+            }),
+          })
+        );
+      });
 
     // LOAD DATA FROM DDIP-API - END
-
-    // LOAD EXAMPLE DATA - START
-
-    this.map.addLayer(
-      new VectorLayer({
-        zIndex: 1,
-        properties: { layerType: LayerType.Data },
-        extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
-        source: new VectorSource({
-          features: new GeoJSON().readFeatures(
-            {
-              type: 'FeatureCollection',
-              crs: {
-                type: 'name',
-                properties: {
-                  name: 'urn:ogc:def:crs:EPSG::4326',
-                },
-              },
-
-              features: data.map((d) => {
-                return {
-                  type: 'Feature',
-                  properties: { id: d.id },
-                  geometry: d.footprint,
-                };
-              }),
-            },
-            {
-              featureProjection: 'EPSG:3857',
-            }
-          ),
-        }),
-      })
-    );
-
-    // LOAD EXAMPLE DATA - END
-
-    // this.map
-    //   .getLayers()
-    //   .forEach((layer) => console.log({ layer, props: layer.getProperties() }));
+  }
+  ngOnDestroy() {
+    this.onDestroy.next();
   }
 }
 
