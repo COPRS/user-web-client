@@ -144,12 +144,20 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // Convert footprints
           if (products?.products) {
-            const footprints = products.products
+            let features = products.products
               .filter((p) => p.Footprint)
               .map((p) => {
                 return { id: p.Id, footprint: p.Footprint };
               });
-            return footprints;
+
+            // switch lat/lon
+            features.forEach((f) => {
+              f.footprint.coordinates.forEach((coordinate, idx, arr) => {
+                arr[idx] = coordinate.map((c) => [c[1], c[0]]);
+              });
+            });
+
+            return features;
           } else {
             return undefined;
           }
