@@ -5,7 +5,7 @@
   [clrDgSingleSelected]="selected"
   (clrDgSingleSelectedChange)="selectionChanged($event)"
 >
-  <clr-dg-column>Id</clr-dg-column>
+  <clr-dg-column>Name</clr-dg-column>
   <clr-dg-column
     ><clr-icon shape="map-marker" class="is-solid"></clr-icon
   ></clr-dg-column>
@@ -18,14 +18,18 @@
     *ngFor="let product of products; trackBy: trackById"
     [clrDgItem]="product"
   >
-    <clr-dg-cell>{{ product.Id }}</clr-dg-cell>
+    <clr-dg-cell>{{ product.Name }}</clr-dg-cell>
     <clr-dg-cell>
       <clr-icon *ngIf="product.Footprint" shape="map-marker"></clr-icon>
     </clr-dg-cell>
     <!-- <clr-dg-cell>{{ product.Name }}</clr-dg-cell> -->
     <clr-dg-cell>{{ product.ContentLength | fileSize }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.ContentDate?.Start | date }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.ContentDate?.End | date }}</clr-dg-cell>
+    <clr-dg-cell>{{
+      product.ContentDate?.Start | date: "MMM d, y h:mm:ss.sss"
+    }}</clr-dg-cell>
+    <clr-dg-cell>{{
+      product.ContentDate?.End | date: "MMM d, y h:mm:ss.sss"
+    }}</clr-dg-cell>
   </clr-dg-row>
 
   <!-- <clr-dg-detail *clrIfDetail="let detail">
@@ -48,6 +52,6 @@
   </clr-dg-footer>
 </clr-datagrid>
 
-<pre>
+<!-- <pre>
   {{ selected | json }}
-</pre>
+</pre> -->

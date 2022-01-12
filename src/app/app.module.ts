@@ -15,6 +15,7 @@ import { FilterElementListComponent } from './filter-sidebar/components/filter-e
 import { MapSwitcherComponent } from './map-viewer/components/map-switcher/map-switcher.component';
 import { QueryResultGridComponent } from './filter-sidebar/query-result-grid/query-result-grid.component';
 import { FileSizePipe } from './filter-sidebar/query-result-grid/file-size.pipe';
+import { LimitToPipe } from './filter-sidebar/query-result-grid/limit-to.pipe';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -30,6 +31,7 @@ export function initializeApp(configService: ConfigService) {
     MapSwitcherComponent,
     QueryResultGridComponent,
     FileSizePipe,
+    LimitToPipe,
   ],
   imports: [
     BrowserModule,
