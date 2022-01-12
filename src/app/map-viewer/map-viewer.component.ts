@@ -121,11 +121,9 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!f) {
           select.getFeatures().clear();
         } else {
-          this.map
-            .getLayers()
-            .getArray()
-            .filter((l) => console.log({ l }));
-          // TODO: set when selected from outside of the map
+          // TODO: set feature to selected when selected from outside of the map
+          this.map.getLayers().getArray();
+          // .filter((l) => console.log({ l }));
         }
       });
 

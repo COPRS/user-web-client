@@ -61,7 +61,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   selectionChanged($event) {
-    console.log({ $event });
     const selectedProduct = $event as DdipProduct;
     this.detailsNavService.setSelectedProduct(selectedProduct);
   }
