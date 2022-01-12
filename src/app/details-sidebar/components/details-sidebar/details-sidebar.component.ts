@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';
@@ -25,9 +25,10 @@ export class DetailsSidebarComponent implements OnInit {
       .getSelectedProduct()
       .pipe(map((p) => !!p));
     this.selectedProduct$ = this.navService.getSelectedProduct();
-    this.downloadUrl$ = this.navService
-      .getSelectedProduct()
-      .pipe(map((p) => this.ddipService.constructorDownloadUrl(p.Id)));
+    this.downloadUrl$ = this.navService.getSelectedProduct().pipe(
+      filter((p) => !!p),
+      map((p) => this.ddipService.constructorDownloadUrl(p.Id))
+    );
   }
 
   ngOnInit(): void {}
