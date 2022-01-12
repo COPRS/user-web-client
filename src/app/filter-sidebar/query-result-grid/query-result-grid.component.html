@@ -1,37 +1,41 @@
 <clr-datagrid
-  class="datagrid-compact"
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading"
-  [(clrDgSelected)]="selected"
+  [clrDgRowSelection]="rowSelection"
+  [clrDgSingleSelected]="selected"
+  (clrDgSingleSelectedChange)="selectionChanged($event)"
 >
   <clr-dg-column>Id</clr-dg-column>
-  <clr-dg-column>Has Footprint</clr-dg-column>
-  <clr-dg-column>Name</clr-dg-column>
+  <clr-dg-column
+    ><clr-icon shape="map-marker" class="is-solid"></clr-icon
+  ></clr-dg-column>
+  <!-- <clr-dg-column>Name</clr-dg-column> -->
   <clr-dg-column>Content length</clr-dg-column>
   <clr-dg-column>Content date start</clr-dg-column>
   <clr-dg-column>Content date end</clr-dg-column>
-  <clr-dg-column>Checksum</clr-dg-column>
 
-  <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
+  <clr-dg-row
+    *ngFor="let product of products; trackBy: trackById"
+    [clrDgItem]="product"
+  >
     <clr-dg-cell>{{ product.Id }}</clr-dg-cell>
     <clr-dg-cell>
       <clr-icon *ngIf="product.Footprint" shape="map-marker"></clr-icon>
     </clr-dg-cell>
-    <clr-dg-cell>{{ product.Name }}</clr-dg-cell>
+    <!-- <clr-dg-cell>{{ product.Name }}</clr-dg-cell> -->
     <clr-dg-cell>{{ product.ContentLength | fileSize }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentDate?.Start | date }}</clr-dg-cell>
     <clr-dg-cell>{{ product.ContentDate?.End | date }}</clr-dg-cell>
-    <clr-dg-cell>{{ product.Checksum?.[0]?.Value }}</clr-dg-cell>
   </clr-dg-row>
 
-  <clr-dg-detail *clrIfDetail="let detail">
+  <!-- <clr-dg-detail *clrIfDetail="let detail">
     <clr-dg-detail-header>{{ detail.Name }}</clr-dg-detail-header>
     <clr-dg-detail-body>
       <pre>
         {{ detail | json }}
       </pre>
     </clr-dg-detail-body>
-  </clr-dg-detail>
+  </clr-dg-detail> -->
 
   <clr-dg-footer>
     {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
@@ -43,3 +47,7 @@
     ></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
+
+<pre>
+  {{ selected | json }}
+</pre>
