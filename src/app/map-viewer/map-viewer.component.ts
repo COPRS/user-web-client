@@ -107,18 +107,27 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map.addInteraction(select);
       select.on('select', (e) => {
         if (e.selected.length !== 0) {
-          this.detailsSideBarNav.setShowNav(e.selected[0].values_.id);
+          this.detailsSideBarNav.setSelectedProduct(e.selected[0].values_.id);
         } else {
-          this.detailsSideBarNav.setShowNav(undefined);
+          this.detailsSideBarNav.setSelectedProduct(undefined);
         }
       });
     }
 
-    this.detailsSideBarNav.getShowNav().subscribe((f) => {
-      if (!f) {
-        select.getFeatures().clear();
-      }
-    });
+    this.detailsSideBarNav
+      .getSelectedProduct()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((f) => {
+        if (!f) {
+          select.getFeatures().clear();
+        } else {
+          this.map
+            .getLayers()
+            .getArray()
+            .filter((l) => console.log({ l }));
+          // TODO: set when selected from outside of the map
+        }
+      });
 
     // CLICK SELECT - END
 
@@ -152,7 +161,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // switch lat/lon
             features.forEach((f) => {
-              f.footprint.coordinates.forEach((coordinate, idx, arr) => {
+              f.footprint?.coordinates.forEach((coordinate, idx, arr) => {
                 arr[idx] = coordinate.map((c) => [c[1], c[0]]);
               });
             });
@@ -164,7 +173,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       )
       .subscribe((footprints) => {
-        console.log({ footprints });
         if (!footprints) {
           return;
         }
@@ -172,6 +180,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.map.addLayer(
           new VectorLayer({
             extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+
             properties: { layerType: LayerType.Data },
             source: new VectorSource({
               features: new GeoJSON().readFeatures(

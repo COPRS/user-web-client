@@ -43,4 +43,8 @@ export class DdipService {
     });
     return this.config.settings.apiUrl + '?' + queryString.join('&');
   }
+
+  constructorDownloadUrl(productId: string): string {
+    return this.config.settings.apiUrl + `(${productId})/$value`;
+  }
 }

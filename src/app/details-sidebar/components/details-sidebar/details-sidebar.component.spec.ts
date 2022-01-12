@@ -1,6 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { BehaviorSubject, Observable } from 'rxjs';
+import { FileSizePipe } from 'src/app/filter-sidebar/query-result-grid/file-size.pipe';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
+import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';
 import { DetailsSidebarComponent } from './details-sidebar.component';
+
+class MockDdipService {
+  getProducts() {}
+}
+
+class MockDetailsSidebarNavigationService {
+  getSelectedProduct() {
+    return new BehaviorSubject<DdipProduct>({
+      Checksum: [{ Algorithm: 'test', ChecksumDate: '', Value: '' }],
+      ContentDate: { Start: '', End: '' },
+    } as any);
+  }
+}
 
 describe('DetailsSidebarComponent', () => {
   let component: DetailsSidebarComponent;
@@ -8,9 +25,15 @@ describe('DetailsSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DetailsSidebarComponent ]
-    })
-    .compileComponents();
+      declarations: [DetailsSidebarComponent, FileSizePipe],
+      providers: [
+        { provide: DdipService, useClass: MockDdipService },
+        {
+          provide: DetailsSidebarNavigationService,
+          useClass: MockDetailsSidebarNavigationService,
+        },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

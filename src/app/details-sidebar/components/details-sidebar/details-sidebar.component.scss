@@ -28,7 +28,16 @@ $container-content-padding-top-bottom: 20px;
     }
 
     .metadatalist {
-      margin-left: 20px;
+      margin-left: 10px;
+      font-size: small;
+    }
+
+    .metadatalist > .name {
+      font-weight: bold;
+    }
+
+    .metadatalist > .value {
+      margin-bottom: 0.8em;
     }
 
     side-details-bar-content-element .side-details-bar-badge {

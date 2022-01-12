@@ -1,10 +1,10 @@
-export type DdipProductResponse = {
+export interface DdipProductResponse {
   '@odata.context': '$metadata#Products';
   '@odata.count': number;
   value: DdipProduct[];
-};
+}
 
-export type DdipProduct = {
+export interface DdipProduct {
   '@odata.mediaContentType': string;
   Id: string;
   Name: string;
@@ -18,11 +18,17 @@ export type DdipProduct = {
     Start: string;
     End: string;
   };
-  Footprint: null;
-};
+  Footprint: DdipProductFootprint | undefined;
+}
 
-export type DdipProductChecksum = {
+export interface DdipProductChecksum {
   Algorithm: string;
   Value: string;
   ChecksumDate: string;
-};
+}
+
+export interface DdipProductFootprint {
+  type: string;
+  crs: any;
+  coordinates: Array<Array<[number, number]>>;
+}
