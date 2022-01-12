@@ -8,6 +8,9 @@ import { DetailsSidebarComponent } from './details-sidebar.component';
 
 class MockDdipService {
   getProducts() {}
+  constructorDownloadUrl() {
+    return '';
+  }
 }
 
 class MockDetailsSidebarNavigationService {
