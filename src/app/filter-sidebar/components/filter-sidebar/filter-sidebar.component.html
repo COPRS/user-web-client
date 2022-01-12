@@ -60,24 +60,6 @@
       <hr />
       <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.FILTERS">
         <div class="side-nav-bar-content-element">
-          <div class="clr-row clr-align-items-end">
-            <div class="clr-col-12">
-              <clr-input-container>
-                <label class="clr-col-12">Api Base Url</label>
-                <input
-                  class="clr-col-12"
-                  style="width: 100%"
-                  clrInput
-                  placeholder="https://..."
-                  value="{{ settings.apiUrl }}"
-                  (change)="onApiUrlChange($event.target)"
-                />
-              </clr-input-container>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div class="side-nav-bar-content-element">
           <app-filter-element-list></app-filter-element-list>
         </div>
         <hr />

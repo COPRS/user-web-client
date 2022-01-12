@@ -75,10 +75,6 @@ export class FilterSidebarComponent implements OnInit {
     return navBarStyle;
   }
 
-  onApiUrlChange(target: any) {
-    this.configService.setApiUrl(target.value);
-  }
-
   async onManualFilterQueryChange(target: any) {
     this.filterElementsService.updateWithManualFilter(target.value);
   }
