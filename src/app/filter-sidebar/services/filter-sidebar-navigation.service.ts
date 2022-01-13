@@ -14,7 +14,7 @@ export class FilterSidebarNavigationService {
     true
   );
   private selectedSubNav$: BehaviorSubject<SideBarSubNav> =
-    new BehaviorSubject<SideBarSubNav>(SideBarSubNav.RESULTS);
+    new BehaviorSubject<SideBarSubNav>(SideBarSubNav.FILTERS);
 
   constructor() {}
 

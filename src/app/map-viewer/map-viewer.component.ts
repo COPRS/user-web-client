@@ -5,10 +5,12 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { Feature } from 'ol';
 import { Zoom } from 'ol/control';
 import { click } from 'ol/events/condition';
 import GeoJSON from 'ol/format/GeoJSON';
-import Select from 'ol/interaction/Select';
+import Polygon from 'ol/geom/Polygon';
+import { Draw, Select } from 'ol/interaction';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
@@ -18,6 +20,7 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
+import { MapRegionSelectionService } from './services/map-region-selection.service';
 import {
   AvailableMap,
   MapSwitcherService,
@@ -32,12 +35,15 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private map: Map;
   private bounds = [-180, -89, 180, 89];
   private readonly onDestroy = new Subject<void>();
+  private source = new VectorSource({ wrapX: false });
+  private draw: Draw;
 
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
     private elementRef: ElementRef,
     private mapSwitcher: MapSwitcherService,
-    private queryResultService: QueryResultService
+    private queryResultService: QueryResultService,
+    private mapRegionSelectionService: MapRegionSelectionService
   ) {}
   async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
@@ -47,7 +53,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private changeMapBackground(selectedMap: AvailableMap) {
-    // Remove old background if exists
+    // Remove old background if it exists
     const backgroundLayers = this.map
       .getLayers()
       .getArray()
@@ -62,7 +68,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     backgroundLayers.forEach((l) => {
       this.map.removeLayer(l);
-      });
+    });
 
     // Set new background
     selectedMap.sources.forEach((source) => {
@@ -133,6 +139,17 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // CLICK SELECT - END
 
+    // CREATE DRAW BOX - START
+    this.mapRegionSelectionService.getSelectionStarted().subscribe((type) => {
+      this.startSelection(type);
+    });
+
+    this.mapRegionSelectionService.getSelectionAborted().subscribe(() => {
+      this.abortSelection();
+    });
+
+    // CREATE DRAW BOX - END
+
     // LOAD DATA FROM DDIP-API - START
 
     this.queryResultService
@@ -155,7 +172,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
             });
           dataLayers.forEach((l) => {
             this.map.removeLayer(l);
-            });
+          });
 
           // Convert footprints
           if (products?.products) {
@@ -218,6 +235,30 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // LOAD DATA FROM DDIP-API - END
   }
+
+  private startSelection(type: string) {
+    this.draw = new Draw({ source: this.source, type });
+
+    this.map.addInteraction(this.draw);
+
+    this.draw.on('drawend', (drawEvent) => {
+      const drawnFeature = drawEvent.feature as Feature<Polygon>;
+      const geometry = drawnFeature.getGeometry();
+      geometry.transform('EPSG:3857', 'EPSG:4326');
+      const coordinates = geometry.getCoordinates();
+      this.mapRegionSelectionService.finishSelection({ coordinates });
+      this.abortSelection();
+    });
+  }
+
+  private abortSelection() {
+    if (this.draw) {
+      this.draw.abortDrawing();
+      this.map.removeInteraction(this.draw);
+      delete this.draw;
+    }
+  }
+
   ngOnDestroy() {
     this.onDestroy.next();
   }

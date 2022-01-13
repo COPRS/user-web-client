@@ -1,7 +1,11 @@
-import { style, transition, trigger, animate } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {
+  MapRegionSelection,
+  MapRegionSelectionService,
+} from 'src/app/map-viewer/services/map-region-selection.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
@@ -34,6 +38,7 @@ export class FilterSidebarComponent implements OnInit {
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
   settings: IAppConfig;
+  selectedRegion$: Observable<MapRegionSelection>;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -42,7 +47,8 @@ export class FilterSidebarComponent implements OnInit {
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
     private dataService: QueryResultService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private mapRegionSelectionService: MapRegionSelectionService
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +60,7 @@ export class FilterSidebarComponent implements OnInit {
     this.showSideNav$ = this.navService.getShowNav();
     this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.settings = this.configService.settings;
+    this.selectedRegion$ = this.mapRegionSelectionService.getSelection();
   }
 
   onSidebarClose() {
@@ -80,5 +87,17 @@ export class FilterSidebarComponent implements OnInit {
 
   onSubNavClick(selectedSubNav: SideBarSubNav) {
     this.navService.setSelectedSubNav(selectedSubNav);
+  }
+
+  startGeopgraphicSelection() {
+    this.mapRegionSelectionService.startSelection('Polygon');
+  }
+
+  abortGeopgraphicSelection() {
+    this.mapRegionSelectionService.abortSelection();
+  }
+
+  clearGeopgraphicSelection() {
+    this.mapRegionSelectionService.clearSelection();
   }
 }

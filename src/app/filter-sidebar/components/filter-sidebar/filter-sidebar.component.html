@@ -64,6 +64,21 @@
         </div>
         <hr />
         <div class="side-nav-bar-content-element">
+          Geographic Selection
+          <button class="btn" (click)="startGeopgraphicSelection()">
+            Start Selection
+          </button>
+          <button class="btn" (click)="abortGeopgraphicSelection()">
+            Cancel Selection
+          </button>
+          <button class="btn" (click)="clearGeopgraphicSelection()">
+            Clear Selection
+          </button>
+
+          <pre>{{ selectedRegion$ | async | json }}</pre>
+        </div>
+        <hr />
+        <div class="side-nav-bar-content-element">
           <form class="clr-form clr-form-vertical">
             <clr-textarea-container>
               <label class="clr-col-12">Used query</label>
