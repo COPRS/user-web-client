@@ -3,8 +3,9 @@ $side-bar-top-distance: 30px;
 $container-content-padding-side: 32px;
 $container-content-padding-top-bottom: 20px;
 
-app-filter-sidebar {
+:host {
   position: relative;
+  background-color: pink;
 }
 
 .side-nav-bar {

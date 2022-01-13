@@ -48,16 +48,20 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private changeMapBackground(selectedMap: AvailableMap) {
     // Remove old background if exists
-    this.map
+    const backgroundLayers = this.map
       .getLayers()
       .getArray()
-      .find((l) => {
+      .filter((l) => {
         if (l) {
           const props = l.getProperties();
           if (props.layerType === LayerType.Background) {
-            this.map.removeLayer(l);
+            return true;
           }
         }
+        return false;
+      });
+    backgroundLayers.forEach((l) => {
+      this.map.removeLayer(l);
       });
 
     // Set new background

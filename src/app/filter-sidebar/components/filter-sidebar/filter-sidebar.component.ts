@@ -1,7 +1,8 @@
 import { style, transition, trigger, animate } from '@angular/animations';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MapRegionSelectionService } from 'src/app/map-viewer/services/map-region-selection.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
@@ -24,7 +25,6 @@ import { QueryResultService } from '../../services/query-result.service';
       transition(':leave', [animate('0.1s', style({ opacity: 0 }))]),
     ]),
   ],
-  encapsulation: ViewEncapsulation.None,
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;

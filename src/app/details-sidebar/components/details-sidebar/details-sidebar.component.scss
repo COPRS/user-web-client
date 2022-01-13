@@ -40,10 +40,6 @@ $container-content-padding-top-bottom: 20px;
       margin-bottom: 0.8em;
     }
 
-    side-details-bar-content-element .side-details-bar-badge {
-      text-align: left;
-    }
-
     .side-details-bar-close {
       text-align: left;
     }
@@ -70,6 +66,10 @@ $container-content-padding-top-bottom: 20px;
 
         h3 {
           margin-top: 0;
+        }
+
+        .side-details-bar-badge {
+          text-align: left;
         }
       }
     }
