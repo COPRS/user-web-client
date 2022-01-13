@@ -33,14 +33,6 @@
           </div>
         </div>
 
-        <!-- <div class="clr-row">
-            <div class="clr-example-col-value clr-col">
-              <h4>Quicklook</h4>
-              <clr-icon shape="image" size="180"></clr-icon>
-            </div>
-          </div>
-        -->
-
         <div class="clr-row">
           <div class="clr-example-col-value clr-col">
             <h4>Attributes</h4>
@@ -51,25 +43,25 @@
               <li class="name">Filename:</li>
               <li class="value">{{ (selectedProduct$ | async).Name }}</li>
               <li class="name">
-                <b>Content Length:</b>
+                <strong>Content Length:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).ContentLength | fileSize }}
               </li>
               <li class="name">
-                <b>Publication Date:</b>
+                <strong>Publication Date:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).PublicationDate | date }}
               </li>
               <li class="name">
-                <b>Eviction Date:</b>
+                <strong>Eviction Date:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).EvictionDate | date }}
               </li>
               <li class="name">
-                <b>Checksum:</b>
+                <strong>Checksum:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).Checksum[0].Value }} ({{
@@ -77,50 +69,25 @@
                 }})
               </li>
               <li class="name">
-                <b>Production Type:</b>
+                <strong>Production Type:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).ProductionType }}
               </li>
               <li class="name">
-                <b>Content Date Start:</b>
+                <strong>Content Date Start:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).ContentDate.Start }}
               </li>
               <li class="name">
-                <b>Content Date End:</b>
+                <strong>Content Date End:</strong>
               </li>
               <li class="value">
                 {{ (selectedProduct$ | async).ContentDate.End }}
               </li>
             </ul>
           </div>
-
-          <!-- <div class="clr-example-col-value clr-col">
-            <h4>Files</h4>
-            <span>
-              <clr-tree>
-                <clr-tree-node
-                  *ngFor="let directory of rootDirectory"
-                  [(clrExpanded)]="directory.expanded"
-                >
-                  <clr-icon [attr.shape]="directory.icon"></clr-icon>
-                  {{ directory.name }}
-                  <clr-tree-node *ngFor="let file of directory.files">
-                    <button
-                      class="clr-treenode-link"
-                      [class.active]="file.active"
-                    >
-                      <clr-icon [attr.shape]="file.icon"></clr-icon>
-                      {{ file.name }}
-                    </button>
-                  </clr-tree-node>
-                </clr-tree-node>
-              </clr-tree></span
-            >
-          </div>
-        </div> -->
 
           <a
             class="btn btn-outline btn-icon"
@@ -131,10 +98,6 @@
             <clr-icon shape="archive"></clr-icon>
             Download Product
           </a>
-
-          <!-- <pre>
-            {{ selectedProduct$ | async | json }} 
-          </pre> -->
         </div>
       </div>
     </div>

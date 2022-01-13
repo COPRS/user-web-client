@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { FileSizePipe } from 'src/app/filter-sidebar/query-result-grid/file-size.pipe';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';

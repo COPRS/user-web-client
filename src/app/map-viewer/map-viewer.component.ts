@@ -46,7 +46,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((e) => this.changeMapBackground(e));
   }
 
-  private changeMapBackground(map: AvailableMap) {
+  private changeMapBackground(selectedMap: AvailableMap) {
     // Remove old background if exists
     this.map
       .getLayers()
@@ -61,12 +61,12 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // Set new background
-    map.sources.forEach((source) => {
+    selectedMap.sources.forEach((source) => {
       this.map.addLayer(
         new TileLayer({
           properties: {
             layerType: LayerType.Background,
-            layerName: map.mapName,
+            layerName: selectedMap.mapName,
           },
           source,
           extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
@@ -159,9 +159,10 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // switch lat/lon
             features.forEach((f) => {
-              f.footprint?.coordinates.forEach((coordinate, idx, arr) => {
-                arr[idx] = coordinate.map((c) => [c[1], c[0]]);
-              });
+              f.footprint?.coordinates.forEach(
+                (coordinate, idx, arr) =>
+                  (arr[idx] = coordinate.map((c) => [c[1], c[0]]))
+              );
             });
 
             return features;

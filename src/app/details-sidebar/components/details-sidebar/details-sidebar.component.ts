@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';

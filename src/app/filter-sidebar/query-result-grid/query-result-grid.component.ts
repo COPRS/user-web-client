@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Subject } from 'rxjs';
-import { sequenceEqual, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from 'src/app/details-sidebar/services/details-sidebar-navigation.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { QueryResultService } from '../services/query-result.service';
@@ -31,7 +31,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       .getFilteredProducts()
       .pipe(takeUntil(this.onDestroy))
       .subscribe((page) => {
-        this.products = page.products as DdipProduct[];
+        this.products = page.products;
         this.total = page.totalCount;
         this.loading = false;
       });
