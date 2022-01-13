@@ -136,17 +136,21 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         takeUntil(this.onDestroy),
         map((products) => {
-          // Remove data layer
-          this.map
+          // Remove data layers
+          const dataLayers = this.map
             .getLayers()
             .getArray()
-            .find((l) => {
+            .filter((l) => {
               if (l) {
                 const props = l.getProperties();
                 if (props.layerType === LayerType.Data) {
-                  this.map.removeLayer(l);
+                  return true;
                 }
               }
+              return false;
+            });
+          dataLayers.forEach((l) => {
+            this.map.removeLayer(l);
             });
 
           // Convert footprints
@@ -159,10 +163,9 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // switch lat/lon
             features.forEach((f) => {
-              f.footprint?.coordinates.forEach(
-                (coordinate, idx, arr) =>
-                  (arr[idx] = coordinate.map((c) => [c[1], c[0]]))
-              );
+              f.footprint?.coordinates.forEach((coordinate, idx, arr) => {
+                arr[idx] = coordinate.map((c) => [c[1], c[0]]);
+              });
             });
 
             return features;
