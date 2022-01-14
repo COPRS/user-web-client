@@ -101,7 +101,7 @@ export class FilterElementsService {
       mapRegion.coordinates.forEach((f) => {
         flattened += f
           .map((c) => {
-            return `${c[1]} ${c[0]}`;
+            return `${c[0]} ${c[1]}`;
           })
           .join(', ');
       });

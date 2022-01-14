@@ -180,11 +180,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
             let features = products.products.filter((p) => p.Footprint);
 
             // switch lat/lon
-            features.forEach((f) => {
-              f.Footprint?.coordinates.forEach((coordinate, idx, arr) => {
-                arr[idx] = coordinate.map((c) => [c[1], c[0]]);
-              });
-            });
+            // features.forEach((f) => {
+            //   f.Footprint?.coordinates.forEach((coordinate, idx, arr) => {
+            //     arr[idx] = coordinate.map((c) => [c[1], c[0]]);
+            //   });
+            // });
 
             return features;
           } else {
