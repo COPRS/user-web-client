@@ -1,0 +1,18 @@
+<button class="btn btn-primary" (click)="startGeopgraphicSelection()">
+  <clr-icon shape="plus-circle"></clr-icon> Select a
+  <span *ngIf="selectedRegion$ | async">new </span>Region on the map
+</button>
+<button
+  class="btn"
+  *ngIf="isSelectionActive"
+  (click)="abortGeopgraphicSelection()"
+>
+  Cancel Selection
+</button>
+<button
+  class="btn"
+  *ngIf="selectedRegion$ | async"
+  (click)="clearGeopgraphicSelection()"
+>
+  Clear Selection
+</button>

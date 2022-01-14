@@ -64,18 +64,7 @@
         </div>
         <hr />
         <div class="side-nav-bar-content-element">
-          Geographic Selection
-          <button class="btn" (click)="startGeopgraphicSelection()">
-            Start Selection
-          </button>
-          <button class="btn" (click)="abortGeopgraphicSelection()">
-            Cancel Selection
-          </button>
-          <button class="btn" (click)="clearGeopgraphicSelection()">
-            Clear Selection
-          </button>
-
-          <pre>{{ selectedRegion$ | async | json }}</pre>
+          <app-region-selection-filter-element></app-region-selection-filter-element>
         </div>
         <hr />
         <div class="side-nav-bar-content-element">

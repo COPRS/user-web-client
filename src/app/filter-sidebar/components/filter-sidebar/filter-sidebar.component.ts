@@ -38,7 +38,6 @@ export class FilterSidebarComponent implements OnInit {
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
   settings: IAppConfig;
-  selectedRegion$: Observable<MapRegionSelection>;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -60,7 +59,6 @@ export class FilterSidebarComponent implements OnInit {
     this.showSideNav$ = this.navService.getShowNav();
     this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.settings = this.configService.settings;
-    this.selectedRegion$ = this.mapRegionSelectionService.getSelection();
   }
 
   onSidebarClose() {
@@ -87,17 +85,5 @@ export class FilterSidebarComponent implements OnInit {
 
   onSubNavClick(selectedSubNav: SideBarSubNav) {
     this.navService.setSelectedSubNav(selectedSubNav);
-  }
-
-  startGeopgraphicSelection() {
-    this.mapRegionSelectionService.startSelection('Polygon');
-  }
-
-  abortGeopgraphicSelection() {
-    this.mapRegionSelectionService.abortSelection();
-  }
-
-  clearGeopgraphicSelection() {
-    this.mapRegionSelectionService.clearSelection();
   }
 }
