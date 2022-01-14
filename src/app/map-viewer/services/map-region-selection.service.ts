@@ -10,7 +10,7 @@ export class MapRegionSelectionService {
   private selectionActive$ = new BehaviorSubject<{
     event: 'start' | 'abort' | 'finish';
     value?: SelectionType | MapRegionSelection;
-  }>({ event: 'abort' });
+  }>({ event: 'finish' });
 
   constructor(
     private filterSidebarNavigationService: FilterSidebarNavigationService
@@ -28,6 +28,7 @@ export class MapRegionSelectionService {
 
   clearSelection() {
     this.selectionActive$.next({ event: 'finish', value: undefined });
+    this.abortSelection();
   }
 
   abortSelection() {

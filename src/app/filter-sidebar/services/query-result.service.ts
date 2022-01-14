@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinct, mergeMap } from 'rxjs/operators';
+import { MapRegionSelectionService } from 'src/app/map-viewer/services/map-region-selection.service';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { FilterElementsService } from './filter-elements.service';
@@ -40,7 +41,8 @@ export class QueryResultService {
 
   constructor(
     private ddipService: DdipService,
-    private filterService: FilterElementsService
+    private filterService: FilterElementsService,
+    private mapRegionSelectionService: MapRegionSelectionService
   ) {
     this.currentPage$.subscribe(this.currentPageSubject$);
   }

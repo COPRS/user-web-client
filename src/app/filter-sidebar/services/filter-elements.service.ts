@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { flatMap, map, mergeMap } from 'rxjs/operators';
+import {
+  MapRegionSelection,
+  MapRegionSelectionService,
+} from 'src/app/map-viewer/services/map-region-selection.service';
 import { FilterElement } from '../models/FilterElement';
 
 @Injectable({
@@ -13,7 +17,7 @@ export class FilterElementsService {
     new BehaviorSubject(0);
   private filterElements: Array<FilterElement> = [];
 
-  constructor() {}
+  constructor(private mapRegionSelectionService: MapRegionSelectionService) {}
 
   public updateFilters(filterElements: FilterElement[]): void {
     this.filterElements = filterElements;
@@ -27,8 +31,19 @@ export class FilterElementsService {
   }
 
   public getQuery(): Observable<string> {
-    return this.filterElements$.pipe(
+    // TODO merge mit selected region
+    this.mapRegionSelectionService.getSelection();
+
+    const filterElements = this.filterElements$.pipe(
       map(this.convertFilterElementToOdataFilter)
+    );
+
+    const regionFilter = this.mapRegionSelectionService
+      .getSelection()
+      .pipe(map((e) => this.convertCoordinatesToOdataFilter(e)));
+
+    return combineLatest([filterElements, regionFilter]).pipe(
+      map((e) => e.filter((f) => !!f).join(' and '))
     );
   }
 
@@ -75,6 +90,24 @@ export class FilterElementsService {
       });
 
       return result.join(' and ');
+    }
+  }
+
+  private convertCoordinatesToOdataFilter(
+    mapRegion: MapRegionSelection
+  ): string {
+    if (mapRegion) {
+      let flattened = '';
+      mapRegion.coordinates.forEach((f) => {
+        flattened += f
+          .map((c) => {
+            return `${c[1]} ${c[0]}`;
+          })
+          .join(', ');
+      });
+      return `OData.CSC.Intersects(area=geography'SRID=4326;POLYGON((${flattened}))')`;
+    } else {
+      return undefined;
     }
   }
 }
