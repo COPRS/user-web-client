@@ -117,7 +117,9 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map.addInteraction(select);
       select.on('select', (e) => {
         if (e.selected.length !== 0) {
-          this.detailsSideBarNav.setSelectedProduct(e.selected[0].values_.id);
+          this.detailsSideBarNav.setSelectedProduct(
+            e.selected[0].values_.product
+          );
         } else {
           this.detailsSideBarNav.setSelectedProduct(undefined);
         }
@@ -136,7 +138,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           // .filter((l) => console.log({ l }));
         }
       });
-
     // CLICK SELECT - END
 
     // CREATE DRAW BOX - START
@@ -176,15 +177,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // Convert footprints
           if (products?.products) {
-            let features = products.products
-              .filter((p) => p.Footprint)
-              .map((p) => {
-                return { id: p.Id, footprint: p.Footprint };
-              });
+            let features = products.products.filter((p) => p.Footprint);
 
             // switch lat/lon
             features.forEach((f) => {
-              f.footprint?.coordinates.forEach((coordinate, idx, arr) => {
+              f.Footprint?.coordinates.forEach((coordinate, idx, arr) => {
                 arr[idx] = coordinate.map((c) => [c[1], c[0]]);
               });
             });
@@ -195,8 +192,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         })
       )
-      .subscribe((footprints) => {
-        if (!footprints) {
+      .subscribe((ddipProducts) => {
+        if (!ddipProducts) {
           return;
         }
         // Add data layer with new data
@@ -216,11 +213,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
                     },
                   },
 
-                  features: footprints.map((d) => {
+                  features: ddipProducts.map((product) => {
                     return {
                       type: 'Feature',
-                      properties: { id: d.id },
-                      geometry: d.footprint,
+                      properties: { product },
+                      geometry: product.Footprint,
                     };
                   }),
                 },
