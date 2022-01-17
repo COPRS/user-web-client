@@ -111,7 +111,7 @@ jobs:
             -Dsonar.projectKey=user-web-client
             -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
             -Dsonar.projectVersion=${{ steps.extract_version.outputs.version }}
-            -Dsonar.javascript.lcov.reportPaths=coverage/user-web-client/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=../coverage/user-web-client/lcov.info
         env:
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONARQUBE_HOST }}
