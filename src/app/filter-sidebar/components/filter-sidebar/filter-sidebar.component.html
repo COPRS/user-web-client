@@ -24,10 +24,32 @@
 
     <div class="side-nav-bar-menu-container-header">
       <div class="clr-row">
-        <div class="clr-col-9 side-nav-bar-badge">
+        <div class="clr-col-1"></div>
+        <div
+          class="clr-col-5 side-nav-bar-badge"
+          [ngClass]="{
+            buttonSelected: (selectedSubNav$ | async) === SideBarSubNav.FILTERS
+          }"
+          (click)="onSubNavClick(SideBarSubNav.FILTERS)"
+        >
           <clr-icon shape="filter"></clr-icon> FILTERS
+          <span *ngIf="filterCount$ | async" class="badge badge-info">{{
+            filterCount$ | async
+          }}</span>
         </div>
-        <div class="clr-col-3 side-nav-bar-close clr-align-self-center">
+        <div
+          class="clr-col-5 side-nav-bar-badge"
+          [ngClass]="{
+            buttonSelected: (selectedSubNav$ | async) === SideBarSubNav.RESULTS
+          }"
+          (click)="onSubNavClick(SideBarSubNav.RESULTS)"
+        >
+          <clr-icon shape="view-list"></clr-icon> RESULTS
+          <span *ngIf="resultCount$ | async" class="badge badge-info">{{
+            resultCount$ | async
+          }}</span>
+        </div>
+        <div class="clr-col-1 side-nav-bar-close clr-align-self-center">
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
         </div>
       </div>
@@ -36,66 +58,35 @@
     <!-- side bar content -->
     <div class="side-nav-bar-content-container">
       <hr />
-      <div class="side-nav-bar-content-element">
-        <div class="clr-row clr-align-items-end">
-          <div class="clr-col-6">
-            <clr-input-container>
-              <label>Api Base Url</label>
-              <input
-                clrInput
-                placeholder="https://..."
-                value="{{ settings.apiBaseUrl }}"
-                (change)="onApiUrlChange($event.target)"
-              />
-            </clr-input-container>
-          </div>
-          <div class="clr-col-6">
-            <clr-input-container>
-              <label>Resource Name</label>
-              <input
-                clrInput
-                placeholder="Products"
-                value="{{ settings.resourceName }}"
-                (change)="onApiResourceChange($event.target)"
-              />
-            </clr-input-container>
-          </div>
+      <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.FILTERS">
+        <div class="side-nav-bar-content-element">
+          <app-filter-element-list></app-filter-element-list>
+        </div>
+        <hr />
+        <div class="side-nav-bar-content-element">
+          <app-region-selection-filter-element></app-region-selection-filter-element>
+        </div>
+        <hr />
+        <div class="side-nav-bar-content-element">
+          <form class="clr-form clr-form-vertical">
+            <clr-textarea-container>
+              <label class="clr-col-12">Used query</label>
+              <textarea
+                class="clr-col-12"
+                clrTextarea
+                style="width: 100%"
+                required
+                [value]="queryFilterFromService$ | async"
+                (change)="onManualFilterQueryChange($event.target)"
+              ></textarea>
+            </clr-textarea-container>
+          </form>
         </div>
       </div>
-      <hr />
-      <div class="side-nav-bar-content-element">
-        <app-filter-element-list></app-filter-element-list>
-      </div>
-      <hr />
-      <div class="side-nav-bar-content-element">
-        <form class="clr-form clr-form-vertical">
-          <clr-textarea-container>
-            <label class="clr-col-12">Filter Query</label>
-            <textarea
-              class="clr-col-12"
-              clrTextarea
-              style="width: 100%"
-              required
-              [value]="queryFilterFromService$ | async"
-              (change)="onFilterQueryChange($event.target)"
-            ></textarea>
-          </clr-textarea-container>
-        </form>
-      </div>
-      <hr />
-      <div class="side-nav-bar-content-element">
-        <form class="clr-form clr-form-vertical">
-          <clr-textarea-container>
-            <label class="clr-col-12">Query Result</label>
-            <textarea
-              class="clr-col-12"
-              clrTextarea
-              style="width: 100%"
-              required
-              [value]="queryResultFromService | json"
-            ></textarea>
-          </clr-textarea-container>
-        </form>
+      <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.RESULTS">
+        <div class="side-nav-bar-content-element">
+          <app-query-result-grid></app-query-result-grid>
+        </div>
       </div>
     </div>
   </div>
@@ -108,5 +99,12 @@
   [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) }"
 >
   <clr-icon shape="filter"></clr-icon>
-  <span class="badge badge-info">9</span>
+  <span *ngIf="filterCount$ | async" class="badge badge-info">{{
+    filterCount$ | async
+  }}</span>
+  &nbsp;
+  <clr-icon shape="view-list"></clr-icon>
+  <span *ngIf="resultCount$ | async" class="badge badge-info">{{
+    resultCount$ | async
+  }}</span>
 </div>

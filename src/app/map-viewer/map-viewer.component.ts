@@ -1,15 +1,26 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
-import Map from 'ol/Map';
-import View from 'ol/View';
-import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
-import GeoJSON from 'ol/format/GeoJSON';
-import { Stamen, Vector as VectorSource, XYZ } from 'ol/source';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { Feature } from 'ol';
 import { Zoom } from 'ol/control';
-import { transformExtent } from 'ol/proj';
 import { click } from 'ol/events/condition';
-import Select from 'ol/interaction/Select';
+import GeoJSON from 'ol/format/GeoJSON';
+import Polygon from 'ol/geom/Polygon';
+import { Draw, Select } from 'ol/interaction';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
+import Map from 'ol/Map';
+import { transformExtent } from 'ol/proj';
+import { Vector as VectorSource } from 'ol/source';
+import View from 'ol/View';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
-import { data } from './data';
+import { QueryResultService } from '../filter-sidebar/services/query-result.service';
+import { MapRegionSelectionService } from './services/map-region-selection.service';
 import {
   AvailableMap,
   MapSwitcherService,
@@ -20,14 +31,19 @@ import {
   templateUrl: './map-viewer.component.html',
   styleUrls: ['./map-viewer.component.scss'],
 })
-export class MapViewerComponent implements OnInit, AfterViewInit {
+export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private map: Map;
   private bounds = [-180, -89, 180, 89];
+  private readonly onDestroy = new Subject<void>();
+  private source = new VectorSource({ wrapX: false });
+  private draw: Draw;
 
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
     private elementRef: ElementRef,
-    private mapSwitcher: MapSwitcherService
+    private mapSwitcher: MapSwitcherService,
+    private queryResultService: QueryResultService,
+    private mapRegionSelectionService: MapRegionSelectionService
   ) {}
   async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
@@ -36,28 +52,31 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
       .subscribe((e) => this.changeMapBackground(e));
   }
 
-  private changeMapBackground(map: AvailableMap) {
-    // Remove old background if exists
-    this.map
+  private changeMapBackground(selectedMap: AvailableMap) {
+    // Remove old background if it exists
+    const backgroundLayers = this.map
       .getLayers()
       .getArray()
-      .find((l) => {
+      .filter((l) => {
         if (l) {
           const props = l.getProperties();
           if (props.layerType === LayerType.Background) {
-            console.log('remove', l);
-            this.map.removeLayer(l);
+            return true;
           }
         }
+        return false;
       });
+    backgroundLayers.forEach((l) => {
+      this.map.removeLayer(l);
+    });
 
     // Set new background
-    map.sources.forEach((source) => {
+    selectedMap.sources.forEach((source) => {
       this.map.addLayer(
         new TileLayer({
           properties: {
             layerType: LayerType.Background,
-            layerName: map.mapName,
+            layerName: selectedMap.mapName,
           },
           source,
           extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
@@ -98,78 +117,147 @@ export class MapViewerComponent implements OnInit, AfterViewInit {
       this.map.addInteraction(select);
       select.on('select', (e) => {
         if (e.selected.length !== 0) {
-          this.detailsSideBarNav.setShowNav(e.selected[0].values_.id);
+          this.detailsSideBarNav.setSelectedProduct(
+            e.selected[0].values_.product
+          );
         } else {
-          this.detailsSideBarNav.setShowNav(undefined);
+          this.detailsSideBarNav.setSelectedProduct(undefined);
         }
       });
     }
 
-    this.detailsSideBarNav.getShowNav().subscribe((f) => {
-      if (!f) {
-        select.getFeatures().clear();
-      }
+    this.detailsSideBarNav
+      .getSelectedProduct()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((f) => {
+        if (!f) {
+          select.getFeatures().clear();
+        } else {
+          // TODO: set feature to selected when selected from outside of the map
+          this.map.getLayers().getArray();
+          // .filter((l) => console.log({ l }));
+        }
+      });
+    // CLICK SELECT - END
+
+    // CREATE DRAW BOX - START
+    this.mapRegionSelectionService.getSelectionStarted().subscribe((type) => {
+      this.startSelection(type);
     });
 
-    // CLICK SELECT - END
+    this.mapRegionSelectionService.getSelectionAborted().subscribe(() => {
+      this.abortSelection();
+    });
+
+    // CREATE DRAW BOX - END
 
     // LOAD DATA FROM DDIP-API - START
 
-    // this.ddipService.trySciHub().then((data) => {
-    //   const features = data.map((e) => e.ContentGeometry);
-    //   this.map.addLayer(
-    //     new VectorLayer({
-    //       extent: transformExtent(bounds, 'EPSG:4326', 'EPSG:3857'),
-    //       source: new VectorSource({
-    //         features: new GML().readFeatures(features, {
-    //           featureProjection: 'EPSG:3857',
-    //         }),
-    //       }),
-    //     })
-    //   );
-    // });
+    this.queryResultService
+      .getFilteredProducts()
+      .pipe(
+        takeUntil(this.onDestroy),
+        map((products) => {
+          // Remove data layers
+          const dataLayers = this.map
+            .getLayers()
+            .getArray()
+            .filter((l) => {
+              if (l) {
+                const props = l.getProperties();
+                if (props.layerType === LayerType.Data) {
+                  return true;
+                }
+              }
+              return false;
+            });
+          dataLayers.forEach((l) => {
+            this.map.removeLayer(l);
+          });
+
+          // Convert footprints
+          if (products?.products) {
+            let features = products.products.filter((p) => p.Footprint);
+
+            // switch lat/lon
+            // features.forEach((f) => {
+            //   f.Footprint?.coordinates.forEach((coordinate, idx, arr) => {
+            //     arr[idx] = coordinate.map((c) => [c[1], c[0]]);
+            //   });
+            // });
+
+            return features;
+          } else {
+            return undefined;
+          }
+        })
+      )
+      .subscribe((ddipProducts) => {
+        if (!ddipProducts) {
+          return;
+        }
+        // Add data layer with new data
+        this.map.addLayer(
+          new VectorLayer({
+            extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+
+            properties: { layerType: LayerType.Data },
+            source: new VectorSource({
+              features: new GeoJSON().readFeatures(
+                {
+                  type: 'FeatureCollection',
+                  crs: {
+                    type: 'name',
+                    properties: {
+                      name: 'urn:ogc:def:crs:EPSG::4326',
+                    },
+                  },
+
+                  features: ddipProducts.map((product) => {
+                    return {
+                      type: 'Feature',
+                      properties: { product },
+                      geometry: product.Footprint,
+                    };
+                  }),
+                },
+                {
+                  featureProjection: 'EPSG:3857',
+                }
+              ),
+            }),
+          })
+        );
+      });
 
     // LOAD DATA FROM DDIP-API - END
+  }
 
-    // LOAD EXAMPLE DATA - START
+  private startSelection(type: string) {
+    this.draw = new Draw({ source: this.source, type });
 
-    this.map.addLayer(
-      new VectorLayer({
-        zIndex: 1,
-        properties: { layerType: LayerType.Data },
-        extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
-        source: new VectorSource({
-          features: new GeoJSON().readFeatures(
-            {
-              type: 'FeatureCollection',
-              crs: {
-                type: 'name',
-                properties: {
-                  name: 'urn:ogc:def:crs:EPSG::4326',
-                },
-              },
+    this.map.addInteraction(this.draw);
 
-              features: data.map((d) => {
-                return {
-                  type: 'Feature',
-                  properties: { id: d.id },
-                  geometry: d.footprint,
-                };
-              }),
-            },
-            {
-              featureProjection: 'EPSG:3857',
-            }
-          ),
-        }),
-      })
-    );
+    this.draw.on('drawend', (drawEvent) => {
+      const drawnFeature = drawEvent.feature as Feature<Polygon>;
+      const geometry = drawnFeature.getGeometry();
+      geometry.transform('EPSG:3857', 'EPSG:4326');
+      const coordinates = geometry.getCoordinates();
+      this.mapRegionSelectionService.finishSelection({ coordinates });
+      this.abortSelection();
+    });
+  }
 
-    // LOAD EXAMPLE DATA - END
+  private abortSelection() {
+    if (this.draw) {
+      this.draw.abortDrawing();
+      this.map.removeInteraction(this.draw);
+      delete this.draw;
+    }
+  }
 
-    // this.map
-    //   .getLayers()
-    //   .forEach((layer) => console.log({ layer, props: layer.getProperties() }));
+  ngOnDestroy() {
+    this.onDestroy.next();
   }
 }
 

@@ -25,7 +25,6 @@ export class FilterElementComponent implements OnInit {
     'Name',
     'ProductionType',
     'ContentLength',
-    'Attributes',
   ];
   attributeName = '';
 

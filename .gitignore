@@ -2,6 +2,7 @@
 
 # dev config file
 /src/assets/config.json
+/src/index.html
 
 # compiled output
 /dist

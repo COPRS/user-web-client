@@ -28,11 +28,16 @@ $container-content-padding-top-bottom: 20px;
     }
 
     .metadatalist {
-      margin-left: 20px;
+      margin-left: 10px;
+      font-size: small;
     }
 
-    side-details-bar-content-element .side-details-bar-badge {
-      text-align: left;
+    .metadatalist > .name {
+      font-weight: bold;
+    }
+
+    .metadatalist > .value {
+      margin-bottom: 0.8em;
     }
 
     .side-details-bar-close {
@@ -45,6 +50,9 @@ $container-content-padding-top-bottom: 20px;
     }
 
     .side-details-bar-content-container {
+      overflow-y: auto;
+      max-height: 850px;
+
       hr {
         margin: 0;
         border: 0;
@@ -58,6 +66,10 @@ $container-content-padding-top-bottom: 20px;
 
         h3 {
           margin-top: 0;
+        }
+
+        .side-details-bar-badge {
+          text-align: left;
         }
       }
     }

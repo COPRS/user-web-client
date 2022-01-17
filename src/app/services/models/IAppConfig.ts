@@ -1,6 +1,5 @@
 export interface IAppConfig {
-  apiBaseUrl: string;
-  resourceName: string;
+  apiUrl: string;
   mapBackgrounds: IAppConfig_MapBackgrounds[];
 }
 

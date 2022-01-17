@@ -1,14 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Observable } from 'rxjs';
+import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ConfigService } from '../services/config.service';
 import { IAppConfig } from '../services/models/IAppConfig';
 import { MapViewerComponent } from './map-viewer.component';
 
 class MockConfigService {
   settings: IAppConfig = {
-    apiBaseUrl: 'http://test',
-    resourceName: 'res',
+    apiUrl: 'http://test',
     mapBackgrounds: [],
   };
+}
+
+class MockQueryResultService {
+  getFilteredProducts() {
+    return new Observable();
+  }
+  setPagination() {}
 }
 
 describe('MapViewerComponent', () => {
@@ -21,6 +29,7 @@ describe('MapViewerComponent', () => {
       providers: [
         MapViewerComponent,
         { provide: ConfigService, useClass: MockConfigService },
+        { provide: QueryResultService, useClass: MockQueryResultService },
       ],
     }).compileComponents();
   });

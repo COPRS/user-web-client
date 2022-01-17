@@ -3,13 +3,15 @@ $side-bar-top-distance: 30px;
 $container-content-padding-side: 32px;
 $container-content-padding-top-bottom: 20px;
 
-app-filter-sidebar {
+:host {
   position: relative;
+  background-color: pink;
 }
 
 .side-nav-bar {
   position: absolute;
   z-index: 1001;
+
   top: 0px;
   // bottom: 0px;
   left: 0;
@@ -17,8 +19,8 @@ app-filter-sidebar {
 
   .side-nav-bar-overlay {
     background: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     position: fixed;
   }
 
@@ -38,6 +40,11 @@ app-filter-sidebar {
       text-align: left;
     }
 
+    .buttonSelected {
+      background-color: lightgrey;
+      border-bottom: thin solid darkgray;
+    }
+
     .side-nav-bar-close {
       text-align: right;
     }
@@ -48,6 +55,9 @@ app-filter-sidebar {
     }
 
     .side-nav-bar-content-container {
+      overflow-y: auto;
+      max-height: 700px;
+
       hr {
         margin: 0;
         border: 0;

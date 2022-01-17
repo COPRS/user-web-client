@@ -1,11 +1,19 @@
-import { style, transition, trigger, animate } from '@angular/animations';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import {
+  MapRegionSelection,
+  MapRegionSelectionService,
+} from 'src/app/map-viewer/services/map-region-selection.service';
 import { ConfigService } from 'src/app/services/config.service';
-import { DdipService } from 'src/app/services/ddip.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';
-import { FilterSidebarNavigationService } from '../../services/filter-sidebar-navigation.service';
+import {
+  FilterSidebarNavigationService,
+  SideBarSubNav,
+} from '../../services/filter-sidebar-navigation.service';
+import { QueryResultService } from '../../services/query-result.service';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -20,10 +28,13 @@ import { FilterSidebarNavigationService } from '../../services/filter-sidebar-na
       transition(':leave', [animate('0.1s', style({ opacity: 0 }))]),
     ]),
   ],
-  encapsulation: ViewEncapsulation.None,
 })
 export class FilterSidebarComponent implements OnInit {
   showSideNav$: Observable<boolean>;
+  selectedSubNav$: Observable<SideBarSubNav>;
+  SideBarSubNav = SideBarSubNav;
+  filterCount$: Observable<number | string>;
+  resultCount$: Observable<number>;
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
   settings: IAppConfig;
@@ -34,17 +45,19 @@ export class FilterSidebarComponent implements OnInit {
   constructor(
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
-    private ddipService: DdipService,
-    private configService: ConfigService
+    private dataService: QueryResultService,
+    private configService: ConfigService,
+    private mapRegionSelectionService: MapRegionSelectionService
   ) {}
 
   ngOnInit(): void {
     this.queryFilterFromService$ = this.filterElementsService.getQuery();
+    this.filterCount$ = this.filterElementsService.getFilterCount();
+    this.resultCount$ = this.dataService
+      .getFilteredProducts()
+      .pipe(map((e) => e.totalCount));
     this.showSideNav$ = this.navService.getShowNav();
-    this.queryFilterFromService$.subscribe(
-      async (f) =>
-        (this.queryResultFromService = await this.ddipService.getProducts(f))
-    );
+    this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.settings = this.configService.settings;
   }
 
@@ -66,17 +79,11 @@ export class FilterSidebarComponent implements OnInit {
     return navBarStyle;
   }
 
-  onApiUrlChange(target: any) {
-    this.configService.setApiBaseUrl(target.value);
+  async onManualFilterQueryChange(target: any) {
+    this.filterElementsService.updateWithManualFilter(target.value);
   }
 
-  onApiResourceChange(target: any) {
-    this.configService.setResourceName(target.value);
-  }
-
-  async onFilterQueryChange(target: any) {
-    this.queryResultFromService = await this.ddipService.getProducts(
-      target.value
-    );
+  onSubNavClick(selectedSubNav: SideBarSubNav) {
+    this.navService.setSelectedSubNav(selectedSubNav);
   }
 }

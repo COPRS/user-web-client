@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';
 
 @Component({
@@ -8,21 +11,33 @@ import { DetailsSidebarNavigationService } from '../../services/details-sidebar-
   styleUrls: ['./details-sidebar.component.scss'],
 })
 export class DetailsSidebarComponent implements OnInit {
-  showSideNav$: Observable<string>;
+  showSideNav$: Observable<boolean>;
+  selectedProduct$: Observable<DdipProduct>;
+  downloadUrl$: Observable<string>;
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
 
-  constructor(private navService: DetailsSidebarNavigationService) {}
-
-  ngOnInit(): void {
-    this.showSideNav$ = this.navService.getShowNav();
+  constructor(
+    private navService: DetailsSidebarNavigationService,
+    private ddipService: DdipService
+  ) {
+    this.showSideNav$ = this.navService
+      .getSelectedProduct()
+      .pipe(map((p) => !!p));
+    this.selectedProduct$ = this.navService.getSelectedProduct();
+    this.downloadUrl$ = this.navService.getSelectedProduct().pipe(
+      filter((p) => !!p),
+      map((p) => this.ddipService.constructorDownloadUrl(p.Id))
+    );
   }
+
+  ngOnInit(): void {}
 
   onSidebarClose() {
-    this.navService.setShowNav(undefined);
+    this.navService.setSelectedProduct(undefined);
   }
 
-  getSideNavBarStyle(showNav: string) {
+  getSideNavBarStyle(showNav: any) {
     let navBarStyle: any = {};
 
     navBarStyle.transition =

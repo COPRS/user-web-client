@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DetailsSidebarNavigationService {
-  private selectedFeature$: BehaviorSubject<string> =
-    new BehaviorSubject<string>(undefined);
+  private selectedFeature$: BehaviorSubject<DdipProduct> =
+    new BehaviorSubject<DdipProduct>(undefined);
 
   constructor() {}
 
-  getShowNav() {
+  getSelectedProduct(): Observable<DdipProduct> {
     return this.selectedFeature$.asObservable();
   }
 
-  setShowNav(selectedFeatureId: string) {
-    this.selectedFeature$.next(selectedFeatureId);
+  setSelectedProduct(selectedFeature: DdipProduct): void {
+    this.selectedFeature$.next(selectedFeature);
   }
 
-  isNavOpen() {
-    return this.selectedFeature$.value;
+  isNavOpen(): boolean {
+    return !!this.selectedFeature$?.value;
   }
 }

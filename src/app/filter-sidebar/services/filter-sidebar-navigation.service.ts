@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+export enum SideBarSubNav {
+  FILTERS = 'FILTERS',
+  RESULTS = 'RESULTS',
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class FilterSidebarNavigationService {
   private showNav$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false
+    true
   );
+  private selectedSubNav$: BehaviorSubject<SideBarSubNav> =
+    new BehaviorSubject<SideBarSubNav>(SideBarSubNav.FILTERS);
 
   constructor() {}
 
@@ -25,5 +32,13 @@ export class FilterSidebarNavigationService {
 
   isNavOpen() {
     return this.showNav$.value;
+  }
+
+  getSelectedSubNav() {
+    return this.selectedSubNav$.asObservable();
+  }
+
+  setSelectedSubNav(selectedSubNav: SideBarSubNav) {
+    this.selectedSubNav$.next(selectedSubNav);
   }
 }

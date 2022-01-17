@@ -25,7 +25,7 @@ RUN npm install --audit=false
 # add app
 COPY . /app
 
-RUN ls -alh .
+
 # run tests
 ENV CHROME_BIN=chromium
 RUN npm run test:ci
@@ -33,14 +33,15 @@ RUN npm run e2e:ci
 USER root
 
 # generate build
-RUN npm run ng build -- --output-path=dist
+RUN npm run build -- --output-path=dist
+RUN mv /app/dist/index.html /app/dist/index.templ.html
 
 ############
 ### prod ###
 ############
 
 # base image
-FROM nginx:1.21.4-alpine
+FROM nginx:1.21.5-alpine
 
 RUN apk upgrade --no-cache && apk add --no-cache gettext
 
@@ -48,6 +49,7 @@ RUN apk upgrade --no-cache && apk add --no-cache gettext
 COPY --from=build /app/dist /usr/share/nginx/html
 
 RUN rm /usr/share/nginx/html/assets/config.json
+RUN rm /usr/share/nginx/html/index.html
 
 ADD ./docker/entrypoint.sh /entrypoint.sh
 

@@ -1,12 +1,13 @@
 <div
   class="side-details-bar"
-  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) === undefined }"
+  [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) === false }"
 >
   <!-- side bar-->
 
   <div
     class="side-details-bar-menu-container"
     [ngStyle]="getSideNavBarStyle(showSideNav$ | async)"
+    *ngIf="selectedProduct$ | async"
   >
     <!-- side bar header -->
 
@@ -16,7 +17,7 @@
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
         </div>
         <div class="clr-col-11 side-details-bar-badge">
-          {{ showSideNav$ | async }}
+          {{ (selectedProduct$ | async).Id }}
         </div>
       </div>
     </div>
@@ -25,56 +26,79 @@
     <div class="side-details-bar-content-container">
       <hr />
       <div class="side-details-bar-content-element">
-        <div class="clr-row">
+        <div class="clr-row" *ngIf="(selectedProduct$ | async).Footprint">
           <div class="clr-example-col-value clr-col">
             <h4>Footprint</h4>
             <clr-icon shape="image" size="180"></clr-icon>
           </div>
-          <div class="clr-example-col-value clr-col">
-            <h4>Quicklook</h4>
-            <clr-icon shape="image" size="180"></clr-icon>
-          </div>
         </div>
+
         <div class="clr-row">
           <div class="clr-example-col-value clr-col">
             <h4>Attributes</h4>
 
             <ul class="list-unstyled metadatalist">
-              <li><b>data:</b> Id est laborum</li>
-              <li><b>data:</b> Dolore eu fugiat</li>
-              <li><b>data:</b> Occaecat cupidatat</li>
-              <li><b>data:</b> Deserunt mollit anim</li>
+              <li class="name">Id:</li>
+              <li class="value">{{ (selectedProduct$ | async).Id }}</li>
+              <li class="name">Filename:</li>
+              <li class="value">{{ (selectedProduct$ | async).Name }}</li>
+              <li class="name">
+                <strong>Content Length:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).ContentLength | fileSize }}
+              </li>
+              <li class="name">
+                <strong>Publication Date:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).PublicationDate | date }}
+              </li>
+              <li class="name">
+                <strong>Eviction Date:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).EvictionDate | date }}
+              </li>
+              <li class="name">
+                <strong>Checksum:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).Checksum[0].Value }} ({{
+                  (selectedProduct$ | async).Checksum[0].Algorithm
+                }})
+              </li>
+              <li class="name">
+                <strong>Production Type:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).ProductionType }}
+              </li>
+              <li class="name">
+                <strong>Content Date Start:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).ContentDate.Start }}
+              </li>
+              <li class="name">
+                <strong>Content Date End:</strong>
+              </li>
+              <li class="value">
+                {{ (selectedProduct$ | async).ContentDate.End }}
+              </li>
             </ul>
           </div>
-          <div class="clr-example-col-value clr-col">
-            <h4>Files</h4>
-            <span>
-              <clr-tree>
-                <clr-tree-node
-                  *ngFor="let directory of rootDirectory"
-                  [(clrExpanded)]="directory.expanded"
-                >
-                  <clr-icon [attr.shape]="directory.icon"></clr-icon>
-                  {{ directory.name }}
-                  <clr-tree-node *ngFor="let file of directory.files">
-                    <button
-                      class="clr-treenode-link"
-                      [class.active]="file.active"
-                    >
-                      <clr-icon [attr.shape]="file.icon"></clr-icon>
-                      {{ file.name }}
-                    </button>
-                  </clr-tree-node>
-                </clr-tree-node>
-              </clr-tree></span
-            >
-          </div>
-        </div>
 
-        <button class="btn btn-outline btn-icon">
-          <clr-icon shape="archive"></clr-icon>
-          Download Product
-        </button>
+          <a
+            class="btn btn-outline btn-icon"
+            href="{{ downloadUrl$ | async }}"
+            download="{{ (selectedProduct$ | async).Name }}"
+            target="__blank"
+          >
+            <clr-icon shape="archive"></clr-icon>
+            Download Product
+          </a>
+        </div>
       </div>
     </div>
   </div>
