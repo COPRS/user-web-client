@@ -65,8 +65,8 @@
     "e2e:ci": "concurrently \"npm run start\" \"wait-on http-get://localhost:4200 && npm run cypress:run\" --kill-others --success first",
     "ng": "ng",
     "start": "API_URL=http://coprs.werum.de/prip/odata/v1/Products MAP_BACKGROUNDS=\"[{\\\"name\\\":\\\"TESTING\\\",\\\"layers\\\":[{\\\"url\\\":\\\"testing_url\\\",\\\"layerName\\\":\\\"LayerName\\\"}]}]\" envsubst '$${API_URL} $${ODATA_RESOURCE_NAME} $${MAP_BACKGROUNDS}' < ./src/assets/config.templ.json > ./src/assets/config.json && BASE_HREF=${BASE_HREF:-/} envsubst '$${BASE_HREF}' < ./src/index.templ.html > ./src/index.html && ng serve",
-    "test": "ng test",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox",
+    "test": "ng test  --code-coverage",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessNoSandbox --code-coverage",
     "watch": "ng build --watch --configuration development",
     "lint": "ng lint"
   }
