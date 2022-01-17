@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { flatMap, map, mergeMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
