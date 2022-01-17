@@ -6,7 +6,7 @@ import { IAppConfig } from './models/IAppConfig';
   providedIn: 'root',
 })
 export class ConfigService {
-  settings: IAppConfig;
+  settings: IAppConfig = {} as any;
 
   constructor(private http: HttpClient) {}
 
