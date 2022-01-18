@@ -31,9 +31,6 @@ export class FilterElementsService {
   }
 
   public getQuery(): Observable<string> {
-    // TODO merge mit selected region
-    this.mapRegionSelectionService.getSelection();
-
     const filterElements = this.filterElements$.pipe(
       map(this.convertFilterElementToOdataFilter)
     );
