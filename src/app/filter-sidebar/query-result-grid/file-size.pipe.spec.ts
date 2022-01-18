@@ -11,7 +11,15 @@ describe('FileSizePipe', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should create', () => {
+  it('should return a filesize', () => {
     expect(component.transform(4711)).toEqual('5 KB');
+  });
+
+  it('should return with a given precision', () => {
+    expect(component.transform(4096, 2)).toEqual('4.00 KB');
+  });
+
+  it('should return a question mark if non-number is given', () => {
+    expect(component.transform('some-text' as any)).toEqual('?');
   });
 });
