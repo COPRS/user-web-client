@@ -9,7 +9,8 @@ import { FilterElementsService } from './filter-elements.service';
 class MockMapRegionSelectionService {
   getSelection() {
     return new BehaviorSubject<MapRegionSelection>({
-      coordinates: [[[10, 20]]],
+      coordinates: [[10, 20]],
+      type: 'Polygon',
     });
   }
 }
