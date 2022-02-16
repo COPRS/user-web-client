@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
+  SelectionType,
 } from 'src/app/map-viewer/services/map-region-selection.service';
 
 @Component({
@@ -39,8 +40,8 @@ export class RegionSelectionFilterElementComponent
       .subscribe(() => (this.isSelectionActive = false));
   }
 
-  startGeopgraphicSelection() {
-    this.mapRegionSelectionService.startSelection('Polygon');
+  startGeopgraphicSelection(type: SelectionType) {
+    this.mapRegionSelectionService.startSelection(type);
   }
 
   abortGeopgraphicSelection() {

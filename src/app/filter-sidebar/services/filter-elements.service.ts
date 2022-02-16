@@ -94,15 +94,17 @@ export class FilterElementsService {
     mapRegion: MapRegionSelection
   ): string {
     if (mapRegion) {
-      let flattened = '';
-      mapRegion.coordinates.forEach((f) => {
-        flattened += f
-          .map((c) => {
-            return `${c[0]} ${c[1]}`;
-          })
-          .join(', ');
-      });
-      return `OData.CSC.Intersects(area=geography'SRID=4326;POLYGON((${flattened}))')`;
+      let flattened = mapRegion.coordinates
+        .map((c) => {
+          return `${c[0]} ${c[1]}`;
+        })
+        .join(', ');
+      const coordinates =
+        mapRegion.type == 'Polygon'
+          ? `${mapRegion.type.toUpperCase()}((${flattened}))`
+          : `${mapRegion.type.toUpperCase()}(${flattened})`;
+
+      return `OData.CSC.Intersects(area=geography'SRID=4326;${coordinates}')`;
     } else {
       return undefined;
     }

@@ -59,7 +59,8 @@ export class MapRegionSelectionService {
 }
 
 export interface MapRegionSelection {
-  coordinates: number[][][];
+  type: SelectionType;
+  coordinates: Array<[number, number]>;
 }
 
-export type SelectionType = 'Polygon';
+export type SelectionType = 'Polygon' | 'LineString' | 'Point' | 'Square';

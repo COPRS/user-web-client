@@ -11,6 +11,7 @@ import { click } from 'ol/events/condition';
 import GeoJSON from 'ol/format/GeoJSON';
 import Polygon from 'ol/geom/Polygon';
 import { Draw, Select } from 'ol/interaction';
+import { createRegularPolygon } from 'ol/interaction/Draw';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
@@ -20,7 +21,10 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
-import { MapRegionSelectionService } from './services/map-region-selection.service';
+import {
+  MapRegionSelectionService,
+  SelectionType,
+} from './services/map-region-selection.service';
 import {
   AvailableMap,
   MapSwitcherService,
@@ -37,6 +41,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly onDestroy = new Subject<void>();
   private source = new VectorSource({ wrapX: false });
   private draw: Draw;
+  private drawType: SelectionType;
 
   constructor(
     private detailsSideBarNav: DetailsSidebarNavigationService,
@@ -177,7 +182,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
           // Convert footprints
           if (products?.products) {
-            let features = products.products.filter((p) => p.Footprint);
+            return products.products.filter((p) => p.Footprint);
 
             // switch lat/lon
             // features.forEach((f) => {
@@ -185,8 +190,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
             //     arr[idx] = coordinate.map((c) => [c[1], c[0]]);
             //   });
             // });
-
-            return features;
           } else {
             return undefined;
           }
@@ -233,8 +236,32 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     // LOAD DATA FROM DDIP-API - END
   }
 
-  private startSelection(type: string) {
-    this.draw = new Draw({ source: this.source, type });
+  private startSelection(type: SelectionType) {
+    switch (type) {
+      case 'LineString':
+        this.draw = new Draw({
+          source: this.source,
+          type,
+          maxPoints: 2,
+        });
+        break;
+
+      case 'Polygon':
+      case 'Point':
+        this.draw = new Draw({
+          source: this.source,
+          type,
+        });
+        break;
+      case 'Square':
+        this.draw = new Draw({
+          source: this.source,
+          type: 'Circle',
+          geometryFunction: createRegularPolygon(4),
+        });
+        break;
+    }
+    this.drawType = type;
 
     this.map.addInteraction(this.draw);
 
@@ -243,7 +270,28 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       const geometry = drawnFeature.getGeometry();
       geometry.transform('EPSG:3857', 'EPSG:4326');
       const coordinates = geometry.getCoordinates();
-      this.mapRegionSelectionService.finishSelection({ coordinates });
+      switch (this.drawType) {
+        case 'Polygon':
+        case 'Square':
+          this.mapRegionSelectionService.finishSelection({
+            type: 'Polygon',
+            coordinates: coordinates[0] as any,
+          });
+          break;
+        case 'Point':
+          this.mapRegionSelectionService.finishSelection({
+            type,
+            coordinates: [coordinates] as any,
+          });
+          break;
+        case 'LineString':
+          this.mapRegionSelectionService.finishSelection({
+            type,
+            coordinates: coordinates as any,
+          });
+          break;
+      }
+
       this.abortSelection();
     });
   }
@@ -253,6 +301,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.draw.abortDrawing();
       this.map.removeInteraction(this.draw);
       delete this.draw;
+      delete this.drawType;
     }
   }
 
