@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinct, mergeMap } from 'rxjs/operators';
-import { MapRegionSelectionService } from 'src/app/map-viewer/services/map-region-selection.service';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
-import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
+import {
+  DdipProduct,
+  DdipProductResponse,
+} from 'src/app/services/models/DdipProductResponse';
 import { FilterElementsService } from './filter-elements.service';
 
 @Injectable({
@@ -13,6 +15,7 @@ export class QueryResultService {
   private pagination$ = new BehaviorSubject<PaginationConfig>({
     top: 10,
   });
+  private isLoading$ = new BehaviorSubject<LoadingStatus>({ loading: false });
   private currentPageSubject$ = new BehaviorSubject<{
     products: DdipProduct[];
     totalCount: number;
@@ -25,9 +28,17 @@ export class QueryResultService {
     debounceTime(10),
     mergeMap(async (c) => {
       const [filter, pageConfig] = c;
-      const result = await this.ddipService
-        .getProducts(filter, pageConfig)
-        .catch((e) => console.error('Error while quering for data', e));
+      this.isLoading$.next({ loading: true });
+      let result: DdipProductResponse;
+      try {
+        result = await this.ddipService.getProducts(filter, pageConfig);
+      } catch (error) {
+        console.error('Error while quering for data', error);
+        this.isLoading$.next({ loading: false, error });
+        return { products: [], totalCount: 0 };
+      }
+
+      this.isLoading$.next({ loading: false });
       if (result) {
         return {
           products: result.value,
@@ -41,8 +52,7 @@ export class QueryResultService {
 
   constructor(
     private ddipService: DdipService,
-    private filterService: FilterElementsService,
-    private mapRegionSelectionService: MapRegionSelectionService
+    private filterService: FilterElementsService
   ) {
     this.currentPage$.subscribe(this.currentPageSubject$);
   }
@@ -52,6 +62,10 @@ export class QueryResultService {
     totalCount: number;
   }> {
     return this.currentPageSubject$.asObservable();
+  }
+
+  public getIsLoading(): Observable<LoadingStatus> {
+    return this.isLoading$.asObservable();
   }
 
   public setPagination(top: number, skip?: number) {
@@ -64,3 +78,8 @@ export class QueryResultService {
 }
 
 export type PaginationConfig = { skip?: number; top: number };
+
+export type LoadingStatus = {
+  loading: boolean;
+  error?: any;
+};

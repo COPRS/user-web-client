@@ -10,7 +10,10 @@ import {
   FilterSidebarNavigationService,
   SideBarSubNav,
 } from '../../services/filter-sidebar-navigation.service';
-import { QueryResultService } from '../../services/query-result.service';
+import {
+  LoadingStatus,
+  QueryResultService,
+} from '../../services/query-result.service';
 
 @Component({
   selector: 'app-filter-sidebar',
@@ -35,6 +38,7 @@ export class FilterSidebarComponent implements OnInit {
   queryFilterFromService$: Observable<string>;
   queryResultFromService: any;
   settings: IAppConfig;
+  loadingStatus$: Observable<LoadingStatus>;
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -42,20 +46,20 @@ export class FilterSidebarComponent implements OnInit {
   constructor(
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
-    private dataService: QueryResultService,
-    private configService: ConfigService,
-    private mapRegionSelectionService: MapRegionSelectionService
+    private queryResultService: QueryResultService,
+    private configService: ConfigService
   ) {}
 
   ngOnInit(): void {
     this.queryFilterFromService$ = this.filterElementsService.getQuery();
     this.filterCount$ = this.filterElementsService.getFilterCount();
-    this.resultCount$ = this.dataService
+    this.resultCount$ = this.queryResultService
       .getFilteredProducts()
       .pipe(map((e) => e.totalCount));
     this.showSideNav$ = this.navService.getShowNav();
     this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.settings = this.configService.settings;
+    this.loadingStatus$ = this.queryResultService.getIsLoading();
   }
 
   onSidebarClose() {

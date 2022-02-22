@@ -44,10 +44,13 @@
           }"
           (click)="onSubNavClick(SideBarSubNav.RESULTS)"
         >
-          <clr-icon shape="view-list"></clr-icon> RESULTS
-          <span *ngIf="resultCount$ | async" class="badge badge-info">{{
-            resultCount$ | async
-          }}</span>
+          <clr-icon shape="view-list"></clr-icon>
+          RESULTS
+          <clr-icon
+            *ngIf="(loadingStatus$ | async).error"
+            shape="error-standard"
+            class="is-error"
+          ></clr-icon>
         </div>
         <div class="clr-col-1 side-nav-bar-close clr-align-self-center">
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
@@ -85,6 +88,28 @@
       </div>
       <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.RESULTS">
         <div class="side-nav-bar-content-element">
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="(loadingStatus$ | async).error"
+          >
+            <div class="alert-items">
+              <div class="alert-item static">
+                <div class="alert-icon-wrapper">
+                  <clr-icon
+                    class="alert-icon"
+                    shape="exclamation-circle"
+                  ></clr-icon>
+                </div>
+                <span class="alert-text">
+                  {{ (loadingStatus$ | async)?.error?.statusText }}
+                  (Status: {{ (loadingStatus$ | async)?.error?.status }})
+                  <br />
+                  {{ (loadingStatus$ | async)?.error?.message }}
+                </span>
+              </div>
+            </div>
+          </div>
           <app-query-result-grid></app-query-result-grid>
         </div>
       </div>
