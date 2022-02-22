@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from 'src/app/details-sidebar/services/details-sidebar-navigation.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { QueryResultService } from '../services/query-result.service';
@@ -15,25 +15,28 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: DdipProduct[];
   total: number;
   pageSize: number = 20;
-  loading: boolean = true;
+  loading: Observable<boolean>;
   public rowSelection: boolean = true;
   public selected: DdipProduct[] = [];
   private readonly onDestroy = new Subject<void>();
 
   constructor(
-    private dataService: QueryResultService,
+    private queryResultService: QueryResultService,
     private detailsNavService: DetailsSidebarNavigationService
-  ) {}
+  ) {
+    this.loading = this.queryResultService
+      .getIsLoading()
+      .pipe(map((l) => l.loading));
+  }
 
   ngOnInit(): void {
-    this.dataService.setPagination(this.pageSize);
-    this.dataService
+    this.queryResultService.setPagination(this.pageSize);
+    this.queryResultService
       .getFilteredProducts()
       .pipe(takeUntil(this.onDestroy))
       .subscribe((page) => {
         this.products = page.products;
         this.total = page.totalCount;
-        this.loading = false;
       });
 
     this.detailsNavService
@@ -53,7 +56,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
 
   refresh(state: ClrDatagridStateInterface) {
     const skip = state.page.from > 0 ? state.page.from : undefined;
-    this.dataService.setPagination(state.page.size, skip);
+    this.queryResultService.setPagination(state.page.size, skip);
   }
 
   ngOnDestroy() {
@@ -68,7 +71,3 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     return item.Id;
   }
 }
-
-// export interface DdipProduct extends DdipProduct {
-//   selected: boolean;
-// }

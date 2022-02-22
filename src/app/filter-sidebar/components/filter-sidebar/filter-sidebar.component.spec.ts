@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { ConfigService } from 'src/app/services/config.service';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
@@ -16,6 +16,9 @@ class MockConfigService {
 class MockQueryResultService {
   getFilteredProducts() {
     return new Observable();
+  }
+  getIsLoading() {
+    return from([{ loading: false }]);
   }
   setPagination() {}
 }

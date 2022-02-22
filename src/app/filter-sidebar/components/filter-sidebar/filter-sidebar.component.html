@@ -47,6 +47,10 @@
           <clr-icon shape="view-list"></clr-icon>
           RESULTS
           <clr-icon
+            *ngIf="(loadingStatus$ | async).loading"
+            shape="sync"
+          ></clr-icon>
+          <clr-icon
             *ngIf="(loadingStatus$ | async).error"
             shape="error-standard"
             class="is-error"

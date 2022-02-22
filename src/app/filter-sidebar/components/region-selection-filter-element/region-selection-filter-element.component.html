@@ -1,35 +1,37 @@
-<clr-dropdown [clrCloseMenuOnItemClick]="false">
-  <button clrDropdownTrigger class="btn btn-primary">
-    <clr-icon shape="plus-circle"></clr-icon> Select a
-    <span *ngIf="selectedRegion$ | async">new </span>Region on the map
-  </button>
-  <clr-dropdown-menu *clrIfOpen>
-    <div clrDropdownItem (click)="startGeopgraphicSelection('Point')">
-      Point
-    </div>
-    <div clrDropdownItem (click)="startGeopgraphicSelection('Square')">
-      Square
-    </div>
-    <div clrDropdownItem (click)="startGeopgraphicSelection('LineString')">
-      Line
-    </div>
-    <div clrDropdownItem (click)="startGeopgraphicSelection('Polygon')">
-      Polygon
-    </div>
-  </clr-dropdown-menu>
-</clr-dropdown>
+<div class="btn-group">
+  <clr-dropdown [clrCloseMenuOnItemClick]="false">
+    <button clrDropdownTrigger class="btn btn-primary">
+      <clr-icon shape="plus-circle"></clr-icon> Select a
+      <span *ngIf="selectedRegion$ | async">new </span>Region on the map
+    </button>
+    <clr-dropdown-menu *clrIfOpen>
+      <div clrDropdownItem (click)="startGeopgraphicSelection('Point')">
+        Point
+      </div>
+      <div clrDropdownItem (click)="startGeopgraphicSelection('Square')">
+        Square
+      </div>
+      <div clrDropdownItem (click)="startGeopgraphicSelection('LineString')">
+        Line
+      </div>
+      <div clrDropdownItem (click)="startGeopgraphicSelection('Polygon')">
+        Polygon
+      </div>
+    </clr-dropdown-menu>
+  </clr-dropdown>
 
-<button
-  class="btn"
-  *ngIf="isSelectionActive"
-  (click)="abortGeopgraphicSelection()"
->
-  Cancel Selection
-</button>
-<button
-  class="btn"
-  *ngIf="selectedRegion$ | async"
-  (click)="clearGeopgraphicSelection()"
->
-  Clear Selection
-</button>
+  <button
+    class="btn"
+    *ngIf="isSelectionActive"
+    (click)="abortGeopgraphicSelection()"
+  >
+    Cancel Selection
+  </button>
+  <button
+    class="btn"
+    *ngIf="selectedRegion$ | async"
+    (click)="clearGeopgraphicSelection()"
+  >
+    Clear Selection
+  </button>
+</div>

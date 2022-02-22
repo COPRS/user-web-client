@@ -1,6 +1,6 @@
 <clr-datagrid
   (clrDgRefresh)="refresh($event)"
-  [clrDgLoading]="loading"
+  [clrDgLoading]="loading | async"
   [clrDgRowSelection]="rowSelection"
   [clrDgSingleSelected]="selected"
   (clrDgSingleSelectedChange)="selectionChanged($event)"

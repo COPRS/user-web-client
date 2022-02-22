@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
@@ -10,7 +10,7 @@ import { DetailsSidebarNavigationService } from '../../services/details-sidebar-
   templateUrl: './details-sidebar.component.html',
   styleUrls: ['./details-sidebar.component.scss'],
 })
-export class DetailsSidebarComponent implements OnInit {
+export class DetailsSidebarComponent {
   showSideNav$: Observable<boolean>;
   selectedProduct$: Observable<DdipProduct>;
   downloadUrl$: Observable<string>;
@@ -30,8 +30,6 @@ export class DetailsSidebarComponent implements OnInit {
       map((p) => this.ddipService.constructorDownloadUrl(p.Id))
     );
   }
-
-  ngOnInit(): void {}
 
   onSidebarClose() {
     this.navService.setSelectedProduct(undefined);

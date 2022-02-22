@@ -2,7 +2,6 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { MapRegionSelectionService } from 'src/app/map-viewer/services/map-region-selection.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from '../../services/filter-elements.service';

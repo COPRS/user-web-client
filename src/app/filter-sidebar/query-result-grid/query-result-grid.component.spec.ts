@@ -1,10 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { QueryResultService } from '../services/query-result.service';
 import { QueryResultGridComponent } from './query-result-grid.component';
 class MockQueryResultService {
   getFilteredProducts() {
     return new Observable();
+  }
+  getIsLoading() {
+    return from([{ loading: false }]);
   }
   setPagination() {}
 }
