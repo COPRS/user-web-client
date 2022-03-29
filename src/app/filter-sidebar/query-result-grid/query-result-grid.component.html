@@ -17,9 +17,9 @@
     *ngFor="let product of products; trackBy: trackById"
     [clrDgItem]="product"
   >
-    <clr-dg-cell title="{{ product.Name }}">{{
-      product.Name | limitTo: 75
-    }}</clr-dg-cell>
+    <clr-dg-cell title="{{ product.Name }}" style="overflow-wrap: break-word">
+      {{ product.Name }}
+    </clr-dg-cell>
     <clr-dg-cell>
       <clr-icon *ngIf="product.Footprint" shape="map-marker"></clr-icon>
     </clr-dg-cell>

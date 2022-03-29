@@ -79,6 +79,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedMap.sources.forEach((source) => {
       this.map.addLayer(
         new TileLayer({
+          zIndex: 0,
           properties: {
             layerType: LayerType.Background,
             layerName: selectedMap.mapName,
@@ -202,6 +203,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
         // Add data layer with new data
         this.map.addLayer(
           new VectorLayer({
+            zIndex: Infinity,
             extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
 
             properties: { layerType: LayerType.Data },
