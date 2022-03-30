@@ -1,9 +1,16 @@
 export interface IAppConfig {
   apiUrl: string;
-  mapBackgrounds: IAppConfig_MapBackgrounds[];
+  mapBackgrounds: IAppConfigMapBackgrounds[];
+  keycloak: IAppConfigKeycloak;
 }
 
-export interface IAppConfig_MapBackgrounds {
+export interface IAppConfigMapBackgrounds {
   name: string;
   layers: { url: string; layerName: string }[];
+}
+
+export interface IAppConfigKeycloak {
+  url: string;
+  realm: string;
+  clientId: string;
 }

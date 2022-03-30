@@ -11,6 +11,7 @@ class MockConfigService {
   settings: IAppConfig = {
     apiUrl: 'http://test',
     mapBackgrounds: [],
+    keycloak: { clientId: '', realm: '', url: '' },
   };
 }
 class MockQueryResultService {

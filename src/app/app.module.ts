@@ -27,14 +27,10 @@ function initializeKeycloak(
   keycloak: KeycloakService,
   configService: ConfigService
 ) {
-  // TODO: await configService is initialized
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'http://localhost:8080/auth',
-        realm: 'master',
-        clientId: 'user-web-client',
-      },
+  return async () => {
+    const config = await configService.getSettings();
+    return keycloak.init({
+      config: config.keycloak,
       initOptions: {
         onLoad: 'check-sso',
         silentCheckSsoRedirectUri:
@@ -42,6 +38,7 @@ function initializeKeycloak(
       },
       bearerExcludedUrls: ['/assets'],
     });
+  };
 }
 
 @NgModule({

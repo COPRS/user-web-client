@@ -8,6 +8,7 @@ class MockConfigService {
   settings: IAppConfig = {
     apiUrl: 'http://test:0815/Products',
     mapBackgrounds: [],
+    keycloak: { clientId: '', realm: '', url: '' },
   };
 }
 

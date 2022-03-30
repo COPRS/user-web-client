@@ -1,4 +1,5 @@
 {
   "apiUrl": "${API_URL}",
-  "mapBackgrounds": ${MAP_BACKGROUNDS}
+  "mapBackgrounds": ${MAP_BACKGROUNDS},
+  "keycloak": ${KEYCLOAK}
 }
