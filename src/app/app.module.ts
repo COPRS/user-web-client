@@ -17,9 +17,31 @@ import { QueryResultGridComponent } from './filter-sidebar/query-result-grid/que
 import { FileSizePipe } from './filter-sidebar/query-result-grid/file-size.pipe';
 import { LimitToPipe } from './filter-sidebar/query-result-grid/limit-to.pipe';
 import { RegionSelectionFilterElementComponent } from './filter-sidebar/components/region-selection-filter-element/region-selection-filter-element.component';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
+}
+
+function initializeKeycloak(
+  keycloak: KeycloakService,
+  configService: ConfigService
+) {
+  // TODO: await configService is initialized
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080/auth',
+        realm: 'master',
+        clientId: 'user-web-client',
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html',
+      },
+      bearerExcludedUrls: ['/assets'],
+    });
 }
 
 @NgModule({
@@ -42,6 +64,7 @@ export function initializeApp(configService: ConfigService) {
     ClarityModule,
     MapViewerModule,
     FormsModule,
+    KeycloakAngularModule,
   ],
   providers: [
     ConfigService,
@@ -50,6 +73,12 @@ export function initializeApp(configService: ConfigService) {
       useFactory: initializeApp,
       deps: [ConfigService],
       multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService, ConfigService],
     },
   ],
   bootstrap: [AppComponent],
