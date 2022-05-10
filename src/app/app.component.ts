@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +7,10 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  constructor(private keycloak: KeycloakService) {}
   title = 'user-web-client';
-  selectedFeature$: BehaviorSubject<string> = new BehaviorSubject<string>(
-    '2134567890ß1234567890ß'
-  );
 
-  onSelectedFeatureChanged(event: any) {
-    this.selectedFeature$.next(event);
+  async onLogout() {
+    this.keycloak.logout();
   }
 }

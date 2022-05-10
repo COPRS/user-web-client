@@ -5,6 +5,7 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,8 @@ import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 export class AuthGuard extends KeycloakAuthGuard {
   constructor(
     protected readonly router: Router,
-    protected readonly keycloak: KeycloakService
+    protected readonly keycloak: KeycloakService,
+    protected readonly location: Location
   ) {
     super(router, keycloak);
   }
@@ -23,8 +25,10 @@ export class AuthGuard extends KeycloakAuthGuard {
   ) {
     // Force the user to log in if currently unauthenticated.
     if (!this.authenticated) {
+      const redirectUri =
+        window.location.origin + this.location.prepareExternalUrl(state.url);
       await this.keycloak.login({
-        redirectUri: window.location.origin + state.url,
+        redirectUri,
       });
     }
 
