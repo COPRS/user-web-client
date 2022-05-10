@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [next] - ????.??.??
+
+- RS-360: Keycloak silentCheckSsoRedirectUri doesn't take the base href into account
+
 ## [1.0.1-rc1] - 2022-04-28
 
 ### Added
@@ -29,8 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - RS-308: Point and line researches are not available in V1 (fixed by RS-129)
 - RS-311: On results page the resizing of columns doesn't work
 - RS-334: Configure key management interface
-
-
 
 ### Changed
 
