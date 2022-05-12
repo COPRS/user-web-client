@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { Observable } from 'rxjs';
 import { LoginStatusService } from './services/login-status.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,7 @@ import { LoginStatusService } from './services/login-status.service';
 export class AppComponent {
   constructor(
     private keycloak: KeycloakService,
+    protected readonly location: Location,
     loginStatusService: LoginStatusService
   ) {
     this.isLoggedIn = loginStatusService.getIsLoggedIn();
@@ -18,7 +20,11 @@ export class AppComponent {
   title = 'user-web-client';
   isLoggedIn: Observable<boolean>;
 
-  async onLogout() {
-    await this.keycloak.logout();
+  onLogout() {
+    const redirectUri =
+      window.location.origin + this.location.prepareExternalUrl('');
+    this.keycloak.login({
+      redirectUri,
+    });
   }
 }

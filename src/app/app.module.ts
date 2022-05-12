@@ -39,9 +39,12 @@ function initializeKeycloak(
     keycloak.keycloakEvents$.subscribe((e) => {
       if (
         e.type === KeycloakEventType.OnAuthSuccess ||
+        e.type === KeycloakEventType.OnAuthRefreshSuccess ||
         (e.type === KeycloakEventType.OnReady && e.args === true)
       ) {
         loginStatusService.setLoggedIn(true);
+      } else if (e.type == KeycloakEventType.OnTokenExpired) {
+        keycloak.updateToken();
       } else {
         loginStatusService.setLoggedIn(false);
       }
