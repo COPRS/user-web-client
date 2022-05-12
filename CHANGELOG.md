@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [next] - ????.??.??
 
 - RS-360: Keycloak silentCheckSsoRedirectUri doesn't take the base href into account
+- RS-366: User Web Client Page loads before the keycloak module does
 
 ## [1.0.1-rc1] - 2022-04-28
 

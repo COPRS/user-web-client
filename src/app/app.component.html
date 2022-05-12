@@ -1,18 +1,23 @@
-<header class="header header-1">
-  <div class="branding">
-    <a [routerLink]="['/']" class="nav-link">
-      <clr-icon shape="world"></clr-icon>
-      <span class="title">Copernicus Reference System - User Web Client</span>
-    </a>
-  </div>
-  <div class="header-actions">
-    <a class="nav-link nav-text" (click)="onLogout()" href="">Log Out</a>
-  </div>
-</header>
+<ng-template [ngIf]="isLoggedIn | async">
+  <header class="header header-1">
+    <div class="branding">
+      <a [routerLink]="['/']" class="nav-link">
+        <clr-icon shape="world"></clr-icon>
+        <span class="title">Copernicus Reference System - User Web Client</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <a class="nav-link nav-text" (click)="onLogout()" href="">Log Out</a>
+    </div>
+  </header>
 
-<div class="content-container content-container-scrollable">
-  <app-filter-sidebar [navWidth]="800" [duration]="0.5"></app-filter-sidebar>
-  <app-map-viewer class="content-area"> </app-map-viewer>
-  <app-map-switcher></app-map-switcher>
-  <app-details-sidebar [navWidth]="600" [duration]="0.0"></app-details-sidebar>
-</div>
+  <div class="content-container content-container-scrollable">
+    <app-filter-sidebar [navWidth]="800" [duration]="0.5"></app-filter-sidebar>
+    <app-map-viewer class="content-area"> </app-map-viewer>
+    <app-map-switcher></app-map-switcher>
+    <app-details-sidebar
+      [navWidth]="600"
+      [duration]="0.0"
+    ></app-details-sidebar>
+  </div>
+</ng-template>

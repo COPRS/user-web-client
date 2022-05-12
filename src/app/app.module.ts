@@ -17,8 +17,13 @@ import { QueryResultGridComponent } from './filter-sidebar/query-result-grid/que
 import { FileSizePipe } from './filter-sidebar/query-result-grid/file-size.pipe';
 import { LimitToPipe } from './filter-sidebar/query-result-grid/limit-to.pipe';
 import { RegionSelectionFilterElementComponent } from './filter-sidebar/components/region-selection-filter-element/region-selection-filter-element.component';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import {
+  KeycloakAngularModule,
+  KeycloakEventType,
+  KeycloakService,
+} from 'keycloak-angular';
 import { Location } from '@angular/common';
+import { LoginStatusService } from './services/login-status.service';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -27,21 +32,38 @@ export function initializeApp(configService: ConfigService) {
 function initializeKeycloak(
   keycloak: KeycloakService,
   configService: ConfigService,
-  location: Location
+  location: Location,
+  loginStatusService: LoginStatusService
 ) {
   return async () => {
+    keycloak.keycloakEvents$.subscribe((e) => {
+      if (
+        e.type === KeycloakEventType.OnAuthSuccess ||
+        (e.type === KeycloakEventType.OnReady && e.args === true)
+      ) {
+        loginStatusService.setLoggedIn(true);
+      } else {
+        loginStatusService.setLoggedIn(false);
+      }
+    });
+
     const config = await configService.getSettings();
     const silentCheckSsoRedirectUri =
       window.location.origin +
       location.prepareExternalUrl('/assets/silent-check-sso.html');
-    return keycloak.init({
-      config: config.keycloak,
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri,
-      },
-      bearerExcludedUrls: ['/assets'],
-    });
+
+    return keycloak
+      .init({
+        config: config.keycloak,
+        initOptions: {
+          onLoad: 'check-sso',
+          silentCheckSsoRedirectUri,
+        },
+        bearerExcludedUrls: ['/assets'],
+      })
+      .catch((e) => {
+        console.error(e);
+      });
   };
 }
 
@@ -79,7 +101,7 @@ function initializeKeycloak(
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService, ConfigService, Location],
+      deps: [KeycloakService, ConfigService, Location, LoginStatusService],
     },
   ],
   bootstrap: [AppComponent],
