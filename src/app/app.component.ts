@@ -23,8 +23,6 @@ export class AppComponent {
   onLogout() {
     const redirectUri =
       window.location.origin + this.location.prepareExternalUrl('');
-    this.keycloak.login({
-      redirectUri,
-    });
+    this.keycloak.logout(redirectUri);
   }
 }
