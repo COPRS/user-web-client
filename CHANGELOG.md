@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [next] - ????.??.??
+## [1.1.0-rc1] - 2022-05-13
 
 - RS-360: Keycloak silentCheckSsoRedirectUri doesn't take the base href into account
 - RS-366: User Web Client Page loads before the keycloak module does
