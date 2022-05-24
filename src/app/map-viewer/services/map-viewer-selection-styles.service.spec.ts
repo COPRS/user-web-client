@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
-import { MapSwitcherService } from './map-switcher.service';
 
+import { MapViewerSelectionStylesService } from './map-viewer-selection-styles.service';
 class MockConfigService {
   settings: IAppConfig = {
     apiUrl: 'http://test',
@@ -12,17 +12,17 @@ class MockConfigService {
   };
 }
 
-describe('MapSwitcherService', () => {
-  let service: MapSwitcherService;
+describe('MapViewerSelectionStylesService', () => {
+  let service: MapViewerSelectionStylesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        MapSwitcherService,
+        MapViewerSelectionStylesService,
         { provide: ConfigService, useClass: MockConfigService },
       ],
     });
-    service = TestBed.inject(MapSwitcherService);
+    service = TestBed.inject(MapViewerSelectionStylesService);
   });
 
   it('should be created', () => {

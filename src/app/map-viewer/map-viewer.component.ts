@@ -9,6 +9,7 @@ import { Feature } from 'ol';
 import { Zoom } from 'ol/control';
 import { click } from 'ol/events/condition';
 import GeoJSON from 'ol/format/GeoJSON';
+import Geometry from 'ol/geom/Geometry';
 import LineString from 'ol/geom/LineString';
 import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
@@ -18,16 +19,12 @@ import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
+import Style from 'ol/style/Style';
 import View from 'ol/View';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
-import {
-  SELECTED_STYLE_POLYGON,
-  SELECTED_STYLE_LINE,
-  SELECTED_STYLE_POINT,
-} from './map-viewer-selection-styles';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
@@ -37,6 +34,7 @@ import {
   AvailableMap,
   MapSwitcherService,
 } from './services/map-switcher.service';
+import { MapViewerSelectionStylesService } from './services/map-viewer-selection-styles.service';
 
 const SOURCE_PROJECTION = 'EPSG:4326';
 const DESTINATION_PROJECTION = 'EPSG:3857';
@@ -59,7 +57,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private elementRef: ElementRef,
     private mapSwitcher: MapSwitcherService,
     private queryResultService: QueryResultService,
-    private mapRegionSelectionService: MapRegionSelectionService
+    private mapRegionSelectionService: MapRegionSelectionService,
+    private mapViewerSelectionStylesService: MapViewerSelectionStylesService
   ) {}
   async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
@@ -111,8 +110,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private changeMapSelectionLayer(selection: MapRegionSelection) {
-    // Remove old background if it exists
+  private changeMapSelectionLayer(selection?: MapRegionSelection) {
+    // Remove old selection layer if it exists
     const backgroundLayers = this.map
       .getLayers()
       .getArray()
@@ -132,15 +131,15 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     // Set new background
     // Add data layer with new data
     if (selection) {
-      let geometry;
-      let style;
+      let geometry: Geometry;
+      let style: Style | any;
       switch (selection.type) {
         case 'LineString':
           geometry = new LineString(selection.coordinates).transform(
             SOURCE_PROJECTION,
             DESTINATION_PROJECTION
           );
-          style = SELECTED_STYLE_LINE;
+          style = this.mapViewerSelectionStylesService.getLineStyle();
           break;
 
         case 'Point':
@@ -148,7 +147,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
             SOURCE_PROJECTION,
             DESTINATION_PROJECTION
           );
-          style = SELECTED_STYLE_POINT;
+          style = this.mapViewerSelectionStylesService.getPointStyle();
           break;
         case 'Polygon':
         case 'Square':
@@ -156,7 +155,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
             SOURCE_PROJECTION,
             DESTINATION_PROJECTION
           );
-          style = SELECTED_STYLE_POLYGON;
+          style = this.mapViewerSelectionStylesService.getPolygonStyle();
           break;
       }
 
@@ -341,14 +340,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // LOAD DATA FROM DDIP-API - END
-
-    // REACT ON SELECTED REGION - START
-
-    // TODO: get filteresadsdasd
-    // asda
-    // sd
-
-    // REACT ON SELECTED REGION - END
   }
 
   private startSelection(type: SelectionType) {
@@ -358,28 +349,28 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           source: this.source,
           type,
           maxPoints: 2,
-          style: SELECTED_STYLE_LINE,
+          style: this.mapViewerSelectionStylesService.getLineStyle(),
         });
         break;
       case 'Polygon':
         this.draw = new Draw({
           source: this.source,
           type,
-          style: SELECTED_STYLE_POLYGON,
+          style: this.mapViewerSelectionStylesService.getPolygonStyle(),
         });
         break;
       case 'Point':
         this.draw = new Draw({
           source: this.source,
           type,
-          style: SELECTED_STYLE_POINT as any,
+          style: this.mapViewerSelectionStylesService.getPointStyle(),
         });
         break;
       case 'Square':
         this.draw = new Draw({
           source: this.source,
           type: 'Circle',
-          style: SELECTED_STYLE_POLYGON,
+          style: this.mapViewerSelectionStylesService.getPolygonStyle(),
           geometryFunction: createRegularPolygon(4),
         });
         break;
