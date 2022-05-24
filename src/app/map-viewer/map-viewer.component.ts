@@ -9,6 +9,8 @@ import { Feature } from 'ol';
 import { Zoom } from 'ol/control';
 import { click } from 'ol/events/condition';
 import GeoJSON from 'ol/format/GeoJSON';
+import LineString from 'ol/geom/LineString';
+import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
 import { Draw, Select } from 'ol/interaction';
 import { createRegularPolygon } from 'ol/interaction/Draw';
@@ -17,11 +19,17 @@ import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
 import View from 'ol/View';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import {
+  SELECTED_STYLE_POLYGON,
+  SELECTED_STYLE_LINE,
+  SELECTED_STYLE_POINT,
+} from './map-viewer-selection-styles';
+import {
+  MapRegionSelection,
   MapRegionSelectionService,
   SelectionType,
 } from './services/map-region-selection.service';
@@ -29,6 +37,9 @@ import {
   AvailableMap,
   MapSwitcherService,
 } from './services/map-switcher.service';
+
+const SOURCE_PROJECTION = 'EPSG:4326';
+const DESTINATION_PROJECTION = 'EPSG:3857';
 
 @Component({
   selector: 'app-map-viewer',
@@ -54,7 +65,12 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.setTarget(this.elementRef.nativeElement);
     this.mapSwitcher
       .getSelectedMap()
+      .pipe(takeUntil(this.onDestroy))
       .subscribe((e) => this.changeMapBackground(e));
+    this.mapRegionSelectionService
+      .getSelection()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((e) => this.changeMapSelectionLayer(e));
   }
 
   private changeMapBackground(selectedMap: AvailableMap) {
@@ -85,10 +101,85 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
             layerName: selectedMap.mapName,
           },
           source,
-          extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+          extent: transformExtent(
+            this.bounds,
+            SOURCE_PROJECTION,
+            DESTINATION_PROJECTION
+          ),
         })
       );
     });
+  }
+
+  private changeMapSelectionLayer(selection: MapRegionSelection) {
+    // Remove old background if it exists
+    const backgroundLayers = this.map
+      .getLayers()
+      .getArray()
+      .filter((l) => {
+        if (l) {
+          const props = l.getProperties();
+          if (props.layerType === LayerType.Selection) {
+            return true;
+          }
+        }
+        return false;
+      });
+    backgroundLayers.forEach((l) => {
+      this.map.removeLayer(l);
+    });
+
+    // Set new background
+    // Add data layer with new data
+    if (selection) {
+      let geometry;
+      let style;
+      switch (selection.type) {
+        case 'LineString':
+          geometry = new LineString(selection.coordinates).transform(
+            SOURCE_PROJECTION,
+            DESTINATION_PROJECTION
+          );
+          style = SELECTED_STYLE_LINE;
+          break;
+
+        case 'Point':
+          geometry = new Point(selection.coordinates[0]).transform(
+            SOURCE_PROJECTION,
+            DESTINATION_PROJECTION
+          );
+          style = SELECTED_STYLE_POINT;
+          break;
+        case 'Polygon':
+        case 'Square':
+          geometry = new Polygon([selection.coordinates]).transform(
+            SOURCE_PROJECTION,
+            DESTINATION_PROJECTION
+          );
+          style = SELECTED_STYLE_POLYGON;
+          break;
+      }
+
+      this.map.addLayer(
+        new VectorLayer({
+          zIndex: Infinity,
+          extent: transformExtent(
+            this.bounds,
+            SOURCE_PROJECTION,
+            DESTINATION_PROJECTION
+          ),
+          style,
+          properties: { layerType: LayerType.Selection },
+          source: new VectorSource({
+            features: [
+              new Feature({
+                geometry,
+              }),
+            ],
+          }),
+        })
+      );
+    }
   }
 
   ngOnInit(): void {
@@ -98,7 +189,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       view: new View({
         center: [0, 0],
         zoom: 1.8,
-        extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+        extent: transformExtent(
+          this.bounds,
+          SOURCE_PROJECTION,
+          DESTINATION_PROJECTION
+        ),
         constrainOnlyCenter: true,
       }),
     });
@@ -147,13 +242,19 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     // CLICK SELECT - END
 
     // CREATE DRAW BOX - START
-    this.mapRegionSelectionService.getSelectionStarted().subscribe((type) => {
-      this.startSelection(type);
-    });
+    this.mapRegionSelectionService
+      .getSelectionStarted()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((type) => {
+        this.startSelection(type);
+      });
 
-    this.mapRegionSelectionService.getSelectionAborted().subscribe(() => {
-      this.abortSelection();
-    });
+    this.mapRegionSelectionService
+      .getSelectionAborted()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(() => {
+        this.abortSelection();
+      });
 
     // CREATE DRAW BOX - END
 
@@ -204,7 +305,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.map.addLayer(
           new VectorLayer({
             zIndex: Infinity,
-            extent: transformExtent(this.bounds, 'EPSG:4326', 'EPSG:3857'),
+            extent: transformExtent(
+              this.bounds,
+              SOURCE_PROJECTION,
+              DESTINATION_PROJECTION
+            ),
 
             properties: { layerType: LayerType.Data },
             source: new VectorSource({
@@ -227,7 +332,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
                   }),
                 },
                 {
-                  featureProjection: 'EPSG:3857',
+                  featureProjection: DESTINATION_PROJECTION,
                 }
               ),
             }),
@@ -236,6 +341,14 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     // LOAD DATA FROM DDIP-API - END
+
+    // REACT ON SELECTED REGION - START
+
+    // TODO: get filteresadsdasd
+    // asda
+    // sd
+
+    // REACT ON SELECTED REGION - END
   }
 
   private startSelection(type: SelectionType) {
@@ -245,20 +358,28 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           source: this.source,
           type,
           maxPoints: 2,
+          style: SELECTED_STYLE_LINE,
         });
         break;
-
       case 'Polygon':
+        this.draw = new Draw({
+          source: this.source,
+          type,
+          style: SELECTED_STYLE_POLYGON,
+        });
+        break;
       case 'Point':
         this.draw = new Draw({
           source: this.source,
           type,
+          style: SELECTED_STYLE_POINT as any,
         });
         break;
       case 'Square':
         this.draw = new Draw({
           source: this.source,
           type: 'Circle',
+          style: SELECTED_STYLE_POLYGON,
           geometryFunction: createRegularPolygon(4),
         });
         break;
@@ -270,7 +391,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.draw.on('drawend', (drawEvent) => {
       const drawnFeature = drawEvent.feature as Feature<Polygon>;
       const geometry = drawnFeature.getGeometry();
-      geometry.transform('EPSG:3857', 'EPSG:4326');
+      geometry.transform(DESTINATION_PROJECTION, SOURCE_PROJECTION);
       const coordinates = geometry.getCoordinates();
       switch (this.drawType) {
         case 'Polygon':
@@ -315,4 +436,5 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 export enum LayerType {
   Background = 'Background',
   Data = 'Data',
+  Selection = 'Selection',
 }
