@@ -1,6 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ConfigService } from 'src/app/services/config.service';
+import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementComponent } from './filter-element.component';
+
+class MockConfigService {
+  settings: IAppConfig = {
+    apiUrl: 'http://test',
+    mapBackgrounds: [],
+    keycloak: { clientId: '', realm: '', url: '' },
+    mapView: { selectionFillColor: '', selectionStrokeColor: '' },
+    filterConfig: [],
+  };
+}
 
 describe('FilterElementComponent', () => {
   let component: FilterElementComponent;
@@ -8,9 +19,12 @@ describe('FilterElementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FilterElementComponent ]
-    })
-    .compileComponents();
+      declarations: [FilterElementComponent],
+      providers: [
+        FilterElementComponent,
+        { provide: ConfigService, useClass: MockConfigService },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

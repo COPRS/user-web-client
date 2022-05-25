@@ -2,5 +2,6 @@
   "apiUrl": "${API_URL}",
   "mapBackgrounds": ${MAP_BACKGROUNDS},
   "keycloak": ${KEYCLOAK},
-  "mapView": ${MAP_VIEW}
+  "mapView": ${MAP_VIEW},
+  "filterConfig": ${FILTER_CONFIG}
 }

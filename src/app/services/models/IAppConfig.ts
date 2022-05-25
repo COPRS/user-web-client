@@ -3,6 +3,7 @@ export interface IAppConfig {
   mapBackgrounds: IAppConfigMapBackgrounds[];
   keycloak: IAppConfigKeycloak;
   mapView: IAppConfigMapView;
+  filterConfig: IAppFilterConfig[];
 }
 
 export interface IAppConfigMapBackgrounds {
@@ -20,3 +21,15 @@ export interface IAppConfigMapView {
   selectionFillColor: string;
   selectionStrokeColor: string;
 }
+
+export interface IAppFilterConfig {
+  attributeName: string;
+  valueType: IAppFilterConfigValueType;
+}
+
+export type IAppFilterConfigValueType =
+  | 'string'
+  | 'date'
+  | 'double'
+  | 'long'
+  | 'boolean';

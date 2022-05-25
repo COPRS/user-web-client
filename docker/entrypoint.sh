@@ -33,13 +33,20 @@ fi
 
 if [ -z "$MAP_VIEW" ]
 then
-    export BASE_HREF=${MAP_VIEW:-/}
-    echo "MAP_VIEW is unset, set to default: " $MAP_VIEW;
+    echo "MAP_VIEW is unset";
 else
     echo "MAP_VIEW is set to '$MAP_VIEW'";
 fi
 
-envsubst '$${API_URL} $${MAP_BACKGROUNDS} $${KEYCLOAK} $${MAP_VIEW}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
+if [ -z "$FILTER_CONFIG" ]
+then
+    export FILTER_CONFIG=${FILTER_CONFIG:-[]}
+    echo "FILTER_CONFIG is unset, set to default: " $FILTER_CONFIG;
+else
+    echo "FILTER_CONFIG is set to '$FILTER_CONFIG'";
+fi
+
+envsubst '$${API_URL} $${MAP_BACKGROUNDS} $${KEYCLOAK} $${MAP_VIEW} $${FILTER_CONFIG}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
 envsubst '$${BASE_HREF}' < /usr/share/nginx/html/index.templ.html > /usr/share/nginx/html/index.html
 
 exec nginx -g 'daemon off;'

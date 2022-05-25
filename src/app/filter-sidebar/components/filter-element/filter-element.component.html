@@ -36,15 +36,28 @@
     </clr-datalist-container>
   </div>
   <div class="clr-col-4">
-    <clr-input-container>
-      <label>Value</label>
-      <input
-        style="width: 100%"
-        clrInput
-        name="value"
-        (change)="onChange()"
-        [(ngModel)]="value"
-      />
-    </clr-input-container>
+    <ng-container [ngSwitch]="valueType">
+      <clr-date-container *ngSwitchCase="'date'">
+        <label>Value</label>
+        <input
+          [clrDate]="dateValue"
+          type="date"
+          name="value"
+          (clrDateChange)="onDateChange($event)"
+          required
+        />
+      </clr-date-container>
+      <clr-input-container *ngSwitchDefault>
+        <label>Value</label>
+        <input
+          clrInput
+          name="value"
+          (change)="onChange()"
+          [(ngModel)]="value"
+          style="width: 100%"
+          required
+        />
+      </clr-input-container>
+    </ng-container>
   </div>
 </div>

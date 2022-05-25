@@ -10,6 +10,7 @@ class MockConfigService {
     mapBackgrounds: [],
     keycloak: { clientId: '', realm: '', url: '' },
     mapView: { selectionFillColor: '', selectionStrokeColor: '' },
+    filterConfig: [],
   };
 }
 

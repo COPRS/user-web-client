@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [next] - ????.??.??
 
 - RS-336: Display search area with results
+- RS-317: Date filter does not work
 
 ## [1.1.0-rc1] - 2022-05-13
 

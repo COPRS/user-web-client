@@ -17,6 +17,7 @@ The user-web-client configuration consists of two environment variables:
 | BASE_HREF                 | `/uwc/` (default: /)                                                                                               | (optional) when the user-web-client is deployed on a sub-path, this option is mandatory. For example, when the full URL is `https://rs-domain.net/web-client` the $BASE_HREF must to be set to `/web-client/`. If it is deployed on the root `https://rs-domain.net` this setting can be ignored.               |
 | KEYCLOAK                  | `{"url":"http://localhost:8080/auth","realm":"master","clientId": "user-web-client"}`                              | A text string containing a JSON configuration object. See TypeScript interface definition file for details [IAppConfig.ts (IAppConfigKeycloak)](./src/app/services/models/IAppConfig.ts). Proper encoding/escaping of special characters must be taken care of when adding this setting to the container.       |
 | MAP_VIEW                  | `{"selectionFillColor":"rgba(255,155,51,0.3)","selectionStrokeColor":"rgba(255,155,51,0.6)"}`                      | A text string containing a JSON configuration object. See TypeScript interface definition file for details [IAppConfig.ts (IAppConfigMapView)](./src/app/services/models/IAppConfig.ts). Proper encoding/escaping of special characters must be taken care of when adding this setting to the container.        |
+| FILTER_CONFIG             | `[{"attributeName":"PublicationDate","valueType":"date"}]` (default: [])                                           | A text string containing a JSON configuration object. See TypeScript interface definition file for details [IAppConfig.ts (IAppFilterConfig)](./src/app/services/models/IAppConfig.ts). Proper encoding/escaping of special characters must be taken care of when adding this setting to the container.         |
 
 ### Example Kubernetes
 
@@ -33,7 +34,9 @@ env:
   keycloak: |
     "{\"url\":\"KEYCLOAK_AUTH_ENDPOINT\",\"realm\":\"KEYCLOAK_REALM\",\"clientId\": \"CLIENT_ID\"}
   mapView: |
-    "{\"selectionFillColor\":\"rgba(255,155,51,0.3)\",\"selectionStrokeColor\":\"rgba(255,155,51,0.6)\"}
+    "{\"selectionFillColor\":\"CSS_COLOR_STRING\",\"selectionStrokeColor\":\"CSS_COLOR_STRING\"}
+  filterConfig: |
+    "[{\"attributeName\":\"ATTRIBUTE_NAME",\"valueType\":\"VALUE_TYPE\"}]"
 ```
 
 values.yaml (practical example)
@@ -51,4 +54,6 @@ env:
   # Map View configuration
   mapView: |
     "{\"selectionFillColor\":\"rgba(255,155,51,0.3)\",\"selectionStrokeColor\":\"rgba(255,155,51,0.6)\"}
+  filterConfig: |
+    "[{\"attributeName\":\"PublicationDate",\"valueType\":\"date\"}]"
 ```
