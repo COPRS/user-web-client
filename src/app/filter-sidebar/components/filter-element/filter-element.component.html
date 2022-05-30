@@ -30,8 +30,10 @@
       <datalist>
         <option
           *ngFor="let operator of operatorSuggestions"
-          [value]="operator"
-        ></option>
+          [value]="operator.value"
+        >
+          {{ operator.description }}
+        </option>
       </datalist>
     </clr-datalist-container>
   </div>

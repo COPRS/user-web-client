@@ -3,6 +3,17 @@ import { ConfigService } from 'src/app/services/config.service';
 import { IAppFilterConfigValueType } from 'src/app/services/models/IAppConfig';
 import { FilterElement } from '../../models/FilterElement';
 
+const OPERATOR_SUGGESTIONS: OperatorSuggestion[] = [
+  { value: 'contains', description: 'contains' },
+  { value: 'endswith', description: 'endswith' },
+  { value: 'eq', description: 'equals (eq)' },
+  { value: 'ge', description: 'greater equal (ge)' },
+  { value: 'gt', description: 'greater than (gt)' },
+  { value: 'le', description: 'less equal (le)' },
+  { value: 'lt', description: 'less than (lt)' },
+  { value: 'startswith', description: 'startswith' },
+];
+
 @Component({
   selector: 'app-filter-element',
   templateUrl: './filter-element.component.html',
@@ -30,16 +41,7 @@ export class FilterElementComponent implements OnInit {
   ];
   attributeName = '';
 
-  operatorSuggestions = [
-    'contains',
-    'endswith',
-    'eq',
-    'ge',
-    'gt',
-    'le',
-    'lt',
-    'startswith',
-  ];
+  operatorSuggestions: OperatorSuggestion[] = [];
   operator = '';
 
   value: string = '';
@@ -66,7 +68,8 @@ export class FilterElementComponent implements OnInit {
   }
 
   onChange(): void {
-    this.setValueType(this.attributeName);
+    this.valueType = this.setValueType(this.attributeName);
+    this.operatorSuggestions = this.updateOperatorSuggestions(this.valueType);
     if (this.attributeName && this.operator && (this.value || this.dateValue)) {
       this.changed.emit({
         attributeName: this.attributeName,
@@ -76,12 +79,54 @@ export class FilterElementComponent implements OnInit {
     }
   }
 
-  setValueType(attributeName: string) {
+  setValueType(attributeName: string): IAppFilterConfigValueType {
     if (attributeName) {
       const fieldFilterType = this.configService.settings.filterConfig?.find(
         (f) => f.attributeName === attributeName
       );
-      this.valueType = fieldFilterType ? fieldFilterType.valueType : undefined;
+      return fieldFilterType ? fieldFilterType.valueType : undefined;
+    } else {
+      return undefined;
+    }
+  }
+
+  updateOperatorSuggestions(
+    valueType: IAppFilterConfigValueType
+  ): OperatorSuggestion[] {
+    switch (valueType) {
+      case 'boolean':
+        return OPERATOR_SUGGESTIONS.filter((o) =>
+          (['eq'] as Operator[]).includes(o.value)
+        );
+      case 'string':
+        return OPERATOR_SUGGESTIONS.filter((o) =>
+          (['eq', 'startswith', 'endswith', 'contains'] as Operator[]).includes(
+            o.value
+          )
+        );
+      case 'date':
+      case `double`:
+      case 'long':
+        return OPERATOR_SUGGESTIONS.filter((o) =>
+          (['gt', 'ge', 'lt', 'le', 'eq'] as Operator[]).includes(o.value)
+        );
+      default:
+        return OPERATOR_SUGGESTIONS;
     }
   }
 }
+
+export interface OperatorSuggestion {
+  value: Operator;
+  description: string;
+}
+
+export type Operator =
+  | 'contains'
+  | 'endswith'
+  | 'eq'
+  | 'ge'
+  | 'gt'
+  | 'le'
+  | 'lt'
+  | 'startswith';
