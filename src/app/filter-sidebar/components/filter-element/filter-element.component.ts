@@ -53,7 +53,7 @@ export class FilterElementComponent implements OnInit {
     this.operator = this.initFilter.operator;
     this.value = this.initFilter.value;
     this.dateValue = this.value ? new Date(this.value) : undefined;
-    this.setValueType(this.attributeName);
+    this.updateFilterType(this.attributeName);
   }
 
   onDateChange(event: any): void {
@@ -67,9 +67,17 @@ export class FilterElementComponent implements OnInit {
     this.onChange();
   }
 
+  onAttributeNameChange() {
+    delete this.dateValue;
+    delete this.value;
+    delete this.operator;
+    delete this.operatorSuggestions;
+    this.onChange();
+  }
+
   onChange(): void {
-    this.valueType = this.setValueType(this.attributeName);
-    this.operatorSuggestions = this.updateOperatorSuggestions(this.valueType);
+    this.updateFilterType(this.attributeName);
+
     if (this.attributeName && this.operator && (this.value || this.dateValue)) {
       this.changed.emit({
         attributeName: this.attributeName,
@@ -77,6 +85,11 @@ export class FilterElementComponent implements OnInit {
         value: this.value,
       });
     }
+  }
+
+  updateFilterType(attributeName: string) {
+    this.valueType = this.setValueType(attributeName);
+    this.operatorSuggestions = this.updateOperatorSuggestions(this.valueType);
   }
 
   setValueType(attributeName: string): IAppFilterConfigValueType {

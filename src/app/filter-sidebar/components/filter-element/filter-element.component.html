@@ -6,7 +6,7 @@
         name="Option"
         required
         clrDatalistInput
-        (change)="onChange()"
+        (change)="onAttributeNameChange()"
         [(ngModel)]="attributeName"
       />
       <datalist>
@@ -49,6 +49,22 @@
           required
         />
       </clr-date-container>
+      <ng-container *ngSwitchCase="'long'">
+        <ng-container *ngTemplateOutlet="numberInput"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'double'">
+        <ng-container *ngTemplateOutlet="numberInput"></ng-container>
+      </ng-container>
+      <clr-checkbox-wrapper *ngSwitchCase="'boolean'">
+        <input
+          type="checkbox"
+          clrCheckbox
+          value="value"
+          name="value"
+          (change)="onChange()"
+          [(ngModel)]="value"
+        />
+      </clr-checkbox-wrapper>
       <clr-input-container *ngSwitchDefault>
         <label>Value</label>
         <input
@@ -56,10 +72,22 @@
           name="value"
           (change)="onChange()"
           [(ngModel)]="value"
-          style="width: 100%"
           required
         />
       </clr-input-container>
     </ng-container>
+    <ng-template #numberInput>
+      <clr-input-container>
+        <label>Value</label>
+        <input
+          clrInput
+          name="value"
+          (change)="onChange()"
+          [(ngModel)]="value"
+          type="number"
+          style="width: 100%"
+          required
+      /></clr-input-container>
+    </ng-template>
   </div>
 </div>
