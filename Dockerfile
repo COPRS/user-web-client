@@ -3,7 +3,7 @@
 ####################
 
 # base image
-FROM node:14 as build
+FROM node:16 as build
 
 # install chrome for tests
 RUN apt-get update && apt-get install -yq chromium \
@@ -41,7 +41,7 @@ RUN mv /app/dist/index.html /app/dist/index.templ.html
 ############
 
 # base image
-FROM nginx:1.21.5-alpine
+FROM nginx:1.21.6-alpine
 
 RUN apk upgrade --no-cache && apk add --no-cache gettext
 

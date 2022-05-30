@@ -1,8 +1,10 @@
 <div class="btn-group">
   <clr-dropdown [clrCloseMenuOnItemClick]="false">
-    <button clrDropdownTrigger class="btn btn-primary">
-      <clr-icon shape="plus-circle"></clr-icon> Select a
-      <span *ngIf="selectedRegion$ | async">new </span>Region on the map
+    <button clrDropdownTrigger class="btn btn-primary btn-icon">
+      <clr-icon shape="plus-circle"></clr-icon>
+      &nbsp;Select a
+      <span *ngIf="selectedRegion$ | async">&nbsp;new&nbsp;</span>Region on the
+      map
     </button>
     <clr-dropdown-menu *clrIfOpen>
       <div clrDropdownItem (click)="startGeopgraphicSelection('Point')">
