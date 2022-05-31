@@ -73,8 +73,9 @@ export class FilterSidebarComponent implements OnInit {
 
     navBarStyle.transition =
       this.duration + 's, visibility ' + this.duration + 's';
-    navBarStyle.width = this.navWidth + 'px';
-    navBarStyle.left = (showNav ? 0 : this.navWidth * -1) + 'px';
+    navBarStyle.width = this.navWidth + 'vw';
+    navBarStyle.left = (showNav ? 0 : this.navWidth * -1) + 'vw';
+    navBarStyle.minWidth = '450px';
 
     return navBarStyle;
   }

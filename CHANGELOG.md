@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - RS-336: Display search area with results
 - RS-317: Date filter does not work
+- RS-319: Improve filter bar ergonomy
 
 ## [1.1.0-rc1] - 2022-05-13
 

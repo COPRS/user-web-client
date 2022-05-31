@@ -1,5 +1,6 @@
-$side-bar-background-color: rgba(255, 255, 255, 0.8);
+$side-bar-background-color: rgba(255, 255, 255, 0.65);
 $side-bar-top-distance: 30px;
+$clarity-header-height: 60px;
 $container-content-padding-side: 32px;
 $container-content-padding-top-bottom: 20px;
 
@@ -12,21 +13,20 @@ $container-content-padding-top-bottom: 20px;
   position: absolute;
   z-index: 1001;
 
-  top: 0px;
-  // bottom: 0px;
+  top: 0;
   left: 0;
-  // right: 0;
 
   .side-nav-bar-overlay {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.2);
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - $clarity-header-height);
     position: fixed;
   }
 
   .side-nav-bar-menu-container {
-    position: absolute;
-    top: $side-bar-top-distance;
+    position: fixed;
+    top: $side-bar-top-distance + $clarity-header-height;
+    bottom: $side-bar-top-distance;
     background: $side-bar-background-color;
     border-radius: 0 3px 3px 0;
     display: flex;
@@ -56,7 +56,6 @@ $container-content-padding-top-bottom: 20px;
 
     .side-nav-bar-content-container {
       overflow-y: auto;
-      max-height: 700px;
 
       hr {
         margin: 0;

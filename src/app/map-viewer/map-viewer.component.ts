@@ -218,7 +218,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       select.on('select', (e) => {
         if (e.selected.length !== 0) {
           this.detailsSideBarNav.setSelectedProduct(
-            e.selected[0].values_.product
+            (e.selected[0] as any).values_.product
           );
         } else {
           this.detailsSideBarNav.setSelectedProduct(undefined);
