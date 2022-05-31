@@ -1,0 +1,51 @@
+$side-bar-background-color: rgba(255, 255, 255, 0.8);
+$side-bar-top-distance: 30px;
+$container-content-padding-side: 32px;
+$container-content-padding-top-bottom: 20px;
+
+.metadatalist {
+  margin-left: 10px;
+  font-size: small;
+}
+
+.metadatalist > .name {
+  font-weight: bolder;
+}
+
+.metadatalist > .value {
+  margin-bottom: 0.8em;
+}
+
+.side-details-bar-close {
+  text-align: left;
+}
+
+.side-details-bar-close > clr-icon {
+  cursor: pointer;
+  transform: rotate(90deg);
+}
+
+.side-details-bar-content-container {
+  overflow-y: auto;
+  max-height: 850px;
+
+  hr {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #c0c0c0;
+  }
+  .side-details-bar-content-element {
+    // background-color: pink;
+    padding: $container-content-padding-top-bottom
+      $container-content-padding-side $container-content-padding-top-bottom
+      $container-content-padding-side;
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .side-details-bar-badge {
+      text-align: left;
+    }
+  }
+}

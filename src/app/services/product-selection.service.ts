@@ -5,7 +5,7 @@ import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 @Injectable({
   providedIn: 'root',
 })
-export class DetailsSidebarNavigationService {
+export class ProductSelectionService {
   private selectedFeature$: BehaviorSubject<DdipProduct> =
     new BehaviorSubject<DdipProduct>(undefined);
 

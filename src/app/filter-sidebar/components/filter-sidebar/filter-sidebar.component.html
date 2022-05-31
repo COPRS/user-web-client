@@ -2,19 +2,6 @@
   class="side-nav-bar"
   [ngClass]="{ 'side-nav-bar-collapsed': (showSideNav$ | async) === false }"
 >
-  <!-- overlay -->
-  <div
-    class="side-nav-bar-overlay"
-    [ngStyle]="{
-      transition:
-        'background-color ' + duration + 's, visibility ' + duration + 's'
-    }"
-    [ngClass]="{
-      'side-nav-bar-overlay-collapsed': (showSideNav$ | async) === false
-    }"
-    (click)="onSidebarClose()"
-  ></div>
-
   <!-- side bar-->
   <div
     class="side-nav-bar-menu-container"
@@ -24,39 +11,54 @@
 
     <div class="side-nav-bar-menu-container-header">
       <div class="clr-row">
-        <div class="clr-col-1"></div>
-        <div
-          class="clr-col-5 side-nav-bar-badge"
-          [ngClass]="{
-            buttonSelected: (selectedSubNav$ | async) === SideBarSubNav.FILTERS
-          }"
-          (click)="onSubNavClick(SideBarSubNav.FILTERS)"
-        >
-          <clr-icon shape="filter"></clr-icon> FILTERS
-          <span *ngIf="filterCount$ | async" class="badge badge-info">{{
-            filterCount$ | async
-          }}</span>
+        <div class="clr-col-11">
+          <div class="clr-row">
+            <div
+              class="clr-col-4 side-nav-bar-badge"
+              [ngClass]="{
+                buttonSelected:
+                  (selectedSubNav$ | async) === SideBarSubNav.FILTERS
+              }"
+              (click)="onSubNavClick(SideBarSubNav.FILTERS)"
+            >
+              <clr-icon shape="filter"></clr-icon> FILTERS
+              <span *ngIf="filterCount$ | async" class="badge badge-info">{{
+                filterCount$ | async
+              }}</span>
+            </div>
+            <div
+              class="clr-col-4 side-nav-bar-badge"
+              [ngClass]="{
+                buttonSelected:
+                  (selectedSubNav$ | async) === SideBarSubNav.RESULTS
+              }"
+              (click)="onSubNavClick(SideBarSubNav.RESULTS)"
+            >
+              <clr-icon shape="view-list"></clr-icon>
+              RESULTS
+              <clr-icon
+                *ngIf="(loadingStatus$ | async).loading"
+                shape="sync"
+              ></clr-icon>
+              <clr-icon
+                *ngIf="(loadingStatus$ | async).error"
+                shape="error-standard"
+                class="is-error"
+              ></clr-icon>
+            </div>
+            <div
+              class="clr-col-4 side-nav-bar-badge"
+              [ngClass]="{
+                buttonSelected:
+                  (selectedSubNav$ | async) === SideBarSubNav.DETAILS
+              }"
+              (click)="onSubNavClick(SideBarSubNav.DETAILS)"
+            >
+              <clr-icon shape="details"></clr-icon> DETAILS
+            </div>
+          </div>
         </div>
-        <div
-          class="clr-col-5 side-nav-bar-badge"
-          [ngClass]="{
-            buttonSelected: (selectedSubNav$ | async) === SideBarSubNav.RESULTS
-          }"
-          (click)="onSubNavClick(SideBarSubNav.RESULTS)"
-        >
-          <clr-icon shape="view-list"></clr-icon>
-          RESULTS
-          <clr-icon
-            *ngIf="(loadingStatus$ | async).loading"
-            shape="sync"
-          ></clr-icon>
-          <clr-icon
-            *ngIf="(loadingStatus$ | async).error"
-            shape="error-standard"
-            class="is-error"
-          ></clr-icon>
-        </div>
-        <div class="clr-col-1 side-nav-bar-close clr-align-self-center">
+        <div class="clr-col-1 side-nav-bar-close clr-align-self-right">
           <clr-icon shape="angle-double" (click)="onSidebarClose()"></clr-icon>
         </div>
       </div>
@@ -75,19 +77,17 @@
         </div>
         <hr />
         <div class="side-nav-bar-content-element">
-          <form class="clr-form clr-form-vertical">
-            <clr-textarea-container>
-              <label class="clr-col-12">Used query</label>
-              <textarea
-                class="clr-col-12"
-                clrTextarea
-                style="width: 100%"
-                required
-                [value]="queryFilterFromService$ | async"
-                (change)="onManualFilterQueryChange($event.target)"
-              ></textarea>
-            </clr-textarea-container>
-          </form>
+          <clr-textarea-container>
+            <label class="clr-col-12">Used query</label>
+            <textarea
+              class="clr-col-12"
+              clrTextarea
+              style="width: 100%"
+              required
+              [value]="queryFilterFromService$ | async"
+              (change)="onManualFilterQueryChange($event.target)"
+            ></textarea>
+          </clr-textarea-container>
         </div>
       </div>
       <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.RESULTS">
@@ -115,6 +115,11 @@
             </div>
           </div>
           <app-query-result-grid></app-query-result-grid>
+        </div>
+      </div>
+      <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.DETAILS">
+        <div class="side-nav-bar-content-element">
+          <app-product-details></app-product-details>
         </div>
       </div>
     </div>

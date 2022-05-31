@@ -9,7 +9,7 @@ import { MapViewerModule } from './map-viewer/map-viewer.module';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from './services/config.service';
 import { FilterSidebarComponent } from './filter-sidebar/components/filter-sidebar/filter-sidebar.component';
-import { DetailsSidebarComponent } from './details-sidebar/components/details-sidebar/details-sidebar.component';
+import { ProductDetailsComponent } from './filter-sidebar/components/details-sidebar/product-details.component';
 import { FilterElementComponent } from './filter-sidebar/components/filter-element/filter-element.component';
 import { FilterElementListComponent } from './filter-sidebar/components/filter-element-list/filter-element-list.component';
 import { MapSwitcherComponent } from './map-viewer/components/map-switcher/map-switcher.component';
@@ -74,7 +74,7 @@ function initializeKeycloak(
   declarations: [
     AppComponent,
     FilterSidebarComponent,
-    DetailsSidebarComponent,
+    ProductDetailsComponent,
     FilterElementComponent,
     FilterElementListComponent,
     MapSwitcherComponent,

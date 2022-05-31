@@ -3,6 +3,8 @@ $side-bar-top-distance: 30px;
 $clarity-header-height: 60px;
 $container-content-padding-side: 32px;
 $container-content-padding-top-bottom: 20px;
+$main-color: rgba(169, 169, 169, 0.8);
+$secondary-color: rgba(211, 211, 211, 0.8);
 
 :host {
   position: relative;
@@ -12,16 +14,10 @@ $container-content-padding-top-bottom: 20px;
 .side-nav-bar {
   position: absolute;
   z-index: 1001;
+ 
 
   top: 0;
   left: 0;
-
-  .side-nav-bar-overlay {
-    background: rgba(0, 0, 0, 0.2);
-    width: 100vw;
-    height: calc(100vh - $clarity-header-height);
-    position: fixed;
-  }
 
   .side-nav-bar-menu-container {
     position: fixed;
@@ -31,18 +27,21 @@ $container-content-padding-top-bottom: 20px;
     border-radius: 0 3px 3px 0;
     display: flex;
     flex-direction: column;
+    backdrop-filter: blur(1px);
 
     .side-nav-bar-menu-container-header {
       padding: 15px;
+      padding-left: $container-content-padding-side;
     }
 
     .side-nav-bar-badge {
-      text-align: left;
+      text-align: center;
+      border-bottom: thin solid $secondary-color;
     }
 
     .buttonSelected {
-      background-color: lightgrey;
-      border-bottom: thin solid darkgray;
+      background-color: $secondary-color;
+      border-bottom: thin solid $main-color;
     }
 
     .side-nav-bar-close {
@@ -60,7 +59,7 @@ $container-content-padding-top-bottom: 20px;
       hr {
         margin: 0;
         border: 0;
-        border-top: 1px solid #c0c0c0;
+        border-top: 1px solid $secondary-color;
       }
       .side-nav-bar-content-element {
         padding: $container-content-padding-top-bottom
@@ -96,4 +95,12 @@ $container-content-padding-top-bottom: 20px;
 
 .side-nav-bar-flag > clr-icon {
   margin-right: 5px;
+}
+
+
+:host ::ng-deep clr-textarea-container > .clr-control-container {
+  padding: 0 !important;
+}
+:host ::ng-deep clr-textarea-container > .clr-control-label {
+  padding: 0 !important;
 }

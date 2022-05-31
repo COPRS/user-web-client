@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 export enum SideBarSubNav {
   FILTERS = 'FILTERS',
   RESULTS = 'RESULTS',
+  DETAILS = 'DETAILS',
 }
 
 @Injectable({

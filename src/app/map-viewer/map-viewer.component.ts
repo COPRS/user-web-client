@@ -21,10 +21,10 @@ import { transformExtent } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
 import Style from 'ol/style/Style';
 import View from 'ol/View';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { DetailsSidebarNavigationService } from '../details-sidebar/services/details-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
+import { ProductSelectionService } from '../services/product-selection.service';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
@@ -53,7 +53,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private drawType: SelectionType;
 
   constructor(
-    private detailsSideBarNav: DetailsSidebarNavigationService,
+    private detailsSideBarNav: ProductSelectionService,
     private elementRef: ElementRef,
     private mapSwitcher: MapSwitcherService,
     private queryResultService: QueryResultService,

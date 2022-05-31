@@ -3,22 +3,19 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
-import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';
+import { ProductSelectionService } from 'src/app/services/product-selection.service';
 
 @Component({
-  selector: 'app-details-sidebar',
-  templateUrl: './details-sidebar.component.html',
-  styleUrls: ['./details-sidebar.component.scss'],
+  selector: 'app-product-details',
+  templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.scss'],
 })
-export class DetailsSidebarComponent {
+export class ProductDetailsComponent {
   showSideNav$: Observable<boolean>;
   selectedProduct$: Observable<DdipProduct>;
   downloadUrl$: Observable<string>;
-  @Input() duration: number = 0.25;
-  @Input() navWidth: number = window.innerWidth;
-
   constructor(
-    private navService: DetailsSidebarNavigationService,
+    private navService: ProductSelectionService,
     private ddipService: DdipService
   ) {
     this.showSideNav$ = this.navService
@@ -29,21 +26,6 @@ export class DetailsSidebarComponent {
       filter((p) => !!p),
       map((p) => this.ddipService.constructorDownloadUrl(p.Id))
     );
-  }
-
-  onSidebarClose() {
-    this.navService.setSelectedProduct(undefined);
-  }
-
-  getSideNavBarStyle(showNav: any) {
-    let navBarStyle: any = {};
-
-    navBarStyle.transition =
-      this.duration + 's, visibility ' + this.duration + 's';
-    navBarStyle.width = this.navWidth + 'px';
-    navBarStyle.right = (!!showNav ? 0 : this.navWidth * -1) + 'px';
-
-    return navBarStyle;
   }
 
   rootDirectory: any[] = [

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DetailsSidebarNavigationService } from './details-sidebar-navigation.service';
+import { ProductSelectionService } from './product-selection.service';
 
 describe('DetailsSidebarNavigationService', () => {
-  let service: DetailsSidebarNavigationService;
+  let service: ProductSelectionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DetailsSidebarNavigationService);
+    service = TestBed.inject(ProductSelectionService);
   });
 
   it('should be created', () => {

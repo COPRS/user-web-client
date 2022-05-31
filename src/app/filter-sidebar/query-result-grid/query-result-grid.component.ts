@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DetailsSidebarNavigationService } from 'src/app/details-sidebar/services/details-sidebar-navigation.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
+import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../services/query-result.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
 
   constructor(
     private queryResultService: QueryResultService,
-    private detailsNavService: DetailsSidebarNavigationService
+    private detailsNavService: ProductSelectionService
   ) {
     this.loading = this.queryResultService
       .getIsLoading()

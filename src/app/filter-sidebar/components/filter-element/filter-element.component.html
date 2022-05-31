@@ -39,7 +39,7 @@
   </div>
   <div class="clr-col-4">
     <ng-container [ngSwitch]="valueType">
-      <clr-date-container *ngSwitchCase="'date'">
+      <clr-date-container *ngSwitchCase="'date'" style="width: 100%">
         <label>Value</label>
         <input
           [clrDate]="dateValue"

@@ -3,8 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { FileSizePipe } from 'src/app/filter-sidebar/query-result-grid/file-size.pipe';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
-import { DetailsSidebarNavigationService } from '../../services/details-sidebar-navigation.service';
-import { DetailsSidebarComponent } from './details-sidebar.component';
+import { ProductSelectionService } from 'src/app/services/product-selection.service';
+import { ProductDetailsComponent } from './product-details.component';
 
 class MockDdipService {
   getProducts() {}
@@ -23,16 +23,16 @@ class MockDetailsSidebarNavigationService {
 }
 
 describe('DetailsSidebarComponent', () => {
-  let component: DetailsSidebarComponent;
-  let fixture: ComponentFixture<DetailsSidebarComponent>;
+  let component: ProductDetailsComponent;
+  let fixture: ComponentFixture<ProductDetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DetailsSidebarComponent, FileSizePipe],
+      declarations: [ProductDetailsComponent, FileSizePipe],
       providers: [
         { provide: DdipService, useClass: MockDdipService },
         {
-          provide: DetailsSidebarNavigationService,
+          provide: ProductSelectionService,
           useClass: MockDetailsSidebarNavigationService,
         },
       ],
@@ -40,7 +40,7 @@ describe('DetailsSidebarComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DetailsSidebarComponent);
+    fixture = TestBed.createComponent(ProductDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
