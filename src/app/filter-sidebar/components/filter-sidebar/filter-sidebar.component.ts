@@ -1,9 +1,10 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
+import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { FilterElementsService } from '../../services/filter-elements.service';
 import {
   FilterSidebarNavigationService,
@@ -28,7 +29,7 @@ import {
     ]),
   ],
 })
-export class FilterSidebarComponent implements OnInit {
+export class FilterSidebarComponent implements OnInit, OnDestroy {
   showSideNav$: Observable<boolean>;
   selectedSubNav$: Observable<SideBarSubNav>;
   SideBarSubNav = SideBarSubNav;
@@ -38,6 +39,7 @@ export class FilterSidebarComponent implements OnInit {
   queryResultFromService: any;
   settings: IAppConfig;
   loadingStatus$: Observable<LoadingStatus>;
+  private readonly onDestroy = new Subject<void>();
 
   @Input() duration: number = 0.25;
   @Input() navWidth: number = window.innerWidth;
@@ -46,8 +48,13 @@ export class FilterSidebarComponent implements OnInit {
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
     private queryResultService: QueryResultService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private productSelectionService: ProductSelectionService
   ) {}
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
+  }
 
   ngOnInit(): void {
     this.queryFilterFromService$ = this.filterElementsService.getQuery();
@@ -59,6 +66,15 @@ export class FilterSidebarComponent implements OnInit {
     this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.settings = this.configService.settings;
     this.loadingStatus$ = this.queryResultService.getIsLoading();
+    this.productSelectionService
+      .getSelectedProduct()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((p) => {
+        if (p) {
+          this.onSubNavClick(SideBarSubNav.DETAILS);
+          this.navService.setShowNav(true);
+        }
+      });
   }
 
   onSidebarClose() {

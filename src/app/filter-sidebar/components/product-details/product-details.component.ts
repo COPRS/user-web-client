@@ -15,14 +15,14 @@ export class ProductDetailsComponent {
   selectedProduct$: Observable<DdipProduct>;
   downloadUrl$: Observable<string>;
   constructor(
-    private navService: ProductSelectionService,
+    private productSelectionService: ProductSelectionService,
     private ddipService: DdipService
   ) {
-    this.showSideNav$ = this.navService
+    this.showSideNav$ = this.productSelectionService
       .getSelectedProduct()
       .pipe(map((p) => !!p));
-    this.selectedProduct$ = this.navService.getSelectedProduct();
-    this.downloadUrl$ = this.navService.getSelectedProduct().pipe(
+    this.selectedProduct$ = this.productSelectionService.getSelectedProduct();
+    this.downloadUrl$ = this.productSelectionService.getSelectedProduct().pipe(
       filter((p) => !!p),
       map((p) => this.ddipService.constructorDownloadUrl(p.Id))
     );
