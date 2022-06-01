@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { DetailsSidebarNavigationService } from 'src/app/details-sidebar/services/details-sidebar-navigation.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../services/query-result.service';
@@ -66,7 +65,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
 
   selectionChanged($event) {
     const selectedProduct = $event as DdipProduct;
-    this.detailsNavService.setSelectedProduct(selectedProduct);
+    // this.detailsNavService.setSelectedProduct(selectedProduct);
   }
   trackById(_index: number, item: DdipProduct) {
     return item.Id;
