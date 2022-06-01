@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinct, mergeMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, mergeMap } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import {
   DdipProduct,
@@ -24,7 +24,10 @@ export class QueryResultService {
     this.filterService.getQuery(),
     this.pagination$,
   ]).pipe(
-    distinct(),
+    distinctUntilChanged(
+      (x, y) =>
+        x[0] === y[0] && x[1].top === y[1].top && x[1].skip === y[1].skip
+    ),
     debounceTime(10),
     mergeMap(async (c) => {
       const [filter, pageConfig] = c;

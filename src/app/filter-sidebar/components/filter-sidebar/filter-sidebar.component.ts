@@ -1,10 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
-import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { FilterElementsService } from '../../services/filter-elements.service';
 import {
   FilterSidebarNavigationService,
@@ -48,8 +47,7 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
     private navService: FilterSidebarNavigationService,
     private filterElementsService: FilterElementsService,
     private queryResultService: QueryResultService,
-    private configService: ConfigService,
-    private productSelectionService: ProductSelectionService
+    private configService: ConfigService
   ) {}
 
   ngOnDestroy(): void {
@@ -66,15 +64,6 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
     this.selectedSubNav$ = this.navService.getSelectedSubNav();
     this.settings = this.configService.settings;
     this.loadingStatus$ = this.queryResultService.getIsLoading();
-    this.productSelectionService
-      .getSelectedProduct()
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe((p) => {
-        if (p) {
-          this.onSubNavClick(SideBarSubNav.DETAILS);
-          this.navService.setShowNav(true);
-        }
-      });
   }
 
   onSidebarClose() {

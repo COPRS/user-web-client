@@ -14,15 +14,14 @@ import { QueryResultService } from '../services/query-result.service';
 export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: DdipProduct[];
   total: number;
-  pageSize: number = 20;
+  pageSize: number = 15;
   loading: Observable<boolean>;
-  public rowSelection: boolean = true;
-  public selected: DdipProduct[] = [];
+  public selected: DdipProduct;
   private readonly onDestroy = new Subject<void>();
 
   constructor(
     private queryResultService: QueryResultService,
-    private detailsNavService: ProductSelectionService
+    private productSelectionService: ProductSelectionService
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -30,7 +29,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.queryResultService.setPagination(this.pageSize);
     this.queryResultService
       .getFilteredProducts()
       .pipe(takeUntil(this.onDestroy))
@@ -39,18 +37,17 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
         this.total = page.totalCount;
       });
 
-    this.detailsNavService
+    this.productSelectionService
       .getSelectedProduct()
       .pipe(takeUntil(this.onDestroy))
       .subscribe(async (selected) => {
-        // TODO: select or deselect when changed from outside}
-        // if (!selected) {
-        //   this.selected = [];
-        // } else {
-        //   console.log({ selected });
-        //   // this.selected = this.products.filter((e) => e.Id === selected);
-        //   console.log('selected object', this.selected);
-        // }
+        if (!selected) {
+          this.selected = undefined;
+        } else {
+          this.selected = this.products.filter(
+            (e) => e.Name === selected.Name
+          )[0];
+        }
       });
   }
 
@@ -65,9 +62,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
 
   selectionChanged($event) {
     const selectedProduct = $event as DdipProduct;
-    // this.detailsNavService.setSelectedProduct(selectedProduct);
-  }
-  trackById(_index: number, item: DdipProduct) {
-    return item.Id;
+    this.productSelectionService.setSelectedProduct(selectedProduct);
   }
 }

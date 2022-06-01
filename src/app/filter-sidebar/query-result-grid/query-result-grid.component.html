@@ -1,7 +1,6 @@
 <clr-datagrid
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading | async"
-  [clrDgRowSelection]="rowSelection"
   [clrDgSingleSelected]="selected"
   (clrDgSingleSelectedChange)="selectionChanged($event)"
 >
@@ -13,10 +12,7 @@
   <clr-dg-column>Content date start</clr-dg-column>
   <clr-dg-column>Content date end</clr-dg-column>
 
-  <clr-dg-row
-    *ngFor="let product of products; trackBy: trackById"
-    [clrDgItem]="product"
-  >
+  <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
     <clr-dg-cell title="{{ product.Name }}" style="overflow-wrap: break-word">
       {{ product.Name }}
     </clr-dg-cell>

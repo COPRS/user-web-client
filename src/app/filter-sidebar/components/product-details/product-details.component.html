@@ -47,16 +47,19 @@
         </li>
       </ul>
     </div>
-
-    <a
-      class="btn btn-outline btn-icon"
-      href="{{ downloadUrl$ | async }}"
-      download="{{ (selectedProduct$ | async).Name }}"
-      target="__blank"
-    >
-      <clr-icon shape="archive"></clr-icon>
-      Download Product
-    </a>
+  </div>
+  <div class="clr-row">
+    <div class="clr-col">
+      <a
+        class="btn btn-outline btn-icon"
+        href="{{ downloadUrl$ | async }}"
+        download="{{ (selectedProduct$ | async).Name }}"
+        target="__blank"
+      >
+        <clr-icon shape="archive"></clr-icon>
+        Download Product
+      </a>
+    </div>
   </div>
 </div>
 

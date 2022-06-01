@@ -19,10 +19,16 @@ import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
+import Fill from 'ol/style/Fill';
+import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import View from 'ol/View';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import {
+  FilterSidebarNavigationService,
+  SideBarSubNav,
+} from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
 import {
@@ -53,12 +59,13 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private drawType: SelectionType;
 
   constructor(
-    private detailsSideBarNav: ProductSelectionService,
+    private productSelectionService: ProductSelectionService,
     private elementRef: ElementRef,
     private mapSwitcher: MapSwitcherService,
     private queryResultService: QueryResultService,
     private mapRegionSelectionService: MapRegionSelectionService,
-    private mapViewerSelectionStylesService: MapViewerSelectionStylesService
+    private mapViewerSelectionStylesService: MapViewerSelectionStylesService,
+    private filterSidebarNavigationService: FilterSidebarNavigationService
   ) {}
   async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
@@ -205,8 +212,23 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     // INIT MAP - END
 
     // CLICK SELECT - BEGIN
+    const selected = new Style({
+      fill: new Fill({
+        color: 'rgba(0, 114, 163, 0.4',
+      }),
+      stroke: new Stroke({
+        color: 'rgba(0, 114, 163, 0.8)',
+        width: 3,
+      }),
+    });
+
+    function selectStyle(_feature) {
+      return selected;
+    }
+
     const select = new Select({
       condition: click,
+      style: selectStyle,
     });
 
     if (select !== null) {
@@ -215,18 +237,23 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (select !== null) {
       this.map.addInteraction(select);
+
       select.on('select', (e) => {
         if (e.selected.length !== 0) {
-          this.detailsSideBarNav.setSelectedProduct(
+          this.productSelectionService.setSelectedProduct(
             (e.selected[0] as any).values_.product
           );
+          this.filterSidebarNavigationService.setSelectedSubNav(
+            SideBarSubNav.DETAILS
+          );
+          this.filterSidebarNavigationService.setShowNav(true);
         } else {
-          this.detailsSideBarNav.setSelectedProduct(undefined);
+          this.productSelectionService.setSelectedProduct(undefined);
         }
       });
     }
 
-    this.detailsSideBarNav
+    this.productSelectionService
       .getSelectedProduct()
       .pipe(takeUntil(this.onDestroy))
       .subscribe((f) => {
@@ -234,8 +261,36 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           select.getFeatures().clear();
         } else {
           // TODO: set feature to selected when selected from outside of the map
-          this.map.getLayers().getArray();
-          // .filter((l) => console.log({ l }));
+          const features = this.map
+            .getLayers()
+            .getArray()
+            .filter((l) => {
+              if (l) {
+                const props = l.getProperties();
+                if (props.layerType === LayerType.Data) {
+                  return true;
+                }
+              }
+              return false;
+            })
+            .map((l: VectorLayer<VectorSource>) => {
+              const ff = l
+                .getSource()
+                .getFeatures()
+                .filter((fff) => {
+                  const props = fff.getProperties();
+                  console.log(props);
+                  return props?.product?.Name === f.Name;
+                });
+              return ff;
+            });
+
+          select.getFeatures().clear();
+
+          console.log({ features });
+          features.forEach((gg) =>
+            gg.forEach((ggg) => select.getFeatures().push(ggg))
+          );
         }
       });
     // CLICK SELECT - END

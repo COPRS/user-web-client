@@ -18,8 +18,4 @@ export class ProductSelectionService {
   setSelectedProduct(selectedFeature: DdipProduct): void {
     this.selectedFeature$.next(selectedFeature);
   }
-
-  isNavOpen(): boolean {
-    return !!this.selectedFeature$?.value;
-  }
 }
