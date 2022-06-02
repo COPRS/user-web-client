@@ -256,8 +256,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.productSelectionService
       .getSelectedProduct()
       .pipe(takeUntil(this.onDestroy))
-      .subscribe((f) => {
-        if (!f) {
+      .subscribe((selectedFeature) => {
+        if (!selectedFeature) {
           select.getFeatures().clear();
         } else {
           // TODO: set feature to selected when selected from outside of the map
@@ -273,23 +273,20 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
               }
               return false;
             })
-            .map((l: VectorLayer<VectorSource>) => {
-              const ff = l
+            .map((l: VectorLayer<VectorSource>) =>
+              l
                 .getSource()
                 .getFeatures()
-                .filter((fff) => {
-                  const props = fff.getProperties();
-                  console.log(props);
-                  return props?.product?.Name === f.Name;
-                });
-              return ff;
-            });
+                .filter((f) => {
+                  const props = f.getProperties();
+                  return props?.product?.Id === selectedFeature.Id;
+                })
+            );
 
           select.getFeatures().clear();
 
-          console.log({ features });
-          features.forEach((gg) =>
-            gg.forEach((ggg) => select.getFeatures().push(ggg))
+          features.forEach((f) =>
+            f.forEach((ff) => select.getFeatures().push(ff))
           );
         }
       });

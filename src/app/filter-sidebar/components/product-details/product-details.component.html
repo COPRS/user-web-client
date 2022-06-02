@@ -1,4 +1,28 @@
 <div *ngIf="selectedProduct$ | async">
+  <div class="clr-row">
+    <div class="clr-col-6">
+      <button
+        class="btn btn-icon btn-sm"
+        (click)="selectPreviousProduct()"
+        [disabled]="(selectedProductPageIndex$ | async).idx <= 0"
+      >
+        <clr-icon shape="step-forward-2 down"></clr-icon> Previous
+      </button>
+    </div>
+    <div class="clr-col-6 align-right">
+      <button
+        class="btn btn-icon btn-sm"
+        (click)="selectNextProduct()"
+        [disabled]="
+          (selectedProductPageIndex$ | async).idx >=
+          (selectedProductPageIndex$ | async).totalLength - 1
+        "
+      >
+        Next <clr-icon shape="step-forward-2"></clr-icon>
+      </button>
+    </div>
+  </div>
+
   <div class="clr-row" *ngIf="(selectedProduct$ | async).Footprint">
     <div class="clr-col">
       <h4>Footprint</h4>

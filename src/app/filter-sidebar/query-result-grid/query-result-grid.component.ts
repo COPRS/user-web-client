@@ -44,9 +44,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
         if (!selected) {
           this.selected = undefined;
         } else {
-          this.selected = this.products.filter(
-            (e) => e.Name === selected.Name
-          )[0];
+          this.selected = this.products.filter((e) => e.Id === selected.Id)[0];
         }
       });
   }
