@@ -4,6 +4,10 @@ import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
+import {
+  FilterSidebarNavigationService,
+  SideBarSubNav,
+} from '../services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../services/query-result.service';
 
 @Component({
@@ -21,7 +25,8 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
 
   constructor(
     private queryResultService: QueryResultService,
-    private productSelectionService: ProductSelectionService
+    private productSelectionService: ProductSelectionService,
+    private filterSidebarNavigationService: FilterSidebarNavigationService
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -61,5 +66,14 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   selectionChanged($event) {
     const selectedProduct = $event as DdipProduct;
     this.productSelectionService.setSelectedProduct(selectedProduct);
+  }
+
+  goToDetailsTab($event) {
+    const selectedProduct = $event as DdipProduct;
+    this.productSelectionService.setSelectedProduct(selectedProduct);
+    this.filterSidebarNavigationService.setSelectedSubNav(
+      SideBarSubNav.DETAILS
+    );
+    this.filterSidebarNavigationService.setShowNav(true);
   }
 }
