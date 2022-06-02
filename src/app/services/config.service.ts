@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { IAppConfig } from './models/IAppConfig';
+import { IAppConfig, IAppFilterConfig } from './models/IAppConfig';
 import { BehaviorSubject } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
@@ -22,7 +22,7 @@ export class ConfigService {
           .get('./assets/config.json')
           .toPromise()
           .then((response: IAppConfig) => {
-            this.settings = response;
+            this.settings = mergeWithDefaultConfig(response);
             this.settings$.next(this.settings);
             resolve(true);
           })
@@ -50,3 +50,26 @@ export class ConfigService {
     this.settings.apiUrl = url;
   }
 }
+
+function mergeWithDefaultConfig(config: IAppConfig) {
+  const mergedFilterConfig = [
+    ...new Set([...config.filterConfig, ...DEFAULT_CONFIG.filterConfig]),
+  ];
+  var resFilterConfig: IAppFilterConfig[] = [];
+  mergedFilterConfig.filter(function (item) {
+    var i = resFilterConfig.findIndex(
+      (x) => x.attributeName == item.attributeName
+    );
+    if (i <= -1) {
+      resFilterConfig.push(item);
+    }
+    return null;
+  });
+  config.filterConfig = resFilterConfig;
+
+  return config;
+}
+
+const DEFAULT_CONFIG: Partial<IAppConfig> = {
+  filterConfig: [{ attributeName: 'SensingDate', valueType: 'date' }],
+};
