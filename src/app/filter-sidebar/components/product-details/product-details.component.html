@@ -4,7 +4,10 @@
       <button
         class="btn btn-icon btn-sm"
         (click)="selectPreviousProduct()"
-        [disabled]="(selectedProductPageIndex$ | async).idx <= 0"
+        [disabled]="
+          (selectedProductPageIndex$ | async)?.idx &&
+          (selectedProductPageIndex$ | async)?.idx <= 0
+        "
       >
         <clr-icon shape="step-forward-2 down"></clr-icon> Previous
       </button>
@@ -14,8 +17,9 @@
         class="btn btn-icon btn-sm"
         (click)="selectNextProduct()"
         [disabled]="
-          (selectedProductPageIndex$ | async).idx >=
-          (selectedProductPageIndex$ | async).totalLength - 1
+          (selectedProductPageIndex$ | async)?.idx &&
+          (selectedProductPageIndex$ | async)?.idx >=
+            (selectedProductPageIndex$ | async)?.totalLength - 1
         "
       >
         Next <clr-icon shape="step-forward-2"></clr-icon>

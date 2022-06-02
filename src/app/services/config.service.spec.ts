@@ -41,7 +41,15 @@ describe('ConfigService', () => {
       mockReq.flush({ apiUrl: 'some-url-here:4711' });
 
       await sleep(100);
-      expect(service.settings).toEqual({ apiUrl: 'some-url-here:4711' } as any);
+      expect(service.settings).toEqual({
+        apiUrl: 'some-url-here:4711',
+        filterConfig: [
+          {
+            attributeName: 'SensingDate',
+            valueType: 'date',
+          },
+        ],
+      } as any);
     }
   ));
 

@@ -53,7 +53,10 @@ export class ConfigService {
 
 function mergeWithDefaultConfig(config: IAppConfig) {
   const mergedFilterConfig = [
-    ...new Set([...config.filterConfig, ...DEFAULT_CONFIG.filterConfig]),
+    ...new Set([
+      ...(config?.filterConfig || []),
+      ...DEFAULT_CONFIG.filterConfig,
+    ]),
   ];
   var resFilterConfig: IAppFilterConfig[] = [];
   mergedFilterConfig.filter(function (item) {

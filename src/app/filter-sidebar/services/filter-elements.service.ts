@@ -5,7 +5,6 @@ import {
   MapRegionSelection,
   MapRegionSelectionService,
 } from 'src/app/map-viewer/services/map-region-selection.service';
-import { unsetTimezoneOffset } from 'src/app/util';
 import { FilterElement } from '../models/FilterElement';
 
 @Injectable({
@@ -61,7 +60,6 @@ export class FilterElementsService {
       return filterElements.flatMap((fe) => {
         if (fe.attributeName === 'SensingDate' && Date.parse(fe.value)) {
           const farDate = addDays(new Date(fe.value), 1);
-          farDate.setUTCHours(0, 0, 0, 0);
           return [
             { attributeName: 'ContentDate', operator: 'gt', value: fe.value },
             {

@@ -14,7 +14,9 @@ import { QueryResultService } from '../../services/query-result.service';
 export class ProductDetailsComponent {
   showSideNav$: Observable<boolean>;
   selectedProduct$: Observable<DdipProduct>;
-  selectedProductPageIndex$: Observable<{ idx: number; totalLength: number }>;
+  selectedProductPageIndex$: Observable<
+    { idx: number; totalLength: number } | undefined
+  >;
   queryResult$: Observable<[DdipProduct, DdipProduct[]]>;
   downloadUrl$: Observable<string>;
   constructor(
@@ -38,8 +40,12 @@ export class ProductDetailsComponent {
     ]).pipe(
       map((e) => {
         const [selected, currentPage] = e;
-        const idx = currentPage.findIndex((f) => f.Id === selected.Id);
-        return { idx, totalLength: currentPage.length };
+        if (selected && currentPage) {
+          const idx = currentPage.findIndex((f) => f.Id === selected.Id);
+          return { idx, totalLength: currentPage.length };
+        } else {
+          return undefined;
+        }
       })
     );
   }
@@ -62,10 +68,14 @@ export class ProductDetailsComponent {
       .pipe(take(1))
       .subscribe((res) => {
         const [selected, currentPage] = res;
-        const nextIdx = selected.idx + offset;
+        if (selected && currentPage) {
+          const nextIdx = selected.idx + offset;
 
-        if (nextIdx >= 0 && nextIdx < currentPage.length) {
-          this.productSelectionService.setSelectedProduct(currentPage[nextIdx]);
+          if (nextIdx >= 0 && nextIdx < currentPage.length) {
+            this.productSelectionService.setSelectedProduct(
+              currentPage[nextIdx]
+            );
+          }
         }
       });
   }
