@@ -44,16 +44,28 @@ export class FilterElementComponent implements OnInit {
   operatorSuggestions: OperatorSuggestion[] = [];
   operator = '';
 
-  value: string = '';
+  value: string | boolean | number | undefined = '';
   valueType: IAppFilterConfigValueType | undefined;
   dateValue: Date | undefined;
 
   ngOnInit(): void {
     this.attributeName = this.initFilter.attributeName;
     this.operator = this.initFilter.operator;
-    this.value = this.initFilter.value;
-    this.dateValue = this.value ? new Date(this.value) : undefined;
-    this.updateFilterType(this.attributeName);
+
+    const filterType = this.updateFilterType(this.attributeName);
+    if (filterType === 'date') {
+      this.dateValue = this.initFilter.value
+        ? new Date(this.initFilter.value)
+        : undefined;
+    } else if (filterType === 'boolean') {
+      this.value = this.initFilter.value === 'true' ? true : false;
+    } else if (
+      (['long', 'double'] as IAppFilterConfigValueType[]).includes(filterType)
+    ) {
+      this.value = Number.parseFloat(this.initFilter.value);
+    } else {
+      this.value = this.initFilter.value;
+    }
   }
 
   onDateChange(event: any): void {
@@ -78,11 +90,11 @@ export class FilterElementComponent implements OnInit {
   onChange(): void {
     this.updateFilterType(this.attributeName);
 
-    if (this.attributeName && this.operator && (this.value || this.dateValue)) {
+    if (this.attributeName && this.operator) {
       this.changed.emit({
         attributeName: this.attributeName,
         operator: this.operator,
-        value: this.value,
+        value: this.value?.toString(),
       });
     }
   }
@@ -90,6 +102,7 @@ export class FilterElementComponent implements OnInit {
   updateFilterType(attributeName: string) {
     this.valueType = this.setValueType(attributeName);
     this.operatorSuggestions = this.updateOperatorSuggestions(this.valueType);
+    return this.valueType;
   }
 
   setValueType(attributeName: string): IAppFilterConfigValueType {
