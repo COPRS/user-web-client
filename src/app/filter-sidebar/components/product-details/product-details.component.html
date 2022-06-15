@@ -1,13 +1,10 @@
-<div *ngIf="selectedProduct$ | async">
+<div *ngIf="(selectedProduct$ | async) !== undefined">
   <div class="clr-row">
     <div class="clr-col-6">
       <button
         class="btn btn-icon btn-sm"
         (click)="selectPreviousProduct()"
-        [disabled]="
-          (selectedProductPageIndex$ | async)?.idx &&
-          (selectedProductPageIndex$ | async)?.idx <= 0
-        "
+        [disabled]="!!((selectedProductPageIndex$ | async)?.idx <= 0)"
       >
         <clr-icon shape="step-forward-2 down"></clr-icon> Previous
       </button>
@@ -27,7 +24,7 @@
     </div>
   </div>
 
-  <div class="clr-row" *ngIf="(selectedProduct$ | async).Footprint">
+  <div class="clr-row" *ngIf="(selectedProduct$ | async)?.Footprint">
     <div class="clr-col">
       <h4>Footprint</h4>
       <clr-icon shape="image" size="180"></clr-icon>
@@ -40,55 +37,61 @@
 
       <ul class="list-unstyled metadatalist">
         <li class="name">Id:</li>
-        <li class="value">{{ (selectedProduct$ | async).Id }}</li>
+        <li class="value">{{ (selectedProduct$ | async)?.Id }}</li>
         <li class="name">Filename:</li>
-        <li class="value">{{ (selectedProduct$ | async).Name }}</li>
+        <li class="value">{{ (selectedProduct$ | async)?.Name }}</li>
         <li class="name">Content Length:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).ContentLength | fileSize }}
+          {{ (selectedProduct$ | async)?.ContentLength | fileSize }}
         </li>
         <li class="name">Publication Date:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).PublicationDate | date }}
+          {{ (selectedProduct$ | async)?.PublicationDate | date }}
         </li>
         <li class="name">Eviction Date:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).EvictionDate | date }}
+          {{ (selectedProduct$ | async)?.EvictionDate | date }}
         </li>
         <li class="name">Checksum:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).Checksum[0].Value }} ({{
-            (selectedProduct$ | async).Checksum[0].Algorithm
+          {{ (selectedProduct$ | async)?.Checksum[0].Value }} ({{
+            (selectedProduct$ | async)?.Checksum[0].Algorithm
           }})
         </li>
         <li class="name">Production Type:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).ProductionType }}
+          {{ (selectedProduct$ | async)?.ProductionType }}
         </li>
         <li class="name">Content Date Start:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).ContentDate.Start }}
+          {{ (selectedProduct$ | async)?.ContentDate.Start }}
         </li>
         <li class="name">Content Date End:</li>
         <li class="value">
-          {{ (selectedProduct$ | async).ContentDate.End }}
+          {{ (selectedProduct$ | async)?.ContentDate.End }}
         </li>
       </ul>
     </div>
   </div>
-  <div class="clr-row">
-    <div class="clr-col">
-      <a
-        class="btn btn-outline btn-icon"
-        href="{{ downloadUrl$ | async }}"
-        download="{{ (selectedProduct$ | async).Name }}"
-        target="__blank"
-      >
-        <clr-icon shape="archive"></clr-icon>
-        Download Product
-      </a>
+</div>
+
+<div *ngIf="(selectedProduct$ | async) === undefined">
+  <div class="alert alert-info" role="alert">
+    <div class="alert-items">
+      <div class="alert-item static">
+        <div class="alert-icon-wrapper">
+          <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+        </div>
+        <span class="alert-text">
+          No Product highlighted
+          <br /><br />
+          To show product details
+          <ul>
+            <li>Doubleclick a footprint</li>
+            <li>Highlight a product in the results table</li>
+          </ul>
+        </span>
+      </div>
     </div>
   </div>
 </div>
-
-<div *ngIf="(selectedProduct$ | async) === undefined">No Product selected</div>

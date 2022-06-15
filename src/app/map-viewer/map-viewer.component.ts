@@ -7,30 +7,25 @@ import {
 } from '@angular/core';
 import { Feature } from 'ol';
 import { Zoom } from 'ol/control';
-import { click } from 'ol/events/condition';
 import GeoJSON from 'ol/format/GeoJSON';
 import Geometry from 'ol/geom/Geometry';
 import LineString from 'ol/geom/LineString';
 import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
-import { Draw, Select } from 'ol/interaction';
+import { DoubleClickZoom, Draw } from 'ol/interaction';
 import { createRegularPolygon } from 'ol/interaction/Draw';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
 import { Vector as VectorSource } from 'ol/source';
-import Fill from 'ol/style/Fill';
-import Stroke from 'ol/style/Stroke';
 import Style from 'ol/style/Style';
 import View from 'ol/View';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import {
-  FilterSidebarNavigationService,
-  SideBarSubNav,
-} from '../filter-sidebar/services/filter-sidebar-navigation.service';
+import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
+import { configureMapHighlight, configureMapSelect } from './map-viewer-logic';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
@@ -211,86 +206,19 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     // INIT MAP - END
 
-    // CLICK SELECT - BEGIN
-    const selected = new Style({
-      fill: new Fill({
-        color: 'rgba(0, 114, 163, 0.4',
-      }),
-      stroke: new Stroke({
-        color: 'rgba(0, 114, 163, 0.8)',
-        width: 3,
-      }),
-    });
+    configureMapSelect(
+      this.map,
+      this.productSelectionService,
+      this.filterSidebarNavigationService,
+      this.onDestroy
+    );
 
-    function selectStyle(_feature) {
-      return selected;
-    }
-
-    const select = new Select({
-      condition: click,
-      style: selectStyle,
-    });
-
-    if (select !== null) {
-      this.map.removeInteraction(select);
-    }
-
-    if (select !== null) {
-      this.map.addInteraction(select);
-
-      select.on('select', (e) => {
-        if (e.selected.length !== 0) {
-          this.productSelectionService.setSelectedProduct(
-            (e.selected[0] as any).values_.product
-          );
-          this.filterSidebarNavigationService.setSelectedSubNav(
-            SideBarSubNav.DETAILS
-          );
-          this.filterSidebarNavigationService.setShowNav(true);
-        } else {
-          this.productSelectionService.setSelectedProduct(undefined);
-        }
-      });
-    }
-
-    this.productSelectionService
-      .getSelectedProduct()
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe((selectedFeature) => {
-        if (!selectedFeature) {
-          select.getFeatures().clear();
-        } else {
-          // TODO: set feature to selected when selected from outside of the map
-          const features = this.map
-            .getLayers()
-            .getArray()
-            .filter((l) => {
-              if (l) {
-                const props = l.getProperties();
-                if (props.layerType === LayerType.Data) {
-                  return true;
-                }
-              }
-              return false;
-            })
-            .map((l: VectorLayer<VectorSource>) =>
-              l
-                .getSource()
-                .getFeatures()
-                .filter((f) => {
-                  const props = f.getProperties();
-                  return props?.product?.Id === selectedFeature.Id;
-                })
-            );
-
-          select.getFeatures().clear();
-
-          features.forEach((f) =>
-            f.forEach((ff) => select.getFeatures().push(ff))
-          );
-        }
-      });
-    // CLICK SELECT - END
+    configureMapHighlight(
+      this.map,
+      this.productSelectionService,
+      this.filterSidebarNavigationService,
+      this.onDestroy
+    );
 
     // CREATE DRAW BOX - START
     this.mapRegionSelectionService
@@ -306,11 +234,9 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.abortSelection();
       });
-
     // CREATE DRAW BOX - END
 
     // LOAD DATA FROM DDIP-API - START
-
     this.queryResultService
       .getFilteredProducts()
       .pipe(
@@ -390,8 +316,18 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         );
       });
-
     // LOAD DATA FROM DDIP-API - END
+
+    // DISABLE ZOOM ON DOUBLECLICK - START
+    this.map
+      .getInteractions()
+      .getArray()
+      .forEach((interaction) => {
+        if (interaction instanceof DoubleClickZoom) {
+          this.map.removeInteraction(interaction);
+        }
+      });
+    // DISABLE ZOOM ON DOUBLECLICK - END
   }
 
   private startSelection(type: SelectionType) {

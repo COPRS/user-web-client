@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
-import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { map, take } from 'rxjs/operators';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../../services/query-result.service';
@@ -17,21 +16,16 @@ export class ProductDetailsComponent {
   selectedProductPageIndex$: Observable<
     { idx: number; totalLength: number } | undefined
   >;
-  queryResult$: Observable<[DdipProduct, DdipProduct[]]>;
-  downloadUrl$: Observable<string>;
+
   constructor(
     private productSelectionService: ProductSelectionService,
-    private queryResultService: QueryResultService,
-    private ddipService: DdipService
+    private queryResultService: QueryResultService
   ) {
     this.showSideNav$ = this.productSelectionService
-      .getSelectedProduct()
+      .getHighlightedProduct()
       .pipe(map((p) => !!p));
-    this.selectedProduct$ = this.productSelectionService.getSelectedProduct();
-    this.downloadUrl$ = this.productSelectionService.getSelectedProduct().pipe(
-      filter((p) => !!p),
-      map((p) => this.ddipService.constructorDownloadUrl(p.Id))
-    );
+    this.selectedProduct$ =
+      this.productSelectionService.getHighlightedProduct();
     this.selectedProductPageIndex$ = combineLatest([
       this.selectedProduct$,
       this.queryResultService
@@ -72,7 +66,8 @@ export class ProductDetailsComponent {
           const nextIdx = selected.idx + offset;
 
           if (nextIdx >= 0 && nextIdx < currentPage.length) {
-            this.productSelectionService.setSelectedProduct(
+            this.productSelectionService.unsetHighlightProduct();
+            this.productSelectionService.setHighlightProduct(
               currentPage[nextIdx]
             );
           }

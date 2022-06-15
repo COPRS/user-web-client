@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import {
@@ -20,13 +21,15 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   total: number;
   pageSize: number = 15;
   loading: Observable<boolean>;
-  public selected: DdipProduct;
+  public selected: DdipProduct[];
   private readonly onDestroy = new Subject<void>();
+  meta4File$: Observable<string>;
 
   constructor(
     private queryResultService: QueryResultService,
     private productSelectionService: ProductSelectionService,
-    private filterSidebarNavigationService: FilterSidebarNavigationService
+    private filterSidebarNavigationService: FilterSidebarNavigationService,
+    private ddipService: DdipService
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -43,15 +46,40 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       });
 
     this.productSelectionService
-      .getSelectedProduct()
+      .getSelectedProducts()
       .pipe(takeUntil(this.onDestroy))
       .subscribe(async (selected) => {
         if (!selected) {
           this.selected = undefined;
         } else {
-          this.selected = this.products.filter((e) => e.Id === selected.Id)[0];
+          this.selected = this.products.filter((e) =>
+            selected.some((s) => e.Id === s.Id)
+          );
         }
       });
+
+    this.meta4File$ = this.productSelectionService
+      .getSelectedProducts()
+      .pipe(
+        map((p) =>
+          p.length > 0
+            ? this.ddipService.constructMetalinkDownloadfile(p)
+            : undefined
+        )
+      );
+  }
+
+  async downloadProducts() {
+    this.meta4File$.pipe(take(1)).subscribe((data) => {
+      const c = document.createElement('a');
+      c.download = 'products.meta4';
+
+      var t = new Blob([data], {
+        type: 'text/plain',
+      });
+      c.href = window.URL.createObjectURL(t);
+      c.click();
+    });
   }
 
   refresh(state: ClrDatagridStateInterface) {
@@ -63,14 +91,16 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     this.onDestroy.next();
   }
 
-  selectionChanged($event) {
-    const selectedProduct = $event as DdipProduct;
-    this.productSelectionService.setSelectedProduct(selectedProduct);
+  selectionChanged(selectedProducts: DdipProduct[]) {
+    this.productSelectionService.clearSelectedProducts();
+    selectedProducts?.forEach((p) =>
+      this.productSelectionService.addSelectedProduct(p)
+    );
   }
 
   goToDetailsTab($event) {
     const selectedProduct = $event as DdipProduct;
-    this.productSelectionService.setSelectedProduct(selectedProduct);
+    this.productSelectionService.setHighlightProduct(selectedProduct);
     this.filterSidebarNavigationService.setSelectedSubNav(
       SideBarSubNav.DETAILS
     );

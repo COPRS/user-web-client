@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, mergeMap } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
+  mergeMap,
+} from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import {
   DdipProduct,
   DdipProductResponse,
 } from 'src/app/services/models/DdipProductResponse';
+import { isArrayEqual } from 'src/app/util';
 import { FilterElementsService } from './filter-elements.service';
 
 @Injectable({
@@ -64,7 +70,9 @@ export class QueryResultService {
     products: DdipProduct[];
     totalCount: number;
   }> {
-    return this.currentPageSubject$.asObservable();
+    return this.currentPageSubject$.pipe(
+      distinctUntilKeyChanged('products', isArrayEqual)
+    );
   }
 
   public getIsLoading(): Observable<LoadingStatus> {

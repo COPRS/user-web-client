@@ -39,7 +39,7 @@ describe('DdipService', () => {
   });
 
   it('should construct a query string', () => {
-    expect(service.constructorDownloadUrl('some_productId')).toEqual(
+    expect(service.constructDownloadUrl('some_productId')).toEqual(
       'http://test:0815/Products(some_productId)/$value'
     );
   });
