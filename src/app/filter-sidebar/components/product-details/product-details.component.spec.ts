@@ -13,8 +13,14 @@ class MockDdipService {
   }
 }
 
-class MockDetailsSidebarNavigationService {
+class MockProductSelectionService {
   getSelectedProduct() {
+    return new BehaviorSubject<DdipProduct>({
+      Checksum: [{ Algorithm: 'test', ChecksumDate: '', Value: '' }],
+      ContentDate: { Start: '', End: '' },
+    } as any);
+  }
+  getHighlightedProduct() {
     return new BehaviorSubject<DdipProduct>({
       Checksum: [{ Algorithm: 'test', ChecksumDate: '', Value: '' }],
       ContentDate: { Start: '', End: '' },
@@ -33,7 +39,7 @@ describe('DetailsSidebarComponent', () => {
         { provide: DdipService, useClass: MockDdipService },
         {
           provide: ProductSelectionService,
-          useClass: MockDetailsSidebarNavigationService,
+          useClass: MockProductSelectionService,
         },
       ],
     }).compileComponents();

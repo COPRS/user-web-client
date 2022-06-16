@@ -210,6 +210,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map,
       this.productSelectionService,
       this.filterSidebarNavigationService,
+      this.mapViewerSelectionStylesService,
       this.onDestroy
     );
 
@@ -217,6 +218,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.map,
       this.productSelectionService,
       this.filterSidebarNavigationService,
+      this.mapViewerSelectionStylesService,
       this.onDestroy
     );
 

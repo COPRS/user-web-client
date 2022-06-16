@@ -9,7 +9,14 @@ class MockConfigService {
     apiUrl: 'http://test:0815/Products',
     mapBackgrounds: [],
     keycloak: { clientId: '', realm: '', url: '' },
-    mapView: { selectionFillColor: '', selectionStrokeColor: '' },
+    mapView: {
+      regionSelectionFillColor: '',
+      regionSelectionStrokeColor: '',
+      selectionFillColor: '',
+      selectionStrokeColor: '',
+      highlightStrokeColor: '',
+      highlightFillColor: '',
+    },
     filterConfig: [],
   };
 }

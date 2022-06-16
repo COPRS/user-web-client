@@ -18,8 +18,12 @@ export interface IAppConfigKeycloak {
 }
 
 export interface IAppConfigMapView {
+  regionSelectionFillColor: string;
+  regionSelectionStrokeColor: string;
   selectionFillColor: string;
   selectionStrokeColor: string;
+  highlightFillColor: string;
+  highlightStrokeColor: string;
 }
 
 export interface IAppFilterConfig {

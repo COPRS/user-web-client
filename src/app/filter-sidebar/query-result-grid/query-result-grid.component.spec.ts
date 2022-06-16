@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { from, Observable } from 'rxjs';
 import { QueryResultService } from '../services/query-result.service';
@@ -18,6 +19,7 @@ describe('QueryResultGridComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       declarations: [QueryResultGridComponent],
       providers: [
         QueryResultGridComponent,
