@@ -59,14 +59,13 @@ function mergeWithDefaultConfig(config: IAppConfig) {
     ]),
   ];
   var resFilterConfig: IAppFilterConfig[] = [];
-  mergedFilterConfig.filter(function (item) {
+  mergedFilterConfig.forEach((item) => {
     var i = resFilterConfig.findIndex(
       (x) => x.attributeName == item.attributeName
     );
     if (i <= -1) {
       resFilterConfig.push(item);
     }
-    return null;
   });
   config.filterConfig = resFilterConfig;
 
