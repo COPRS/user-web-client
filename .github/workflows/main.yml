@@ -232,12 +232,12 @@ jobs:
     - name: Lint helm
       shell: bash
       run: |
-        helm lint helm/Chart.yaml
+        helm lint helm
           
     - name: Package helm
       shell: bash
       run: |
-        helm package helm/Chart.yaml
+        helm package helm
         
     - name: Push to Artifactory
       shell: bash
