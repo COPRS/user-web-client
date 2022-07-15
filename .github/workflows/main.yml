@@ -26,6 +26,7 @@ env:
   ARTIFACTORY_BASE: artifactory.coprs.esa-copernicus.eu
   ARTIFACTORY_PROJECT_HELM: rs-helm
   ARTIFACTORY_HELM_PROJECT: processing
+  IMAGE_NAME: rs-user-web-client
 
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
