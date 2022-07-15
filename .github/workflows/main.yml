@@ -14,12 +14,18 @@ on:
         description: "Password to log into Artifactory"
         required: true
 
-env:
+#env:
   # github.repository as <account>/<repo>
-  IMAGE_NAME: rs-user-web-client
+#  IMAGE_NAME: rs-user-web-client
 
-  REGISTRY_BASE: artifactory.coprs.esa-copernicus.eu
-  ARTIFACTORY_PROJECT: werum-docker
+#  REGISTRY_BASE: artifactory.coprs.esa-copernicus.eu
+#  ARTIFACTORY_PROJECT: werum-docker
+  
+env:
+  CHART_FOLDER: rs-processing-common
+  ARTIFACTORY_BASE: artifactory.coprs.esa-copernicus.eu
+  ARTIFACTORY_PROJECT_HELM: rs-helm
+  ARTIFACTORY_HELM_PROJECT: processing
 
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -199,7 +205,23 @@ jobs:
       - name: Push image
         run: |
           docker push ${{ fromJSON(steps.meta.outputs.json).tags[0] }};
-
+          
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        component: ${{ fromJSON(needs.helm-changes.outputs.packages) }}    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ./.github/actions/helm-charts
+      with:
+        COMPONENT: uwc
+        CHART_FOLDER: helm
+        ARTIFACTORY_HELM_PROJECT: ${{ env.ARTIFACTORY_HELM_PROJECT }}  
+        WERUM_ARTIFACTORY_USER: ${{ secrets.WERUM_ARTIFACTORY_USER }}
+        WERUM_ARTIFACTORY_PASSWORD: ${{ secrets.WERUM_ARTIFACTORY_PASSWORD }}
+        
   generate_reports:
     needs: build-docker
     runs-on: ubuntu-latest
