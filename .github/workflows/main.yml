@@ -27,6 +27,11 @@ env:
   ARTIFACTORY_PROJECT_HELM: rs-helm
   ARTIFACTORY_HELM_PROJECT: processing
   IMAGE_NAME: rs-user-web-client
+  
+  # github.repository as <account>/<repo>
+  REGISTRY_BASE: artifactory.coprs.esa-copernicus.eu
+  ARTIFACTORY_PROJECT: werum-docker
+
 
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -161,7 +166,7 @@ jobs:
       - name: Login to Artifactory
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.ARTIFACTORY_BASE }}/${{ env.ARTIFACTORY_PROJECT_HELM }}
+          registry: ${{ env.REGISTRY_BASE }}/${{ env.ARTIFACTORY_PROJECT }}
           username: ${{ secrets.ARTIFACTORY_USER }}
           password: ${{ secrets.ARTIFACTORY_PASSWORD }}
 
@@ -171,7 +176,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.ARTIFACTORY_BASE }}/${{ env.ARTIFACTORY_PROJECT_HELM }}/processing/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY_BASE }}/${{ env.ARTIFACTORY_PROJECT }}/${{ env.IMAGE_NAME }}
 
       # Build Docker image using Buildx
       # This Action automatically pull the code from the branch it's launched from
