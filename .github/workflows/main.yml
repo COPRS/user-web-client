@@ -161,7 +161,7 @@ jobs:
       - name: Login to Artifactory
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.ARTIFACTORY_BASE }}/${{ env.ARTIFACTORY_PROJECT }}
+          registry: ${{ env.ARTIFACTORY_BASE }}/${{ env.ARTIFACTORY_PROJECT_HELM }}
           username: ${{ secrets.ARTIFACTORY_USER }}
           password: ${{ secrets.ARTIFACTORY_PASSWORD }}
 
@@ -171,7 +171,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.ARTIFACTORY_BASE }}/${{ env.ARTIFACTORY_PROJECT }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.ARTIFACTORY_BASE }}/${{ ARTIFACTORY_PROJECT_HELM }}/${{ env.IMAGE_NAME }}
 
       # Build Docker image using Buildx
       # This Action automatically pull the code from the branch it's launched from
