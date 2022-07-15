@@ -242,7 +242,7 @@ jobs:
     - name: Push to Artifactory
       shell: bash
       run: |
-        curl -u "${{ secrets.WERUM_ARTIFACTORY_USER }}:${{ secrets.WERUM_ARTIFACTORY_PASSWORD }}" -T *.tgz "https://${{ env.ARTIFACTORY_BASE }}/artifactory/${{ env.ARTIFACTORY_PROJECT_HELM }}/${{ inputs.ARTIFACTORY_HELM_PROJECT }}/"
+        curl -u "${{ secrets.ARTIFACTORY_USER }}:${{ secrets.ARTIFACTORY_PASSWORD }}" -T *.tgz "https://${{ env.ARTIFACTORY_BASE }}/artifactory/${{ env.ARTIFACTORY_PROJECT_HELM }}/${{ inputs.ARTIFACTORY_HELM_PROJECT }}/"
         
   generate_reports:
     needs: build-docker
