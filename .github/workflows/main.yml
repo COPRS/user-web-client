@@ -206,7 +206,8 @@ jobs:
         run: |
           docker push ${{ fromJSON(steps.meta.outputs.json).tags[0] }};
           
-  release:
+  generate_helm:
+    needs: build-docker
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
