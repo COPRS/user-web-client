@@ -1,4 +1,4 @@
-# COPRS-UWC-ICD COPRS User Web Client User Manual
+# COPRS-UWC-ICD RS UWC User Manual
 
 # SUMMARY
 This document is giving an overview on how to use the User Web Client of the Copernicus Reference System.
