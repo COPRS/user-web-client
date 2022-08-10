@@ -2,6 +2,10 @@
 
 # User-Web-Client
 
+## Overview
+
+TODO
+
 ## Installation
 
 A brief instruction on how to deploy the User Web Client on your cluster and how you can configure the component, can be found within the [User Installation Manual](./docs/Installation%20Manual.md).

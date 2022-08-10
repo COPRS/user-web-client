@@ -11,4 +11,4 @@ The user-web-client is a user facing web application of the Copernicus Reference
 
 It connects to the PRIP interface via OData in order to retrieve its data.
 
-![user-web-client](./media/user-web-client.png "user-web-client")
+![user-web-client](./img/user-web-client.png "user-web-client")
