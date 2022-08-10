@@ -40,8 +40,6 @@ export function configureMapSelect(
         e.selected.forEach((s) =>
           productSelectionService.addSelectedProduct((s as any).values_.product)
         );
-
-        filterSidebarNavigationService.setShowNav(true);
       }
       if (e.deselected.length !== 0) {
         e.deselected.forEach((d) =>
