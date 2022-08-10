@@ -1,4 +1,4 @@
-:arrow_heading_up: Go back to the [User Web Client](../README.md) :arrow_heading_up:
+:arrow_heading_up: Go back to the [User Web Client Documentation](../README.md) :arrow_heading_up:
 
 # COPRS-UWC-ICD RS UWC User Manual
 
