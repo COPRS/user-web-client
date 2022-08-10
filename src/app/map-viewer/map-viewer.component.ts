@@ -24,6 +24,7 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
+import { fixFootprints } from '../services/foot-print-fixer.util';
 import { ProductSelectionService } from '../services/product-selection.service';
 import { configureMapHighlight, configureMapSelect } from './map-viewer-logic';
 import {
@@ -303,6 +304,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
                   },
 
                   features: ddipProducts.map((product) => {
+                    product.Footprint.coordinates =
+                      product.Footprint.coordinates.map((c) =>
+                        fixFootprints(c)
+                      );
+
                     return {
                       type: 'Feature',
                       properties: { product },
