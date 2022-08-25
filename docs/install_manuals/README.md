@@ -2,7 +2,11 @@
 
 # COPRS-UWC-IM RS UWC Installation Manual
 
-## Deploy
+## Installation Requirements
+
+The User Web Client requires an endpoint of KeyCloak that is configured so that user can be authenticated. Before installing it, it will be required to have an instance of Keycloak running. It is available in the Infrastrcture layer of the COPRS. Further information on how to use the infrastructure and how to deploy it, can be found [here](https://github.com/COPRS/infrastructure)
+
+## How to deploy
 
 In order to deploy the User Web Client on your cluster, you can utilize helm to install the chart. This can be done by using the following command:
 `helm install rs-helm/rs-user-web-client --version <VERSION>`
