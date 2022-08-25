@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 340: Footprints are not correctly displayed when crossing the dateline
+- 522: The error message comes out the dedicated box
 
 ## [1.4.0-rc1] - 2022-08-03
 
