@@ -4,7 +4,7 @@
 
 ## Installation Requirements
 
-The User Web Client requires an endpoint of KeyCloak that is configured so that user can be authenticated. Before installing it, it will be required to have an instance of Keycloak running. It is available in the Infrastrcture layer of the COPRS. Further information on how to use the infrastructure and how to deploy it, can be found [here](https://github.com/COPRS/infrastructure)
+The User Web Client requires an endpoint of the RS access management component (KeyCloak) that is configured so that user can be authenticated. Before installing it, it will be required to have an instance of it running. It is available in the Infrastrcture layer of the COPRS. Further information on how to use the infrastructure and how to deploy it, can be found [here](https://github.com/COPRS/infrastructure)
 
 ## How to deploy
 
