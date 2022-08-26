@@ -104,3 +104,7 @@ $secondary-color: rgba(211, 211, 211, 0.8);
 :host ::ng-deep clr-textarea-container > .clr-control-label {
   padding: 0 !important;
 }
+
+.alert-test-fix {
+  word-break: break-word;
+} 
