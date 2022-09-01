@@ -30,7 +30,7 @@ env:
   
   # github.repository as <account>/<repo>
   REGISTRY_BASE: artifactory.coprs.esa-copernicus.eu
-  ARTIFACTORY_PROJECT: werum-docker
+  ARTIFACTORY_PROJECT: rs-docker
 
 
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
