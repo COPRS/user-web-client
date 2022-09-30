@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { from, Observable } from 'rxjs';
-import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../services/query-result.service';
 import { QueryResultGridComponent } from './query-result-grid.component';
 class MockQueryResultService {
@@ -14,12 +13,6 @@ class MockQueryResultService {
   setPagination() {}
 }
 
-class MockProductSelectionService {
-  getSelectedProducts() {
-    return new Observable();
-  }
-}
-
 describe('QueryResultGridComponent', () => {
   let component: QueryResultGridComponent;
   let fixture: ComponentFixture<QueryResultGridComponent>;
@@ -29,12 +22,8 @@ describe('QueryResultGridComponent', () => {
       imports: [HttpClientTestingModule],
       declarations: [QueryResultGridComponent],
       providers: [
-        // QueryResultGridComponent,
+        QueryResultGridComponent,
         { provide: QueryResultService, useClass: MockQueryResultService },
-        {
-          provide: ProductSelectionService,
-          useClass: MockProductSelectionService,
-        },
       ],
     }).compileComponents();
   });
