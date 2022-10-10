@@ -16,7 +16,6 @@ import { MapViewerSelectionStylesService } from './services/map-viewer-selection
 export function configureMapSelect(
   map: Map,
   productSelectionService: ProductSelectionService,
-  filterSidebarNavigationService: FilterSidebarNavigationService,
   mapViewerSelectionStylesService: MapViewerSelectionStylesService,
   onDestroy: Subject<void>
 ) {
@@ -37,16 +36,20 @@ export function configureMapSelect(
 
     select.on('select', (e) => {
       if (e.selected.length !== 0) {
-        e.selected.forEach((s) =>
-          productSelectionService.addSelectedProduct((s as any).values_.product)
-        );
+        e.selected.forEach((s) => {
+          const product = s.get('product');
+          if (product) {
+            productSelectionService.addSelectedProduct(product);
+          }
+        });
       }
       if (e.deselected.length !== 0) {
-        e.deselected.forEach((d) =>
-          productSelectionService.removeSelectedProduct(
-            (d as any).values_.product
-          )
-        );
+        e.deselected.forEach((d) => {
+          const product = d.get('product');
+          if (product) {
+            productSelectionService.removeSelectedProduct(product);
+          }
+        });
       }
 
       if (e.selected.length === 0 && e.deselected.length === 0) {
@@ -111,11 +114,12 @@ export function configureMapHighlight(
       productSelectionService.unsetHighlightProduct();
 
       if (e.selected.length !== 0) {
-        e.selected.forEach((s) =>
-          productSelectionService.setHighlightProduct(
-            (s as any).values_.product
-          )
-        );
+        e.selected.forEach((s) => {
+          const product = s.get('product');
+          if (product) {
+            productSelectionService.setHighlightProduct(product);
+          }
+        });
         filterSidebarNavigationService.setSelectedSubNav(SideBarSubNav.DETAILS);
         filterSidebarNavigationService.setShowNav(true);
       }

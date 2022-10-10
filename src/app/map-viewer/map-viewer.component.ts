@@ -72,7 +72,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mapRegionSelectionService
       .getSelection()
       .pipe(takeUntil(this.onDestroy))
-      .subscribe((e) => this.changeMapSelectionLayer(e));
+      .subscribe((e) => this.changeMapRegionSelectionLayer(e));
   }
 
   private changeMapBackground(selectedMap: AvailableMap) {
@@ -113,7 +113,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private changeMapSelectionLayer(selection?: MapRegionSelection) {
+  private changeMapRegionSelectionLayer(selection?: MapRegionSelection) {
     // Remove old selection layer if it exists
     const backgroundLayers = this.map
       .getLayers()
@@ -210,7 +210,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     configureMapSelect(
       this.map,
       this.productSelectionService,
-      this.filterSidebarNavigationService,
       this.mapViewerSelectionStylesService,
       this.onDestroy
     );

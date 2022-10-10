@@ -13,8 +13,6 @@ export class ProductSelectionService {
   private highlightedProduct$: BehaviorSubject<DdipProduct> =
     new BehaviorSubject<DdipProduct>(undefined);
 
-  constructor() {}
-
   getSelectedProducts(): Observable<DdipProduct[]> {
     return this.selectedProducts$.pipe(distinctUntilChanged(isArrayEqual));
   }
