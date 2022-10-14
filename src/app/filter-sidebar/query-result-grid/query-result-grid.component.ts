@@ -50,7 +50,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.onDestroy))
       .subscribe(async (selected) => {
         if (!selected) {
-          this.selected = undefined;
+          this.selected = [];
         } else {
           this.selected = this.products.filter((e) =>
             selected.some((s) => e.Id === s.Id)

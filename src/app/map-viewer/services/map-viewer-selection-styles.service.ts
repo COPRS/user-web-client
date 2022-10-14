@@ -7,7 +7,6 @@ import Style from 'ol/style/Style';
 import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
-import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 
 const defaultLineDash = [10, 0, 0, 10];
@@ -102,7 +101,10 @@ export class MapViewerSelectionStylesService {
     feature: Feature,
     productSelectionService: ProductSelectionService
   ): Promise<Style> {
-    const product = (feature as any).values_.product as DdipProduct;
+    const product = feature.get('product');
+    if (!product) {
+      return Promise.resolve(undefined as any);
+    }
     return new Promise((resolve, _reject) => {
       combineLatest([
         productSelectionService.getHighlightedProduct(),
@@ -110,9 +112,10 @@ export class MapViewerSelectionStylesService {
       ])
         .pipe(take(1))
         .subscribe(([highlighted, selectedProducts]) => {
-          const isCurrentHighlighted = product.Id === highlighted?.Id;
+          const productId = product.Id;
+          const isCurrentHighlighted = productId === highlighted?.Id;
           const isCurrentSelected = selectedProducts?.some(
-            (p) => p.Id === product.Id
+            (p) => p.Id === productId
           );
           if (isCurrentHighlighted && isCurrentSelected) {
             resolve(this.highlightedAndSelectedStyle);
