@@ -36,7 +36,6 @@ export class FilterElementComponent implements OnInit {
     'ContentDate/Start',
     'ContentDate/End',
     'Name',
-    'ProductionType',
     'ContentLength',
   ];
   attributeName = '';

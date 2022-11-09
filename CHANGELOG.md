@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 632: Some researches disable the product selection
 - 303: empty testing mapbackground available
 - 606: Update factory env values
+- 663: Remove productionType from filter
 
 ### Changed
 
