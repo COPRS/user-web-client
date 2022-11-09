@@ -45,7 +45,11 @@ export class DdipService {
     Object.keys(query).forEach((p) => {
       queryString.push(`${p}=${query[p]}`);
     });
-    return this.config.settings.apiUrl + '?' + queryString.join('&');
+    return (
+      this.config.settings.apiUrl +
+      '?$expand=Attributes&' +
+      queryString.join('&')
+    );
   }
 
   constructDownloadUrl(productId: string): string {
