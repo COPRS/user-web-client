@@ -69,7 +69,7 @@ describe('FilterElementsService', () => {
     ]);
     service.getQuery().subscribe((q) => {
       expect(q).toEqual(
-        "contains(some_name,'some_value') and endsWith(some_name,'some_value') and startswith(some_name,'some_value') and some_name hassomething some_value and OData.CSC.Intersects(area=geography'SRID=4326;POLYGON((10 20))')"
+        "contains(some_name,'some_value') and endsWith(some_name,'some_value') and startswith(some_name,'some_value') and some_name hassomething 'some_value' and OData.CSC.Intersects(area=geography'SRID=4326;POLYGON((10 20))')"
       );
     });
   });
