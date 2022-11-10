@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME } from 'src/app/filter-sidebar/components/filter-element/filter-element.component';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
@@ -84,29 +85,26 @@ export class FilterElementsService {
     } else {
       let result: string[] = [];
       filterElements.forEach((filterElement) => {
-        switch (filterElement.operator) {
-          case 'contains':
-            result.push(
-              `contains(${filterElement.attributeName},'${filterElement.value}')`
-            );
-            break;
-          case 'endswith':
-            result.push(
-              `endsWith(${filterElement.attributeName},'${filterElement.value}')`
-            );
-            break;
-          case 'startswith':
-            result.push(
-              `startswith(${filterElement.attributeName},'${filterElement.value}')`
-            );
-            break;
-          // case 'gt' | 'ge'|  'eq'| 'le' | 'lt':
-          // handled by default
-          default:
-            result.push(
-              `${filterElement.attributeName} ${filterElement.operator} ${filterElement.value}`
-            );
-            break;
+        if (
+          filterElement.attributeName === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME
+        ) {
+          result.push(
+            `Attributes/OData.CSC.StringAttribute/any(att:att/Name eq '${
+              filterElement.attributeName
+            }' and ${makeOperatorFilterString(
+              'att/OData.CSC.StringAttribute/Value',
+              filterElement.operator,
+              filterElement.value
+            )})`
+          );
+        } else {
+          result.push(
+            makeOperatorFilterString(
+              filterElement.attributeName,
+              filterElement.operator,
+              filterElement.value
+            )
+          );
         }
       });
 
@@ -135,7 +133,22 @@ export class FilterElementsService {
   }
 }
 
-function addDays(date: Date, days: number) {
+export function makeOperatorFilterString(attributeName, operator, value) {
+  switch (operator) {
+    case 'contains':
+      return `contains(${attributeName},'${value}')`;
+    case 'endswith':
+      return `endsWith(${attributeName},'${value}')`;
+    case 'startswith':
+      return `startswith(${attributeName},'${value}')`;
+    // case 'gt' | 'ge'|  'eq'| 'le' | 'lt':
+    // handled by default
+    default:
+      return `${attributeName} ${operator} '${value}'`;
+  }
+}
+
+export function addDays(date: Date, days: number) {
   const d = new Date(date.valueOf());
   d.setDate(d.getDate() + days);
   return d;

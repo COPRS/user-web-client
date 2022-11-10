@@ -3,6 +3,8 @@ import { ConfigService } from 'src/app/services/config.service';
 import { IAppFilterConfigValueType } from 'src/app/services/models/IAppConfig';
 import { FilterElement } from '../../models/FilterElement';
 
+export const PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME = 'productType';
+
 const OPERATOR_SUGGESTIONS: OperatorSuggestion[] = [
   { value: 'contains', description: 'contains' },
   { value: 'endswith', description: 'endswith' },
@@ -36,6 +38,7 @@ export class FilterElementComponent implements OnInit {
     'ContentDate/Start',
     'ContentDate/End',
     'Name',
+    PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME,
     'ContentLength',
   ];
   attributeName = '';

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME } from 'src/app/filter-sidebar/components/filter-element/filter-element.component';
 import { PaginationConfig } from '../../filter-sidebar/services/query-result.service';
 import { ConfigService } from '../config.service';
 import {
@@ -89,7 +90,7 @@ ${products.map((p) => this.constructFileTag(p)).join('\n')}
   ): DdipProduct[] {
     return ddipProductsRaw.map((e): DdipProduct => {
       const productType = e.StringAttributes.filter(
-        (n) => n.Name === 'productType'
+        (n) => n.Name === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME
       )[0];
       return {
         '@odata.mediaContentType': e['@odata.mediaContentType'],
