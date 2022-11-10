@@ -17,7 +17,8 @@ const EXAMPLE_PRODUCT: DdipProduct = {
   EvictionDate: '2021-11-25',
   PublicationDate: '2021-11-26',
   Name: 'S1_Test_2',
-  ProductionType: 'Test_Type',
+  ProductionType: 'Test_Production_Type',
+  ProductType: 'Test_Product_Type',
   Footprint: {
     coordinates: [
       [
