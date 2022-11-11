@@ -23,7 +23,8 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   loading: Observable<boolean>;
   public selected: DdipProduct[];
   private readonly onDestroy = new Subject<void>();
-  meta4File$: Observable<string>;
+  downloadFileMeta4$: Observable<string>;
+  downloadFileLink$: Observable<string>;
 
   constructor(
     private queryResultService: QueryResultService,
@@ -58,19 +59,28 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.meta4File$ = this.productSelectionService
+    this.downloadFileMeta4$ = this.productSelectionService
       .getSelectedProducts()
       .pipe(
         map((p) =>
-          p.length > 0
+          p.length > 1
             ? this.ddipService.constructMetalinkDownloadfile(p)
+            : undefined
+        )
+      );
+    this.downloadFileLink$ = this.productSelectionService
+      .getSelectedProducts()
+      .pipe(
+        map((p) =>
+          p.length === 1
+            ? this.ddipService.constructDownloadUrl(p[0].Id)
             : undefined
         )
       );
   }
 
-  async downloadProducts() {
-    this.meta4File$.pipe(take(1)).subscribe((data) => {
+  async downloadMeta4File() {
+    this.downloadFileMeta4$.pipe(take(1)).subscribe((data) => {
       const c = document.createElement('a');
       c.download = 'products.meta4';
 

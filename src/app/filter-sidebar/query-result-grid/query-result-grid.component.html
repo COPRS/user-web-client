@@ -46,13 +46,36 @@
 
 <div class="clr-row">
   <div class="clr-col">
+    <!-- Nothing selected Placeholder -->
     <button
       class="btn btn-outline btn-icon"
-      (click)="downloadProducts()"
-      [disabled]="(meta4File$ | async) === undefined"
+      disabled="true"
+      [hidden]="
+        (downloadFileMeta4$ | async) !== undefined ||
+        (downloadFileLink$ | async) !== undefined
+      "
     >
       <clr-icon shape="archive"></clr-icon>
-      Download Product(s)
+      Download selected Product(s)
     </button>
+    <!-- Multiple selected download button -->
+    <button
+      class="btn btn-outline btn-icon"
+      (click)="downloadMeta4File()"
+      [hidden]="(downloadFileMeta4$ | async) === undefined"
+    >
+      <clr-icon shape="archive"></clr-icon>
+      Download selected Products
+    </button>
+    <!-- Single selected download button -->
+    <a
+      target="_blank"
+      class="btn btn-outline btn-icon"
+      [href]="downloadFileLink$ | async"
+      [hidden]="(downloadFileLink$ | async) === undefined"
+    >
+      <clr-icon shape="archive"></clr-icon>
+      Download selected Product
+    </a>
   </div>
 </div>
