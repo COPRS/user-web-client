@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 609: ProductType is not queryable by filter
 - 603: Get number of results in all views
 - 636: Improve the default view of results panel
+- 711: Product downloading is not working
 
 ### Changed
 
