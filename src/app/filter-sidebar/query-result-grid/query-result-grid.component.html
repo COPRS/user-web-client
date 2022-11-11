@@ -1,35 +1,34 @@
 <clr-datagrid
+  class="datagrid-compact"
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading | async"
   [clrDgSelected]="selected"
   (clrDgSelectedChange)="selectionChanged($event)"
 >
-  <clr-dg-column>Details</clr-dg-column>
-  <clr-dg-column>Name</clr-dg-column>
-  <clr-dg-column
-    ><clr-icon shape="map-marker" class="is-solid"></clr-icon
-  ></clr-dg-column>
-  <clr-dg-column>Content length</clr-dg-column>
+  <clr-dg-column class="icon-column"></clr-dg-column>
+  <clr-dg-column class="name-column">Name</clr-dg-column>
+  <clr-dg-column class="size-column">Size</clr-dg-column>
   <clr-dg-column>Content date start</clr-dg-column>
   <clr-dg-column>Content date end</clr-dg-column>
 
   <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
-    <clr-dg-cell title="Details">
-      <button class="btn btn-link btn-sm" (click)="goToDetailsTab(product)">
-        <clr-icon shape="list"></clr-icon>
-      </button>
-    </clr-dg-cell>
-    <clr-dg-cell title="{{ product.Name }}" style="overflow-wrap: break-word">
-      {{ product.Name }}
-    </clr-dg-cell>
-    <clr-dg-cell>
+    <clr-dg-cell class="icon-column less-padding-cell" title="Details">
+      <clr-icon shape="list" (click)="goToDetailsTab(product)"></clr-icon>
       <clr-icon *ngIf="product.Footprint" shape="map-marker"></clr-icon>
     </clr-dg-cell>
-    <clr-dg-cell>{{ product.ContentLength | fileSize }}</clr-dg-cell>
-    <clr-dg-cell>{{
+    <clr-dg-cell
+      class="name-column less-padding-cell"
+      title="{{ product.Name }}"
+    >
+      {{ product.Name }}
+    </clr-dg-cell>
+    <clr-dg-cell class="size-column less-padding-cell">{{
+      product.ContentLength | fileSize
+    }}</clr-dg-cell>
+    <clr-dg-cell class="less-padding-cell">{{
       product.ContentDate?.Start | date: "MMM d, y h:mm:ss.sss"
     }}</clr-dg-cell>
-    <clr-dg-cell>{{
+    <clr-dg-cell class="less-padding-cell">{{
       product.ContentDate?.End | date: "MMM d, y h:mm:ss.sss"
     }}</clr-dg-cell>
   </clr-dg-row>

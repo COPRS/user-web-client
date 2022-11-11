@@ -36,6 +36,9 @@
             >
               <clr-icon shape="view-list"></clr-icon>
               RESULTS
+              <span *ngIf="resultCount$ | async" class="badge badge-info">{{
+                resultCount$ | async
+              }}</span>
               <clr-icon
                 *ngIf="(loadingStatus$ | async).loading"
                 shape="sync"

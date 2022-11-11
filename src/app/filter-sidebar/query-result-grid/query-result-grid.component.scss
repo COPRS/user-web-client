@@ -1,1 +1,19 @@
-// no stylings yet
+.icon-column {
+  width: 56px;
+  min-width: 56px;
+}
+
+.less-padding-cell {
+  padding: 6px;
+}
+
+.size-column {
+  width: 56px;
+  min-width: 56px;
+}
+
+.name-column {
+  width: 150px;
+  max-width: 30%;
+  overflow-wrap: break-word;
+}
