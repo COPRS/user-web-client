@@ -13,7 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 303: empty testing mapbackground available
 - 606: Update factory env values
 - 663: Remove productionType from filter
+- 609: ProductType is not queryable by filter
 - 603: Get number of results in all views
+- 636: Improve the default view of results panel
 
 ### Changed
 
