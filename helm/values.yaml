@@ -15,7 +15,7 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   # use image from COPRS repository
   registry: artifactory.coprs.esa-copernicus.eu
-  repository: werum-docker
+  repository: rs-docker
   
   name: rs-user-web-client
   tag: develop
