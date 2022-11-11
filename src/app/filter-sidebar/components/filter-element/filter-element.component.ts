@@ -32,6 +32,7 @@ export class FilterElementComponent implements OnInit {
 
   @Output() changed: EventEmitter<FilterElement> = new EventEmitter();
 
+  PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME = PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME;
   attributeNameSuggestions = [
     'PublicationDate',
     'EvictionDate',
