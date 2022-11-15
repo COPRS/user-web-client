@@ -34,6 +34,7 @@ fi
 if [ -z "$MAP_VIEW" ]
 then
     echo "MAP_VIEW is unset";
+    return 1;
 else
     echo "MAP_VIEW is set to '$MAP_VIEW'";
 fi

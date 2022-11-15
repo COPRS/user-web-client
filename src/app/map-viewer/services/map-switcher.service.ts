@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { OSM, Stamen, TileWMS, XYZ } from 'ol/source';
+import { OSM, Stamen, TileWMS } from 'ol/source';
+import TileSource from 'ol/source/Tile';
 import { BehaviorSubject } from 'rxjs';
 import { ConfigService } from 'src/app/services/config.service';
 
@@ -53,4 +54,4 @@ export class MapSwitcherService {
   }
 }
 
-export type AvailableMap = { mapName: string; sources: XYZ[] };
+export type AvailableMap = { mapName: string; sources: TileSource[] };

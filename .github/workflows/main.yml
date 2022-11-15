@@ -30,7 +30,7 @@ env:
   
   # github.repository as <account>/<repo>
   REGISTRY_BASE: artifactory.coprs.esa-copernicus.eu
-  ARTIFACTORY_PROJECT: werum-docker
+  ARTIFACTORY_PROJECT: rs-docker
 
 
   # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -42,14 +42,14 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.4.0
+        uses: actions/setup-node@v3.5.0
         with:
           # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-          node-version: 14.x
+          node-version: 16.x
 
       # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm clean-install
 
       # Run production build
       - name: Run build
@@ -67,14 +67,14 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.4.0
+        uses: actions/setup-node@v3.5.0
         with:
           # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-          node-version: 14.x
+          node-version: 16.x
 
       # Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm clean-install
 
       # Run Unit tests
       - name: Run Unit Tests
@@ -99,13 +99,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v2.4.0
+        uses: actions/setup-node@v3.5.0
         with:
           # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-          node-version: 14.x
+          node-version: 16.x
 
       - name: Install dependencies
-        run: npm install
+        run: npm clean-install
 
       - name: Extract version name
         shell: bash
@@ -227,7 +227,7 @@ jobs:
     - name: Update version number
       shell: bash
       run: |
-        sed -i "s,{{CHART_VERSION}},$([[ ${GITHUB_REF_NAME} =~ [0-9]\.[0-9]\.[0-9] ]] && echo ${GITHUB_REF_NAME} | cut -d "-" -f1 || echo "0.0.1"),g" helm/Chart.yaml
+        sed -i "s,{{CHART_VERSION}},$([[ ${GITHUB_REF_NAME} =~ [0-9]\.[0-9]\.[0-9] ]] && echo ${GITHUB_REF_NAME} | cut -d "-" -f1 || echo "0.0.2"),g" helm/Chart.yaml
       
     - name: Lint helm
       shell: bash

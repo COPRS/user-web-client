@@ -1,7 +1,7 @@
-<div class="clr-row clr-align-items-end">
+<div class="clr-row clr-align-items-start">
   <div class="clr-col-4">
     <clr-datalist-container>
-      <label>Attribute Name</label>
+      <label style="word-break: keep-all">Attribute&nbsp;Name</label>
       <input
         name="Option"
         required
@@ -26,6 +26,7 @@
         clrDatalistInput
         (change)="onChange()"
         [(ngModel)]="operator"
+        err
       />
       <datalist>
         <option
@@ -35,6 +36,16 @@
           {{ operator.description }}
         </option>
       </datalist>
+      <clr-control-helper
+        *ngIf="
+          attributeName === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME &&
+          operator &&
+          operator !== 'eq'
+        "
+        >'{{ PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME }}' only supports 'eq'
+        operator</clr-control-helper
+      >
+      <clr-control-error>There was an error</clr-control-error>
     </clr-datalist-container>
   </div>
   <div class="clr-col-4">

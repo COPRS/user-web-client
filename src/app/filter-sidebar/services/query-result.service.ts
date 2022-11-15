@@ -38,7 +38,7 @@ export class QueryResultService {
     mergeMap(async (c) => {
       const [filter, pageConfig] = c;
       this.isLoading$.next({ loading: true });
-      let result: DdipProductResponse;
+      let result: DdipProductResponse<DdipProduct>;
       try {
         result = await this.ddipService.getProducts(filter, pageConfig);
       } catch (error) {

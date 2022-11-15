@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME } from 'src/app/filter-sidebar/components/filter-element/filter-element.component';
 import { PaginationConfig } from '../../filter-sidebar/services/query-result.service';
 import { ConfigService } from '../config.service';
 import {
   DdipProduct,
   DdipProductChecksum,
+  DdipProductRawFromPrip,
   DdipProductResponse,
 } from '../models/DdipProductResponse';
 import { OdataQuery } from './DdipQuery';
@@ -18,7 +21,7 @@ export class DdipService {
   async getProducts(
     filter: string,
     pageConfig: PaginationConfig
-  ): Promise<DdipProductResponse> {
+  ): Promise<DdipProductResponse<DdipProduct>> {
     const query = {
       $format: 'json',
       $count: true,
@@ -33,11 +36,18 @@ export class DdipService {
       query.$filter = filter;
     }
 
-    const res = await this.http
-      .get<DdipProductResponse>(this.constructURL(query))
+    return await this.http
+      .get<DdipProductResponse<DdipProductRawFromPrip>>(
+        this.constructURL(query)
+      )
+      .pipe(
+        map((e) => ({
+          '@odata.context': e['@odata.context'],
+          '@odata.count': e['@odata.count'],
+          value: this.mapDdipProductRawFromPripToDdipProductRaw(e.value),
+        }))
+      )
       .toPromise();
-
-    return res;
   }
 
   constructURL(query: OdataQuery): string {
@@ -45,7 +55,11 @@ export class DdipService {
     Object.keys(query).forEach((p) => {
       queryString.push(`${p}=${query[p]}`);
     });
-    return this.config.settings.apiUrl + '?' + queryString.join('&');
+    return (
+      this.config.settings.apiUrl +
+      '?$expand=Attributes&' +
+      queryString.join('&')
+    );
   }
 
   constructDownloadUrl(productId: string): string {
@@ -69,5 +83,29 @@ ${products.map((p) => this.constructFileTag(p)).join('\n')}
 
   private constructHashTag(checksum: DdipProductChecksum) {
     return `<hash type="${checksum.Algorithm}">${checksum.Value}</hash>"`;
+  }
+
+  private mapDdipProductRawFromPripToDdipProductRaw(
+    ddipProductsRaw: DdipProductRawFromPrip[]
+  ): DdipProduct[] {
+    return ddipProductsRaw.map((e): DdipProduct => {
+      const productType = e.StringAttributes.filter(
+        (n) => n.Name === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME
+      )[0];
+      return {
+        '@odata.mediaContentType': e['@odata.mediaContentType'],
+        Id: e.Id,
+        Name: e.Name,
+        ContentType: e.ContentType,
+        ContentLength: e.ContentLength,
+        PublicationDate: e.PublicationDate,
+        EvictionDate: e.EvictionDate,
+        Checksum: e.Checksum,
+        ProductionType: e.ProductionType,
+        ProductType: productType ? (productType.Value as string) : undefined,
+        ContentDate: e.ContentDate,
+        Footprint: e.Footprint,
+      };
+    });
   }
 }

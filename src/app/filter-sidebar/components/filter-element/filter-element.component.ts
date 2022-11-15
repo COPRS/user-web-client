@@ -3,6 +3,8 @@ import { ConfigService } from 'src/app/services/config.service';
 import { IAppFilterConfigValueType } from 'src/app/services/models/IAppConfig';
 import { FilterElement } from '../../models/FilterElement';
 
+export const PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME = 'productType';
+
 const OPERATOR_SUGGESTIONS: OperatorSuggestion[] = [
   { value: 'contains', description: 'contains' },
   { value: 'endswith', description: 'endswith' },
@@ -30,13 +32,14 @@ export class FilterElementComponent implements OnInit {
 
   @Output() changed: EventEmitter<FilterElement> = new EventEmitter();
 
+  PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME = PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME;
   attributeNameSuggestions = [
     'PublicationDate',
     'EvictionDate',
     'ContentDate/Start',
     'ContentDate/End',
     'Name',
-    'ProductionType',
+    PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME,
     'ContentLength',
   ];
   attributeName = '';

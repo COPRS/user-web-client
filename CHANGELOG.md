@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [NEXT] - 20XX-XX-XX
+
+### Added
+
+- 632: Some researches disable the product selection
+- 303: empty testing mapbackground available
+- 606: Update factory env values
+- 663: Remove productionType from filter
+- 609: ProductType is not queryable by filter
+- 603: Get number of results in all views
+- 636: Improve the default view of results panel
+- 711: Product downloading is not working
+
+### Changed
+
+- N/A
+
+### Removed
+
+- N/A
+
+## [1.5.0-rc1] - 2022-08-31
+
+### Added
+
+- 340: Footprints are not correctly displayed when crossing the dateline
+- 522: The error message comes out the dedicated box
+
+### Changed
+
+- N/A
+
+### Removed
+
+- N/A
+
 ## [1.4.0-rc1] - 2022-08-03
 
 ### Added
@@ -16,7 +52,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - N/A
 
 ### Removed
-
 
 ## [1.3.0-rc1] - 2022-06-07
 
