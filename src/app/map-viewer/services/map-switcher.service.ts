@@ -22,7 +22,7 @@ export class MapSwitcherService {
   ];
   private selectedMap$ = new BehaviorSubject<AvailableMap>(this.maps[0]);
 
-  constructor(private config: ConfigService) {
+  constructor(config: ConfigService) {
     config.settings.mapBackgrounds.forEach((mb) => {
       this.maps.push({
         mapName: mb.name,

@@ -96,7 +96,7 @@ ${products.map((p) => this.constructFileTag(p)).join('\n')}
     ddipProductsRaw: DdipProductRawFromPrip[]
   ): DdipProduct[] {
     return ddipProductsRaw.map((e): DdipProduct => {
-      const productType = e.StringAttributes.filter(
+      const productType = e.StringAttributes?.filter(
         (n) => n.Name === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME
       )[0];
 

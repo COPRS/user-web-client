@@ -17,8 +17,6 @@ export class FilterSidebarNavigationService {
   private selectedSubNav$: BehaviorSubject<SideBarSubNav> =
     new BehaviorSubject<SideBarSubNav>(SideBarSubNav.FILTERS);
 
-  constructor() {}
-
   getShowNav() {
     return this.showNav$.asObservable();
   }
