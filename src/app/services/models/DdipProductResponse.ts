@@ -20,6 +20,7 @@ export interface DdipProduct {
     End: string;
   };
   Footprint: DdipProductFootprint | undefined;
+  Quicklooks: string[];
 }
 
 export interface DdipProductRawFromPrip {
@@ -43,6 +44,7 @@ export interface DdipProductRawFromPrip {
   DoubleAttributes: DdipProductExtendedAttribute[];
   BooleanAttributes: DdipProductExtendedAttribute[];
   DateTimeOffsetAttributes: DdipProductExtendedAttribute[];
+  Quicklooks: DdipQuicklook[];
 }
 
 export interface DdipProductExtendedAttribute {
@@ -60,4 +62,8 @@ export interface DdipProductFootprint {
   type: string;
   crs: any;
   coordinates: Array<Array<[number, number]>>;
+}
+
+export interface DdipQuicklook {
+  Image: string;
 }

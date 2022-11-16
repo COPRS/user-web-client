@@ -57,7 +57,7 @@ export class DdipService {
     });
     return (
       this.config.settings.apiUrl +
-      '?$expand=Attributes&' +
+      '?$expand=Attributes,Quicklooks&' +
       queryString.join('&')
     );
   }
@@ -85,6 +85,13 @@ ${products.map((p) => this.constructFileTag(p)).join('\n')}
     return `<hash type="${checksum.Algorithm}">${checksum.Value}</hash>"`;
   }
 
+  constructQuicklookUrl(productId: string, quicklookImageName: string): string {
+    return (
+      this.config.settings.apiUrl +
+      `(${productId})/Quicklooks('${quicklookImageName}')/$value`
+    );
+  }
+
   private mapDdipProductRawFromPripToDdipProductRaw(
     ddipProductsRaw: DdipProductRawFromPrip[]
   ): DdipProduct[] {
@@ -92,6 +99,7 @@ ${products.map((p) => this.constructFileTag(p)).join('\n')}
       const productType = e.StringAttributes.filter(
         (n) => n.Name === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME
       )[0];
+
       return {
         '@odata.mediaContentType': e['@odata.mediaContentType'],
         Id: e.Id,
@@ -105,6 +113,9 @@ ${products.map((p) => this.constructFileTag(p)).join('\n')}
         ProductType: productType ? (productType.Value as string) : undefined,
         ContentDate: e.ContentDate,
         Footprint: e.Footprint,
+        Quicklooks: e.Quicklooks.map((q) =>
+          this.constructQuicklookUrl(e.Id, q.Image)
+        ),
       };
     });
   }

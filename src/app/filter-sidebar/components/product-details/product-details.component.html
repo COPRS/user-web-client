@@ -27,7 +27,11 @@
   <div class="clr-row" *ngIf="(selectedProduct$ | async)?.Footprint">
     <div class="clr-col">
       <h4>Footprint</h4>
-      <clr-icon shape="image" size="180"></clr-icon>
+      <img
+        class="quicklookimage"
+        [src]="(selectedProduct$ | async).Quicklooks[0]"
+        alt="Quicklook"
+      />
     </div>
   </div>
 
