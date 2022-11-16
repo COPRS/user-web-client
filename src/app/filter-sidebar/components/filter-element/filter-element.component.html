@@ -67,16 +67,19 @@
       <ng-container *ngSwitchCase="'double'">
         <ng-container *ngTemplateOutlet="numberInput"></ng-container>
       </ng-container>
-      <clr-checkbox-wrapper *ngSwitchCase="'boolean'">
-        <input
-          type="checkbox"
-          clrCheckbox
-          value="value"
-          name="value"
-          (change)="onChange()"
-          [(ngModel)]="value"
-        />
-      </clr-checkbox-wrapper>
+      <clr-checkbox-container *ngSwitchCase="'boolean'">
+        <label>Value</label>
+        <clr-checkbox-wrapper>
+          <input
+            type="checkbox"
+            clrCheckbox
+            value="value"
+            name="value"
+            (change)="onChange()"
+            [(ngModel)]="value"
+          />
+        </clr-checkbox-wrapper>
+      </clr-checkbox-container>
       <clr-input-container *ngSwitchDefault>
         <label>Value</label>
         <input
