@@ -16,6 +16,7 @@ export class ProductDetailsComponent {
   selectedProductPageIndex$: Observable<
     { idx: number; totalLength: number } | undefined
   >;
+  quicklookImageLoadError = false;
 
   constructor(
     private productSelectionService: ProductSelectionService,
@@ -73,6 +74,10 @@ export class ProductDetailsComponent {
           }
         }
       });
+  }
+
+  onQuicklookImageError() {
+    this.quicklookImageLoadError = true;
   }
 
   rootDirectory: any[] = [

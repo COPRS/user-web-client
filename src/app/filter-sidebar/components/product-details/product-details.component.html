@@ -23,15 +23,24 @@
       </button>
     </div>
   </div>
-
-  <div class="clr-row" *ngIf="(selectedProduct$ | async)?.Footprint">
+  <div class="clr-row">
     <div class="clr-col">
-      <h4>Footprint</h4>
-      <img
-        class="quicklookimage"
-        [src]="(selectedProduct$ | async).Quicklooks[0]"
-        alt="Quicklook"
-      />
+      <h4>Quicklook</h4>
+      <div *ngIf="(selectedProduct$ | async)?.Quicklooks?.length > 0">
+        <img
+          [hidden]="quicklookImageLoadError"
+          class="quicklookimage"
+          [src]="(selectedProduct$ | async).Quicklooks[0]"
+          (error)="onQuicklookImageError()"
+          alt=""
+        />
+        <span *ngIf="quicklookImageLoadError"
+          >Could not load quicklook image</span
+        >
+      </div>
+      <span *ngIf="(selectedProduct$ | async)?.Quicklooks?.length === 0">
+        No quicklook image available for this product.
+      </span>
     </div>
   </div>
 
