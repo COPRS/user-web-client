@@ -6,6 +6,7 @@ import {
   MapRegionSelection,
   MapRegionSelectionService,
 } from 'src/app/map-viewer/services/map-region-selection.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { FilterElement } from '../models/FilterElement';
 
 @Injectable({
@@ -18,7 +19,10 @@ export class FilterElementsService {
     new BehaviorSubject(0);
   private filterElements: Array<FilterElement> = [];
 
-  constructor(private mapRegionSelectionService: MapRegionSelectionService) {}
+  constructor(
+    private mapRegionSelectionService: MapRegionSelectionService,
+    private configService: ConfigService
+  ) {}
 
   public updateFilters(filterElements: FilterElement[]): void {
     this.filterElements = filterElements;
@@ -33,8 +37,8 @@ export class FilterElementsService {
 
   public getQuery(): Observable<string> {
     const filterElements = this.filterElements$.pipe(
-      map(this.mapSensingDateToContentDate),
-      map(this.convertFilterElementToOdataFilter)
+      map((e) => this.mapSensingDateToContentDate(e)),
+      map((e) => this.convertFilterElementToOdataFilter(e))
     );
 
     const regionFilter = this.mapRegionSelectionService
@@ -94,15 +98,28 @@ export class FilterElementsService {
             }' and ${makeOperatorFilterString(
               'att/OData.CSC.StringAttribute/Value',
               filterElement.operator,
-              filterElement.value
+              filterElement.value,
+              true
             )})`
           );
         } else {
+          const currentElementFilterConfig =
+            this.configService.settings.filterConfig.find(
+              (e) => e.attributeName === filterElement.attributeName
+            );
+          let isValueStringType = true;
+          if (
+            currentElementFilterConfig &&
+            currentElementFilterConfig.valueType !== 'string'
+          ) {
+            isValueStringType = false;
+          }
           result.push(
             makeOperatorFilterString(
               filterElement.attributeName,
               filterElement.operator,
-              filterElement.value
+              filterElement.value,
+              isValueStringType
             )
           );
         }
@@ -133,7 +150,12 @@ export class FilterElementsService {
   }
 }
 
-export function makeOperatorFilterString(attributeName, operator, value) {
+export function makeOperatorFilterString(
+  attributeName,
+  operator,
+  value,
+  isStringType: boolean
+) {
   switch (operator) {
     case 'contains':
       return `contains(${attributeName},'${value}')`;
@@ -144,7 +166,8 @@ export function makeOperatorFilterString(attributeName, operator, value) {
     // case 'gt' | 'ge'|  'eq'| 'le' | 'lt':
     // handled by default
     default:
-      return `${attributeName} ${operator} '${value}'`;
+      const val = isStringType ? "'" + value + "'" : value;
+      return `${attributeName} ${operator} ${val}`;
   }
 }
 
