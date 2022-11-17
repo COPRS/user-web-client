@@ -27,6 +27,7 @@ export class FilterElementListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.error(this.filterElementsService);
     this.filters = this.filterElementsService.getFilter();
   }
 

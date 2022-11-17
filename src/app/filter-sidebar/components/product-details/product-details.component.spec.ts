@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { FileSizePipe } from 'src/app/filter-sidebar/query-result-grid/file-size.pipe';
+import { FilterElementsService } from 'src/app/filter-sidebar/services/filter-elements.service';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
@@ -11,6 +12,10 @@ class MockDdipService {
   constructorDownloadUrl() {
     return '';
   }
+}
+
+class MockFilterElementsService {
+  public getQuery() {}
 }
 
 class MockProductSelectionService {
@@ -28,7 +33,7 @@ class MockProductSelectionService {
   }
 }
 
-describe('DetailsSidebarComponent', () => {
+describe('ProductDetailsSidebarComponent', () => {
   let component: ProductDetailsComponent;
   let fixture: ComponentFixture<ProductDetailsComponent>;
 
@@ -40,6 +45,10 @@ describe('DetailsSidebarComponent', () => {
         {
           provide: ProductSelectionService,
           useClass: MockProductSelectionService,
+        },
+        {
+          provide: FilterElementsService,
+          useClass: MockFilterElementsService,
         },
       ],
     }).compileComponents();

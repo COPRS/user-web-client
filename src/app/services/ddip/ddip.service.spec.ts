@@ -42,7 +42,7 @@ describe('DdipService', () => {
 
   it('should construct a query string', () => {
     expect(service.constructURL({ $skip: 10, $top: 99 })).toEqual(
-      'http://test:0815/Products?$expand=Attributes&$skip=10&$top=99'
+      'http://test:0815/Products?$expand=Attributes,Quicklooks&$skip=10&$top=99'
     );
   });
 
@@ -69,6 +69,7 @@ describe('DdipService', () => {
         ProductionType: 'ProductionType',
         ProductType: 'ProductType',
         PublicationDate: '',
+        Quicklooks: [],
       },
     ];
 

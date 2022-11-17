@@ -4,6 +4,8 @@ import {
   MapRegionSelection,
   MapRegionSelectionService,
 } from 'src/app/map-viewer/services/map-region-selection.service';
+import { ConfigService } from 'src/app/services/config.service';
+import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { FilterElementsService } from './filter-elements.service';
 
 class MockMapRegionSelectionService {
@@ -13,6 +15,23 @@ class MockMapRegionSelectionService {
       type: 'Polygon',
     });
   }
+}
+
+class MockConfigService {
+  settings: IAppConfig = {
+    apiUrl: 'http://test',
+    mapBackgrounds: [],
+    keycloak: { clientId: '', realm: '', url: '' },
+    mapView: {
+      regionSelectionFillColor: '',
+      regionSelectionStrokeColor: '',
+      selectionFillColor: '',
+      selectionStrokeColor: '',
+      highlightStrokeColor: '',
+      highlightFillColor: '',
+    },
+    filterConfig: [],
+  };
 }
 
 describe('FilterElementsService', () => {
@@ -26,6 +45,7 @@ describe('FilterElementsService', () => {
           provide: MapRegionSelectionService,
           useClass: MockMapRegionSelectionService,
         },
+        { provide: ConfigService, useClass: MockConfigService },
       ],
     });
     service = TestBed.inject(FilterElementsService);

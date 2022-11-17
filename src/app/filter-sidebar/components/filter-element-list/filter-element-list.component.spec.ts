@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FilterElementsService } from 'src/app/filter-sidebar/services/filter-elements.service';
 import { FilterElementListComponent } from './filter-element-list.component';
+
+class MockFilterElementsService {
+  public getFilter() {}
+}
 
 describe('FilterElementListComponent', () => {
   let component: FilterElementListComponent;
@@ -8,9 +12,15 @@ describe('FilterElementListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FilterElementListComponent ]
-    })
-    .compileComponents();
+      declarations: [FilterElementListComponent],
+      providers: [
+        FilterElementListComponent,
+        {
+          provide: FilterElementsService,
+          useClass: MockFilterElementsService,
+        },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
