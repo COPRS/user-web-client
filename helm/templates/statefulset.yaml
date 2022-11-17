@@ -33,6 +33,8 @@ spec:
               value: {{ .Values.env.keycloak }}
             - name: MAP_VIEW
               value: {{ .Values.env.mapView }}
+            - name: FILTER_CONFIG
+              value: {{ .Values.env.filterConfig }}
           ports:
             - name: http
               containerPort: 80
