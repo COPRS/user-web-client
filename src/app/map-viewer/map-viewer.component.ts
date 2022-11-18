@@ -17,11 +17,12 @@ import { createRegularPolygon } from 'ol/interaction/Draw';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
-import { Vector as VectorSource } from 'ol/source';
+import VectorSource from 'ol/source/Vector';
 import Style from 'ol/style/Style';
 import View from 'ol/View';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { shiftFootprints } from 'src/app/services/foot-print-fixer.util';
 import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
@@ -49,7 +50,7 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private map: Map;
   private bounds = [-180, -89, 180, 89];
   private readonly onDestroy = new Subject<void>();
-  private source = new VectorSource({ wrapX: false });
+  private source = new VectorSource();
   private draw: Draw;
   private drawType: SelectionType;
 
@@ -172,7 +173,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           style,
           properties: { layerType: LayerType.Selection },
           source: new VectorSource({
-            wrapX: false,
             features: [
               new Feature({
                 geometry,
@@ -292,7 +292,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
             properties: { layerType: LayerType.Data },
             source: new VectorSource({
-              wrapX: false,
               features: new GeoJSON().readFeatures(
                 {
                   type: 'FeatureCollection',
@@ -304,6 +303,11 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
                   },
 
                   features: ddipProducts.map((product) => {
+                    product.Footprint.coordinates =
+                      product.Footprint.coordinates.map((c) =>
+                        shiftFootprints(c)
+                      );
+
                     return {
                       type: 'Feature',
                       properties: { product },
