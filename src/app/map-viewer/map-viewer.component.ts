@@ -22,7 +22,6 @@ import Style from 'ol/style/Style';
 import View from 'ol/View';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { shiftFootprints } from 'src/app/services/foot-print-fixer.util';
 import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
@@ -303,11 +302,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
                   },
 
                   features: ddipProducts.map((product) => {
-                    product.Footprint.coordinates =
-                      product.Footprint.coordinates.map((c) =>
-                        shiftFootprints(c)
-                      );
-
                     return {
                       type: 'Feature',
                       properties: { product },
