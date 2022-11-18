@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 463: Display Quicklook in product description
 - 720: Possible invalid odata query
+- 713: Footprints disappear when zooming into the map
 
 ### Changed
 
@@ -42,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - N/A
 
 ### Known limitation
+
 - RS-713 - While zooming footprints are disappearing
 
 ## [1.5.0-rc1] - 2022-08-31
