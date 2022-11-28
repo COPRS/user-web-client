@@ -36,6 +36,7 @@ import {
   MapSwitcherService,
 } from './services/map-switcher.service';
 import { MapViewerSelectionStylesService } from './services/map-viewer-selection-styles.service';
+import * as splitGeoJSON from 'geojson-antimeridian-cut';
 
 const SOURCE_PROJECTION = 'EPSG:4326';
 const DESTINATION_PROJECTION = 'EPSG:3857';
@@ -302,6 +303,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
                   },
 
                   features: ddipProducts.map((product) => {
+                    product.Footprint = splitGeoJSON(product.Footprint);
+
                     return {
                       type: 'Feature',
                       properties: { product },

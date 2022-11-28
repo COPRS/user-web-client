@@ -1,6 +1,6 @@
 {
   "name": "rs-user-web-client",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "browser": {
     "fs": false,
     "http": false,
@@ -21,6 +21,7 @@
     "@clr/icons": "^13.0.2",
     "@clr/ui": "^13.3.1",
     "@webcomponents/webcomponentsjs": "^2.6.0",
+    "geojson-antimeridian-cut": "^0.1.0",
     "keycloak-angular": "^9.3.2",
     "keycloak-js": "^16.1.1",
     "license-checker": "^25.0.1",
