@@ -109,8 +109,8 @@
                   ></clr-icon>
                 </div>
                 <span class="alert-text alert-test-fix">
-                  {{ (loadingStatus$ | async)?.error?.statusText }}
-                  (Status: {{ (loadingStatus$ | async)?.error?.status }})
+                  Error while getting data from server (Status:
+                  {{ (loadingStatus$ | async)?.error?.status }})
                   <br />
                   {{ (loadingStatus$ | async)?.error?.message }}
                 </span>
