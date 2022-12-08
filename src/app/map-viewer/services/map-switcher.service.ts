@@ -25,6 +25,11 @@ export class MapSwitcherService {
         ),
       });
     });
+    if (this.maps[0]) {
+      this.selectedMap$.next(this.maps[0]);
+    } else {
+      alert('ERROR: No backgroud map(s) configured');
+    }
   }
 
   setSelectedMap(mapName: string) {
