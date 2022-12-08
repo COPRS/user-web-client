@@ -8,19 +8,8 @@ import { ConfigService } from 'src/app/services/config.service';
   providedIn: 'root',
 })
 export class MapSwitcherService {
-  private maps: AvailableMap[] = [
-    { mapName: 'OSM', sources: [new OSM()] },
-    {
-      mapName: 'Stamen (watercolor)',
-      sources: [
-        new Stamen({ layer: 'watercolor' }),
-        new Stamen({
-          layer: 'terrain-labels',
-        }),
-      ],
-    },
-  ];
-  private selectedMap$ = new BehaviorSubject<AvailableMap>(this.maps[0]);
+  private maps: AvailableMap[] = [];
+  private selectedMap$ = new BehaviorSubject<AvailableMap>(undefined);
 
   constructor(config: ConfigService) {
     config.settings.mapBackgrounds.forEach((mb) => {
