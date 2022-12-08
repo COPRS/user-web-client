@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - 521: ununderstandable "500 OK" error
+- 748: Switch default mapbackground
 
 ### Changed
 
