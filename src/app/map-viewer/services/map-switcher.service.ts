@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { OSM, Stamen, TileWMS } from 'ol/source';
+import { TileWMS } from 'ol/source';
 import TileSource from 'ol/source/Tile';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
 
 @Injectable({
@@ -44,7 +45,7 @@ export class MapSwitcherService {
   }
 
   getSelectedMap() {
-    return this.selectedMap$.asObservable();
+    return this.selectedMap$.pipe(filter((m) => m === undefined));
   }
 }
 
