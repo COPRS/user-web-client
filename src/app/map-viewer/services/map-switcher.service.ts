@@ -45,7 +45,7 @@ export class MapSwitcherService {
   }
 
   getSelectedMap() {
-    return this.selectedMap$.pipe(filter((m) => m === undefined));
+    return this.selectedMap$.pipe(filter((m) => m !== undefined));
   }
 }
 
