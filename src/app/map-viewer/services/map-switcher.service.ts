@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TileWMS } from 'ol/source';
+import { OSM, TileWMS } from 'ol/source';
 import TileSource from 'ol/source/Tile';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -26,11 +26,15 @@ export class MapSwitcherService {
         ),
       });
     });
-    if (this.maps[0]) {
-      this.selectedMap$.next(this.maps[0]);
-    } else {
-      alert('ERROR: No backgroud map(s) configured');
+
+    if (this.maps.length === 0) {
+      alert(
+        'ERROR: No backgroud map(s) configured. Fallback to default OpenStreetMap background.'
+      );
+      this.maps.push({ mapName: 'OSM', sources: [new OSM()] });
     }
+
+    this.selectedMap$.next(this.maps[0]);
   }
 
   setSelectedMap(mapName: string) {
