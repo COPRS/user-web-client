@@ -5,7 +5,8 @@
 env:
   apiUrl: http://coprs.werum.de/prip/odata/v1/Products
   mapBackgrounds: |
-    "[{\"name\": \"Sentinel-2 cloudless 2018 background map\",\"layers\": [{\"url\": \"https://tiles.esa.maps.eox.at/wms\",\"layerName\": \"s2cloudless_3857\"}]},
+    "[{\"name\": \"OpenStreetMap background map\",\"layers\":[{\"url\":\"https://tiles.esa.maps.eox.at/wms\",\"layerName\":\"osm_3857\"}]},
+      {\"name\": \"Sentinel-2 cloudless 2018 background map\",\"layers\": [{\"url\": \"https://tiles.esa.maps.eox.at/wms\",\"layerName\": \"s2cloudless_3857\"}]},
       {\"name\": \"Terrain background map\",\"layers\": [{\"url\": \"https://tiles.esa.maps.eox.at/wms\",\"layerName\": \"terrain_3857\"}]}]"
   baseHref: /uwc/
   keycloak: |
