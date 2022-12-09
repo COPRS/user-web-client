@@ -28,9 +28,6 @@ export class MapSwitcherService {
     });
 
     if (this.maps.length === 0) {
-      alert(
-        'ERROR: No backgroud map(s) configured. Fallback to default OpenStreetMap background.'
-      );
       this.maps.push({ mapName: 'OSM', sources: [new OSM()] });
     }
 
