@@ -34,7 +34,7 @@
               }"
               (click)="onSubNavClick(SideBarSubNav.RESULTS)"
             >
-              <clr-icon shape="view-list"></clr-icon>
+              <clr-icon shape="view-list"></clr-icon>&nbsp;
               <span class="badge badge-info">{{ resultCount$ | async }}</span>
               <clr-icon
                 *ngIf="(loadingStatus$ | async).loading"

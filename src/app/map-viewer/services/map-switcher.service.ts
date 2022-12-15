@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { OSM, Stamen, TileWMS } from 'ol/source';
+import { OSM, TileWMS } from 'ol/source';
 import TileSource from 'ol/source/Tile';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
 
 @Injectable({
@@ -25,11 +26,12 @@ export class MapSwitcherService {
         ),
       });
     });
-    if (this.maps[0]) {
-      this.selectedMap$.next(this.maps[0]);
-    } else {
-      alert('ERROR: No backgroud map(s) configured');
+
+    if (this.maps.length === 0) {
+      this.maps.push({ mapName: 'OSM', sources: [new OSM()] });
     }
+
+    this.selectedMap$.next(this.maps[0]);
   }
 
   setSelectedMap(mapName: string) {
@@ -44,7 +46,7 @@ export class MapSwitcherService {
   }
 
   getSelectedMap() {
-    return this.selectedMap$.asObservable();
+    return this.selectedMap$.pipe(filter((m) => m !== undefined));
   }
 }
 

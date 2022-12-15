@@ -6,7 +6,17 @@ import { MapViewerSelectionStylesService } from './map-viewer-selection-styles.s
 class MockConfigService {
   settings: IAppConfig = {
     apiUrl: 'http://test',
-    mapBackgrounds: [],
+    mapBackgrounds: [
+      {
+        name: 'Sentinel-2 cloudless 2018 background map',
+        layers: [
+          {
+            url: 'https://tiles.esa.maps.eox.at/wms',
+            layerName: 's2cloudless_3857',
+          },
+        ],
+      },
+    ],
     keycloak: { clientId: '', realm: '', url: '' },
     mapView: {
       regionSelectionFillColor: '',
