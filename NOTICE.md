@@ -670,7 +670,6 @@
 | [libnpmversion](https://github.com/npm/libnpmversion) | 2.0.2 | ISC |
 | [license-checker](https://github.com/davglass/license-checker) | 25.0.1 | BSD-3-Clause |
 | [license-webpack-plugin](https://github.com/xz64/license-webpack-plugin) | 4.0.0 | ISC |
-| [licenses: MI](https://github.com/thejoshwolfe/yauzl) | ├─ licenses: MIT | MIT |
 | [lines-and-columns](https://github.com/eventualbuddha/lines-and-columns) | 1.2.4 | MIT |
 | [listr2](https://github.com/cenk1cenk2/listr2) | 3.13.1 | MIT |
 | [lit-element](https://github.com/lit/lit) | 3.0.2 | BSD-3-Clause |
@@ -908,7 +907,6 @@
 | [proxy-from-env](https://github.com/Rob--W/proxy-from-env) | 1.0.0 | MIT |
 | [prr](https://github.com/rvagg/prr) | 1.0.1 | MIT |
 | [psl](https://github.com/lupomontero/psl) | 1.8.0 | MIT |
-| [publisher: Brian For](https://github.com/thejoshwolfe/yauzl) | ├─ publisher: Brian Ford | MIT |
 | [pump](https://github.com/mafintosh/pump) | 3.0.0 | MIT |
 | [punycode](https://github.com/bestiejs/punycode.js) | 1.3.2 | MIT |
 | [punycode](https://github.com/bestiejs/punycode.js) | 2.1.1 | MIT |
@@ -948,7 +946,6 @@
 | [regexpu-core](https://github.com/mathiasbynens/regexpu-core) | 4.8.0 | MIT |
 | [regjsgen](https://github.com/bnjmnt4n/regjsgen) | 0.5.2 | MIT |
 | [regjsparser](https://github.com/jviereck/regjsparser) | 0.7.0 | BSD-2-Clause |
-| [repository: https://github.com/angular/angula](https://github.com/thejoshwolfe/yauzl) | ├─ repository: https://github.com/angular/angular | MIT |
 | [request-progress](https://github.com/IndigoUnited/node-request-progress) | 3.0.0 | MIT |
 | [require-directory](https://github.com/troygoode/node-require-directory) | 2.1.1 | MIT |
 | [require-from-string](https://github.com/floatdrop/require-from-string) | 2.0.2 | MIT |
@@ -1212,3 +1209,4 @@
 | [yargs](https://github.com/yargs/yargs) | 17.3.0 | MIT |
 | [yarnpkg/lockfile](https://github.com/yarnpkg/yarn/blob/master/packages/lockfile) | 1.1.0 | BSD-2-Clause |
 | [yauzl](https://github.com/thejoshwolfe/yauzl) | 2.10.0 | MIT |
+| [zone.js](https://github.com/angular/angular) | 0.11.4 | MIT |
