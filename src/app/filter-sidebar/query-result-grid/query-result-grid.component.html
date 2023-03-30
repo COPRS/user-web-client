@@ -2,8 +2,6 @@
   class="datagrid-compact"
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading | async"
-  [clrDgSelected]="selected"
-  (clrDgSelectedChange)="selectionChanged($event)"
 >
   <clr-dg-column class="icon-column"></clr-dg-column>
   <clr-dg-column class="name-column">Name</clr-dg-column>
@@ -17,7 +15,7 @@
     [style.background-color]="
       highlightedProduct === product ? highlightedProductBackgroundColor : ''
     "
-    (dblclick)="rowDoubleClicked(product)"
+    (click)="rowClicked(product)"
   >
     <clr-dg-cell class="icon-column less-padding-cell">
       <clr-icon

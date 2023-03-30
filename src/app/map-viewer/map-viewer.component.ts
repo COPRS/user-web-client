@@ -24,7 +24,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
-import { configureMapHighlight, configureMapSelect } from './map-viewer-logic';
+import { configureMapHighlight } from './map-viewer-logic';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
@@ -205,12 +205,12 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     // INIT MAP - END
 
-    configureMapSelect(
-      this.map,
-      this.productSelectionService,
-      this.mapViewerSelectionStylesService,
-      this.onDestroy
-    );
+    // configureMapSelect(
+    //   this.map,
+    //   this.productSelectionService,
+    //   this.mapViewerSelectionStylesService,
+    //   this.onDestroy
+    // );
 
     configureMapHighlight(
       this.map,

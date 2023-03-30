@@ -19,7 +19,7 @@ import { QueryResultService } from '../services/query-result.service';
 export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: DdipProduct[];
   total: number;
-  pageSize: number = 15;
+  pageSize: number = 9;
   loading: Observable<boolean>;
   public selected: DdipProduct[];
   public highlightedProduct: DdipProduct;
@@ -84,13 +84,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     this.onDestroy.next();
   }
 
-  selectionChanged(selectedProducts: DdipProduct[]) {
-    this.productSelectionService.clearSelectedProducts();
-    selectedProducts?.forEach((p) =>
-      this.productSelectionService.addSelectedProduct(p)
-    );
-  }
-
   goToDetailsTab($event) {
     const selectedProduct = $event as DdipProduct;
     this.productSelectionService.setHighlightProduct(selectedProduct);
@@ -100,7 +93,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     this.filterSidebarNavigationService.setShowNav(true);
   }
 
-  rowDoubleClicked(product: DdipProduct) {
+  rowClicked(product: DdipProduct) {
     this.goToDetailsTab(product);
   }
 }
