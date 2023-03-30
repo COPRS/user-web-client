@@ -11,7 +11,14 @@
   <clr-dg-column>Content date start</clr-dg-column>
   <clr-dg-column>Content date end</clr-dg-column>
 
-  <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
+  <clr-dg-row
+    *ngFor="let product of products"
+    [clrDgItem]="product"
+    [style.background-color]="
+      highlightedProduct === product ? highlightedProductBackgroundColor : ''
+    "
+    (dblclick)="rowDoubleClicked(product)"
+  >
     <clr-dg-cell class="icon-column less-padding-cell">
       <clr-icon
         shape="list"

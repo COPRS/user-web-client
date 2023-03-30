@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import {
@@ -22,13 +22,15 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   pageSize: number = 15;
   loading: Observable<boolean>;
   public selected: DdipProduct[];
+  public highlightedProduct: DdipProduct;
+  public highlightedProductBackgroundColor: string;
   private readonly onDestroy = new Subject<void>();
 
   constructor(
     private queryResultService: QueryResultService,
     private productSelectionService: ProductSelectionService,
     private filterSidebarNavigationService: FilterSidebarNavigationService,
-    private ddipService: DdipService
+    private configService: ConfigService
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -36,6 +38,10 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.configService.getSettings().then((c) => {
+      this.highlightedProductBackgroundColor = c.mapView.highlightFillColor;
+    });
+
     this.queryResultService
       .getFilteredProducts()
       .pipe(takeUntil(this.onDestroy))
@@ -56,18 +62,17 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
           );
         }
       });
-  }
 
-  downloadProduct(product: DdipProduct) {
-    const downloadUrl = this.ddipService.constructDownloadUrl(product.Id);
-    console.log(product);
-    const link = document.createElement('a');
-    link.setAttribute('target', '_blank');
-    link.setAttribute('href', downloadUrl);
-    link.setAttribute('download', `products.csv`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    this.productSelectionService
+      .getHighlightedProduct()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(async (highlighted) => {
+        if (!highlighted) {
+          this.highlightedProduct = undefined;
+        } else {
+          this.highlightedProduct = highlighted;
+        }
+      });
   }
 
   refresh(state: ClrDatagridStateInterface) {
@@ -93,5 +98,9 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       SideBarSubNav.DETAILS
     );
     this.filterSidebarNavigationService.setShowNav(true);
+  }
+
+  rowDoubleClicked(product: DdipProduct) {
+    this.goToDetailsTab(product);
   }
 }
