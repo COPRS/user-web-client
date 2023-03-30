@@ -61,38 +61,4 @@ describe('DdipService', () => {
       'http://test:0815/Products(some_productId)/$value'
     );
   });
-
-  it('should construct a Metalink file', () => {
-    const ddipProduct: DdipProduct[] = [
-      {
-        '@odata.mediaContentType': 'ceont',
-        Checksum: [
-          { Algorithm: 'md42', ChecksumDate: '2022-01-01', Value: 'val' },
-        ],
-        ContentDate: { End: 'enddate', Start: 'astartdate' },
-        ContentLength: 123456,
-        ContentType: 'ContentType',
-        EvictionDate: '',
-        Footprint: { coordinates: [], crs: '', type: '' },
-        Id: 'the-product-id',
-        Name: 'the-file-name',
-        ProductionType: 'ProductionType',
-        ProductType: 'ProductType',
-        PublicationDate: '',
-        Quicklooks: [],
-      },
-    ];
-
-    const expectedMeta4 = `<?xml version="1.0" encoding="UTF-8"?>
-<metalink xmlns="urn:ietf:params:xml:ns:metalink">
-  <file name="the-file-name">
-    <hash type="md42">val</hash>"
-    <size>123456</size>
-    <url>http://test:0815/Products(the-product-id)/$value</url>
-  </file>      
-</metalink>`;
-    expect(service.constructMetalinkDownloadfile(ddipProduct)).toEqual(
-      expectedMeta4
-    );
-  });
 });

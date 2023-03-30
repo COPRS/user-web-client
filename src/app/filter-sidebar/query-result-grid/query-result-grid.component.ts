@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
@@ -23,8 +23,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   loading: Observable<boolean>;
   public selected: DdipProduct[];
   private readonly onDestroy = new Subject<void>();
-  downloadFileMeta4$: Observable<string>;
-  downloadFileLink$: Observable<string>;
 
   constructor(
     private queryResultService: QueryResultService,
@@ -58,38 +56,18 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
           );
         }
       });
-
-    this.downloadFileMeta4$ = this.productSelectionService
-      .getSelectedProducts()
-      .pipe(
-        map((p) =>
-          p.length > 1
-            ? this.ddipService.constructMetalinkDownloadfile(p)
-            : undefined
-        )
-      );
-    this.downloadFileLink$ = this.productSelectionService
-      .getSelectedProducts()
-      .pipe(
-        map((p) =>
-          p.length === 1
-            ? this.ddipService.constructDownloadUrl(p[0].Id)
-            : undefined
-        )
-      );
   }
 
-  async downloadMeta4File() {
-    this.downloadFileMeta4$.pipe(take(1)).subscribe((data) => {
-      const c = document.createElement('a');
-      c.download = 'products.meta4';
-
-      var t = new Blob([data], {
-        type: 'text/plain',
-      });
-      c.href = window.URL.createObjectURL(t);
-      c.click();
-    });
+  downloadProduct(product: DdipProduct) {
+    const downloadUrl = this.ddipService.constructDownloadUrl(product.Id);
+    console.log(product);
+    const link = document.createElement('a');
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', downloadUrl);
+    link.setAttribute('download', `products.csv`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   }
 
   refresh(state: ClrDatagridStateInterface) {

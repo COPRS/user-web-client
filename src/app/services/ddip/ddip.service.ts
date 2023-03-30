@@ -66,25 +66,6 @@ export class DdipService {
     return this.config.settings.apiUrl + `(${productId})/$value`;
   }
 
-  constructMetalinkDownloadfile(products: DdipProduct[]): string {
-    return `<?xml version="1.0" encoding="UTF-8"?>
-<metalink xmlns="urn:ietf:params:xml:ns:metalink">
-${products.map((p) => this.constructFileTag(p)).join('\n')}      
-</metalink>`;
-  }
-
-  private constructFileTag(product: DdipProduct): string {
-    return `  <file name="${product.Name}">
-    ${product.Checksum.map((c) => this.constructHashTag(c)).join('\n')}
-    <size>${product.ContentLength}</size>
-    <url>${this.constructDownloadUrl(product.Id)}</url>
-  </file>`;
-  }
-
-  private constructHashTag(checksum: DdipProductChecksum) {
-    return `<hash type="${checksum.Algorithm}">${checksum.Value}</hash>"`;
-  }
-
   constructQuicklookUrl(productId: string, quicklookImageName: string): string {
     return (
       this.config.settings.apiUrl +
