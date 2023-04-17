@@ -1,26 +1,16 @@
 import { Injectable } from '@angular/core';
-import { OSM, Stamen, TileWMS } from 'ol/source';
+import { OSM, TileWMS } from 'ol/source';
 import TileSource from 'ol/source/Tile';
 import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { ConfigService } from 'src/app/services/config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MapSwitcherService {
-  private maps: AvailableMap[] = [
-    { mapName: 'OSM', sources: [new OSM()] },
-    {
-      mapName: 'Stamen (watercolor)',
-      sources: [
-        new Stamen({ layer: 'watercolor' }),
-        new Stamen({
-          layer: 'terrain-labels',
-        }),
-      ],
-    },
-  ];
-  private selectedMap$ = new BehaviorSubject<AvailableMap>(this.maps[0]);
+  private maps: AvailableMap[] = [];
+  private selectedMap$ = new BehaviorSubject<AvailableMap>(undefined);
 
   constructor(config: ConfigService) {
     config.settings.mapBackgrounds.forEach((mb) => {
@@ -36,6 +26,12 @@ export class MapSwitcherService {
         ),
       });
     });
+
+    if (this.maps.length === 0) {
+      this.maps.push({ mapName: 'OSM', sources: [new OSM()] });
+    }
+
+    this.selectedMap$.next(this.maps[0]);
   }
 
   setSelectedMap(mapName: string) {
@@ -50,7 +46,7 @@ export class MapSwitcherService {
   }
 
   getSelectedMap() {
-    return this.selectedMap$.asObservable();
+    return this.selectedMap$.pipe(filter((m) => m !== undefined));
   }
 }
 

@@ -63,4 +63,4 @@ export interface MapRegionSelection {
   coordinates: Array<[number, number]>;
 }
 
-export type SelectionType = 'Polygon' | 'LineString' | 'Point' | 'Square';
+export type SelectionType = 'Polygon' | 'LineString' | 'Point';

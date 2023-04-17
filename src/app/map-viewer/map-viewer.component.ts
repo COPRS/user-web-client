@@ -13,7 +13,6 @@ import LineString from 'ol/geom/LineString';
 import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
 import { DoubleClickZoom, Draw } from 'ol/interaction';
-import { createRegularPolygon } from 'ol/interaction/Draw';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
@@ -25,7 +24,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
-import { configureMapHighlight, configureMapSelect } from './map-viewer-logic';
+import { configureMapHighlight } from './map-viewer-logic';
 import {
   MapRegionSelection,
   MapRegionSelectionService,
@@ -153,7 +152,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           style = this.mapViewerSelectionStylesService.getPointStyle();
           break;
         case 'Polygon':
-        case 'Square':
           geometry = new Polygon([selection.coordinates]).transform(
             SOURCE_PROJECTION,
             DESTINATION_PROJECTION
@@ -207,12 +205,12 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     // INIT MAP - END
 
-    configureMapSelect(
-      this.map,
-      this.productSelectionService,
-      this.mapViewerSelectionStylesService,
-      this.onDestroy
-    );
+    // configureMapSelect(
+    //   this.map,
+    //   this.productSelectionService,
+    //   this.mapViewerSelectionStylesService,
+    //   this.onDestroy
+    // );
 
     configureMapHighlight(
       this.map,
@@ -358,14 +356,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
           style: this.mapViewerSelectionStylesService.getPointStyle(),
         });
         break;
-      case 'Square':
-        this.draw = new Draw({
-          source: this.source,
-          type: 'Circle',
-          style: this.mapViewerSelectionStylesService.getPolygonStyle(),
-          geometryFunction: createRegularPolygon(4),
-        });
-        break;
     }
     this.drawType = type;
 
@@ -378,7 +368,6 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       const coordinates = geometry.getCoordinates();
       switch (this.drawType) {
         case 'Polygon':
-        case 'Square':
           this.mapRegionSelectionService.finishSelection({
             type: 'Polygon',
             coordinates: coordinates[0] as any,

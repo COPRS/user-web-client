@@ -2,8 +2,6 @@
   class="datagrid-compact"
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading | async"
-  [clrDgSelected]="selected"
-  (clrDgSelectedChange)="selectionChanged($event)"
 >
   <clr-dg-column class="icon-column"></clr-dg-column>
   <clr-dg-column class="name-column">Name</clr-dg-column>
@@ -11,10 +9,34 @@
   <clr-dg-column>Content date start</clr-dg-column>
   <clr-dg-column>Content date end</clr-dg-column>
 
-  <clr-dg-row *ngFor="let product of products" [clrDgItem]="product">
-    <clr-dg-cell class="icon-column less-padding-cell" title="Details">
-      <clr-icon shape="list" (click)="goToDetailsTab(product)"></clr-icon>
-      <clr-icon *ngIf="product.Footprint" shape="map-marker"></clr-icon>
+  <clr-dg-row
+    *ngFor="let product of products"
+    [clrDgItem]="product"
+    [style.background-color]="
+      highlightedProduct === product ? highlightedProductBackgroundColor : ''
+    "
+    (click)="rowClicked(product)"
+  >
+    <clr-dg-cell class="icon-column less-padding-cell">
+      <clr-icon
+        shape="list"
+        class="icon-column-icon-link"
+        (click)="goToDetailsTab(product)"
+        title="Open Product Details"
+      ></clr-icon>
+      <a
+        target="_blank"
+        class="icon-column-icon-link"
+        [href]="product | productDownloadUrl"
+        title="Download"
+      >
+        <clr-icon shape="download"></clr-icon>
+      </a>
+      <clr-icon
+        *ngIf="product.Footprint"
+        shape="map-marker"
+        title="Product has footprint"
+      ></clr-icon>
     </clr-dg-cell>
     <clr-dg-cell
       class="name-column less-padding-cell"
@@ -43,39 +65,3 @@
     ></clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
-
-<div class="clr-row">
-  <div class="clr-col">
-    <!-- Nothing selected Placeholder -->
-    <button
-      class="btn btn-outline btn-icon"
-      disabled="true"
-      [hidden]="
-        (downloadFileMeta4$ | async) !== undefined ||
-        (downloadFileLink$ | async) !== undefined
-      "
-    >
-      <clr-icon shape="archive"></clr-icon>
-      Download selected Product(s)
-    </button>
-    <!-- Multiple selected download button -->
-    <button
-      class="btn btn-outline btn-icon"
-      (click)="downloadMeta4File()"
-      [hidden]="(downloadFileMeta4$ | async) === undefined"
-    >
-      <clr-icon shape="archive"></clr-icon>
-      Download selected Products
-    </button>
-    <!-- Single selected download button -->
-    <a
-      target="_blank"
-      class="btn btn-outline btn-icon"
-      [href]="downloadFileLink$ | async"
-      [hidden]="(downloadFileLink$ | async) === undefined"
-    >
-      <clr-icon shape="archive"></clr-icon>
-      Download selected Product
-    </a>
-  </div>
-</div>

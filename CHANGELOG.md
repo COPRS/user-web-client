@@ -5,13 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2023-04-05
+
+### Added
+
+- N/A
+
+### Changed
+
+- Minor UI fixes suggested from feedbacks
+
+### Removed
+- N/A
+
+## [1.7.0] - 2022-12-15
+
+### Added
+
+- RS-521: ununderstandable "500 OK" error
+- RS-748: Switch default mapbackground
+
+### Changed
+
+- RS-718: Fix for footprints disappear on map while zooming
+
+### Removed
+
+- N/A
+
 ## [1.6.0] - 2022-11-28
 
 ### Added
 
-- 463: Display Quicklook in product description
-- 720: Possible invalid odata query
-- 713: Footprints disappear when zooming into the map
+- RS-463: Display Quicklook in product description
+- RS-720: Possible invalid odata query
+- RS-713: Footprints disappear when zooming into the map
 
 ### Changed
 
@@ -25,14 +53,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 632: Some researches disable the product selection
-- 303: empty testing mapbackground available
-- 606: Update factory env values
-- 663: Remove productionType from filter
-- 609: ProductType is not queryable by filter
-- 630: Get number of results in all views
-- 636: Improve the default view of results panel
-- 711: Product downloading is not working
+- RS-632: Some researches disable the product selection
+- RS-303: empty testing mapbackground available
+- RS-606: Update factory env values
+- RS-663: Remove productionType from filter
+- RS-609: ProductType is not queryable by filter
+- RS-630: Get number of results in all views
+- RS-636: Improve the default view of results panel
+- RS-711: Product downloading is not working
 
 ### Changed
 
@@ -50,8 +78,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 340: Footprints are not correctly displayed when crossing the dateline
-- 522: The error message comes out the dedicated box
+- RS-340: Footprints are not correctly displayed when crossing the dateline
+- RS-522: The error message comes out the dedicated box
 
 ### Changed
 
@@ -65,7 +93,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 435: Move UWC helm chart CI to UWC repository
+- RS-435: Move UWC helm chart CI to UWC repository
 
 ### Changed
 

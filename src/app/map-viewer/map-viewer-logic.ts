@@ -1,5 +1,5 @@
 import { Feature, Map } from 'ol';
-import { doubleClick, singleClick } from 'ol/events/condition';
+import { singleClick } from 'ol/events/condition';
 import { Select } from 'ol/interaction';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
@@ -12,82 +12,6 @@ import {
 import { ProductSelectionService } from '../services/product-selection.service';
 import { LayerType } from './map-viewer.component';
 import { MapViewerSelectionStylesService } from './services/map-viewer-selection-styles.service';
-
-export function configureMapSelect(
-  map: Map,
-  productSelectionService: ProductSelectionService,
-  mapViewerSelectionStylesService: MapViewerSelectionStylesService,
-  onDestroy: Subject<void>
-) {
-  function selectStyle(feature: Feature) {
-    mapViewerSelectionStylesService
-      .getSelectStyle(feature, productSelectionService)
-      .then((style) => feature.setStyle(style));
-  }
-
-  const select = new Select({
-    condition: singleClick,
-    style: selectStyle,
-  });
-
-  if (select !== null) {
-    map.removeInteraction(select);
-    map.addInteraction(select);
-
-    select.on('select', (e) => {
-      if (e.selected.length !== 0) {
-        e.selected.forEach((s) => {
-          const product = s.get('product');
-          if (product) {
-            productSelectionService.addSelectedProduct(product);
-          }
-        });
-      }
-      if (e.deselected.length !== 0) {
-        e.deselected.forEach((d) => {
-          const product = d.get('product');
-          if (product) {
-            productSelectionService.removeSelectedProduct(product);
-          }
-        });
-      }
-
-      if (e.selected.length === 0 && e.deselected.length === 0) {
-        productSelectionService.clearSelectedProducts();
-      }
-    });
-  }
-
-  productSelectionService
-    .getSelectedProducts()
-    .pipe(takeUntil(onDestroy))
-    .subscribe((selectedFeatures) => {
-      const features = map
-        .getLayers()
-        .getArray()
-        .filter((l) => {
-          if (l) {
-            const props = l.getProperties();
-            if (props.layerType === LayerType.Data) {
-              return true;
-            }
-          }
-          return false;
-        })
-        .map((l: VectorLayer<VectorSource>) =>
-          l
-            .getSource()
-            .getFeatures()
-            .filter((f) => {
-              const props = f.getProperties();
-              return selectedFeatures.some((s) => props?.product?.Id === s.Id);
-            })
-        );
-
-      select.getFeatures().clear();
-      features.forEach((f) => f.forEach((ff) => select.getFeatures().push(ff)));
-    });
-}
 
 export function configureMapHighlight(
   map: Map,
@@ -102,7 +26,7 @@ export function configureMapHighlight(
       .then((style) => feature.setStyle(style));
   }
   const select = new Select({
-    condition: doubleClick,
+    condition: singleClick,
     style: selectStyle,
   });
 

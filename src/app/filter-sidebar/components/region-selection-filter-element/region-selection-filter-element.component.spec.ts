@@ -8,9 +8,8 @@ describe('RegionSelectionFilterElementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegionSelectionFilterElementComponent ]
-    })
-    .compileComponents();
+      declarations: [RegionSelectionFilterElementComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

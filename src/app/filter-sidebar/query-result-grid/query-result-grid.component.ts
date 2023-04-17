@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
-import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { map, takeUntil } from 'rxjs/operators';
+import { ConfigService } from 'src/app/services/config.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import {
@@ -19,18 +19,18 @@ import { QueryResultService } from '../services/query-result.service';
 export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: DdipProduct[];
   total: number;
-  pageSize: number = 15;
+  pageSize: number = 9;
   loading: Observable<boolean>;
   public selected: DdipProduct[];
+  public highlightedProduct: DdipProduct;
+  public highlightedProductBackgroundColor: string;
   private readonly onDestroy = new Subject<void>();
-  downloadFileMeta4$: Observable<string>;
-  downloadFileLink$: Observable<string>;
 
   constructor(
     private queryResultService: QueryResultService,
     private productSelectionService: ProductSelectionService,
     private filterSidebarNavigationService: FilterSidebarNavigationService,
-    private ddipService: DdipService
+    private configService: ConfigService
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -38,6 +38,10 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.configService.getSettings().then((c) => {
+      this.highlightedProductBackgroundColor = c.mapView.highlightFillColor;
+    });
+
     this.queryResultService
       .getFilteredProducts()
       .pipe(takeUntil(this.onDestroy))
@@ -59,37 +63,16 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.downloadFileMeta4$ = this.productSelectionService
-      .getSelectedProducts()
-      .pipe(
-        map((p) =>
-          p.length > 1
-            ? this.ddipService.constructMetalinkDownloadfile(p)
-            : undefined
-        )
-      );
-    this.downloadFileLink$ = this.productSelectionService
-      .getSelectedProducts()
-      .pipe(
-        map((p) =>
-          p.length === 1
-            ? this.ddipService.constructDownloadUrl(p[0].Id)
-            : undefined
-        )
-      );
-  }
-
-  async downloadMeta4File() {
-    this.downloadFileMeta4$.pipe(take(1)).subscribe((data) => {
-      const c = document.createElement('a');
-      c.download = 'products.meta4';
-
-      var t = new Blob([data], {
-        type: 'text/plain',
+    this.productSelectionService
+      .getHighlightedProduct()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe(async (highlighted) => {
+        if (!highlighted) {
+          this.highlightedProduct = undefined;
+        } else {
+          this.highlightedProduct = highlighted;
+        }
       });
-      c.href = window.URL.createObjectURL(t);
-      c.click();
-    });
   }
 
   refresh(state: ClrDatagridStateInterface) {
@@ -101,13 +84,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     this.onDestroy.next();
   }
 
-  selectionChanged(selectedProducts: DdipProduct[]) {
-    this.productSelectionService.clearSelectedProducts();
-    selectedProducts?.forEach((p) =>
-      this.productSelectionService.addSelectedProduct(p)
-    );
-  }
-
   goToDetailsTab($event) {
     const selectedProduct = $event as DdipProduct;
     this.productSelectionService.setHighlightProduct(selectedProduct);
@@ -115,5 +91,9 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       SideBarSubNav.DETAILS
     );
     this.filterSidebarNavigationService.setShowNav(true);
+  }
+
+  rowClicked(product: DdipProduct) {
+    this.goToDetailsTab(product);
   }
 }

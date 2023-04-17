@@ -34,11 +34,8 @@
               }"
               (click)="onSubNavClick(SideBarSubNav.RESULTS)"
             >
-              <clr-icon shape="view-list"></clr-icon>
-              RESULTS
-              <span *ngIf="resultCount$ | async" class="badge badge-info">{{
-                resultCount$ | async
-              }}</span>
+              <clr-icon shape="view-list"></clr-icon>&nbsp;
+              <span class="badge badge-info">{{ resultCount$ | async }}</span>
               <clr-icon
                 *ngIf="(loadingStatus$ | async).loading"
                 shape="sync"
@@ -109,8 +106,8 @@
                   ></clr-icon>
                 </div>
                 <span class="alert-text alert-test-fix">
-                  {{ (loadingStatus$ | async)?.error?.statusText }}
-                  (Status: {{ (loadingStatus$ | async)?.error?.status }})
+                  Error while getting data from server (Status:
+                  {{ (loadingStatus$ | async)?.error?.status }})
                   <br />
                   {{ (loadingStatus$ | async)?.error?.message }}
                 </span>
@@ -141,7 +138,5 @@
   }}</span>
   &nbsp;
   <clr-icon shape="view-list"></clr-icon>
-  <span *ngIf="resultCount$ | async" class="badge badge-info">{{
-    resultCount$ | async
-  }}</span>
+  <span class="badge badge-info">{{ resultCount$ | async }}</span>
 </div>

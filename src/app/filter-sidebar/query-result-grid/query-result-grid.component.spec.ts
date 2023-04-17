@@ -18,6 +18,10 @@ class MockProductSelectionService {
   getSelectedProducts() {
     return new Observable();
   }
+
+  getHighlightedProduct() {
+    return new Observable();
+  }
 }
 
 describe('QueryResultGridComponent', () => {

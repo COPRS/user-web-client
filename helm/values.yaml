@@ -4,8 +4,10 @@
 
 env:
   apiUrl: http://coprs.werum.de/prip/odata/v1/Products
-  mapBackgrounds: | 
-    "[{\"name\":\"Terrain +\",\"layers\":[{\"url\":\"https://tiles.esa.maps.eox.at/wms\",\"layerName\":\"terrain_3857\"}]}]"
+  mapBackgrounds: |
+    "[{\"name\": \"OpenStreetMap background map\",\"layers\":[{\"url\":\"https://tiles.esa.maps.eox.at/wms\",\"layerName\":\"osm_3857\"}]},
+      {\"name\": \"Sentinel-2 cloudless 2018 background map\",\"layers\": [{\"url\": \"https://tiles.esa.maps.eox.at/wms\",\"layerName\": \"s2cloudless_3857\"}]},
+      {\"name\": \"Terrain background map\",\"layers\": [{\"url\": \"https://tiles.esa.maps.eox.at/wms\",\"layerName\": \"terrain_3857\"}]}]"
   baseHref: /uwc/
   keycloak: |
     "{\"url\":\"http://coprs.werum.de/auth\",\"realm\":\"master\",\"clientId\": \"user-web-client\"}"
@@ -18,10 +20,10 @@ image:
   # use image from COPRS repository
   registry: artifactory.coprs.esa-copernicus.eu
   repository: rs-docker
-  
+
   name: rs-user-web-client
   tag: develop
-  
+
   imagePullSecrets: spring-cloud-dataflow-registry-dockersecret
 
   # use image from local computer
