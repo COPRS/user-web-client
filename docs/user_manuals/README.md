@@ -33,7 +33,6 @@ When the UWC has been configured by an administrator, certain attribute name fil
 
 To only search in a specified region on the map. When being selected, the sidebar minimizes and allows to select a region as follows:
 - Point (one click to select point)
-- Square (select center, then move and choose size of square)
 - Line (select two points for a line)
 - Polygon (select multiple points, needs to be closed with a click on the first point)
 
