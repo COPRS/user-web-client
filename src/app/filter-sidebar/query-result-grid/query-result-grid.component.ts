@@ -19,7 +19,8 @@ import { QueryResultService } from '../services/query-result.service';
 export class QueryResultGridComponent implements OnInit, OnDestroy {
   products: DdipProduct[];
   total: number;
-  pageSize: number = 9;
+  pageSize: number = 100;
+  page: number = 1;
   loading: Observable<boolean>;
   public selected: DdipProduct[];
   public highlightedProduct: DdipProduct;

@@ -56,12 +56,17 @@
   </clr-dg-row>
 
   <clr-dg-footer>
-    {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
-    {{ total }} products
     <clr-dg-pagination
       #pagination
       [clrDgTotalItems]="total"
+      [clrDgPage]="page"
       [clrDgPageSize]="pageSize"
-    ></clr-dg-pagination>
+    >
+    {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
+    {{ total }} products
+    <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]"
+    >page size:</clr-dg-page-size
+    >
+    </clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>
