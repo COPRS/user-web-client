@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../../services/query-result.service';
@@ -20,7 +21,8 @@ export class ProductDetailsComponent {
 
   constructor(
     private productSelectionService: ProductSelectionService,
-    private queryResultService: QueryResultService
+    private queryResultService: QueryResultService,
+    private ddipService: DdipService
   ) {
     this.showSideNav$ = this.productSelectionService
       .getHighlightedProduct()
@@ -51,6 +53,15 @@ export class ProductDetailsComponent {
 
   selectNextProduct() {
     this.goToOffsetIntList(1);
+  }
+
+  downloadProduct() {
+    this.selectedProduct$.pipe(take(1)).subscribe((res) => {
+      if (res?.Id) {
+        let downloadUrl = this.ddipService.constructDownloadUrl(res.Id);
+        window.open(downloadUrl, '_blank');
+      }
+    });
   }
 
   goToOffsetIntList(offset: number) {

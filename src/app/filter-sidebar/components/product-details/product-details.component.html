@@ -1,6 +1,6 @@
 <div *ngIf="(selectedProduct$ | async) !== undefined">
   <div class="clr-row">
-    <div class="clr-col-6">
+    <div class="clr-col-4">
       <button
         class="btn btn-icon btn-sm"
         (click)="selectPreviousProduct()"
@@ -9,7 +9,15 @@
         <clr-icon shape="step-forward-2 down"></clr-icon> Previous
       </button>
     </div>
-    <div class="clr-col-6 align-right">
+    <div class="clr-col-4 align-right">
+      <button
+        class="btn btn-primary btn-icon btn-sm"
+        (click)="downloadProduct()"
+      >
+        <clr-icon shape="download"></clr-icon> Download
+      </button>
+    </div>
+    <div class="clr-col-4 align-right">
       <button
         class="btn btn-icon btn-sm"
         (click)="selectNextProduct()"
