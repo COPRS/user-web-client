@@ -71,7 +71,7 @@ export class FilterElementComponent implements OnInit {
     ) {
       this.value = Number.parseFloat(this.initFilter.value);
     } else if (filterType === 'size' && this.initFilter.value) {
-      const [, ...arr] = this.initFilter.value.match(/(\d*)([\s\S]*)/);
+      const [, ...arr] = this.initFilter.value.match(/([\d,\.]*)([\s\S]*)/);
       this.value = arr[0];
       this.sizeUnit = arr[1];
     } else {

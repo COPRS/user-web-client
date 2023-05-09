@@ -94,7 +94,7 @@ export class FilterElementsService {
           : undefined;
 
         if (valueType == 'size') {
-          const [, ...arr] = fe.value.match(/(\d*)([\s\S]*)/);
+          const [, ...arr] = fe.value.match(/([\d,\.]*)([\s\S]*)/);
           const numberValue = Number.parseFloat(arr[0]);
           const unitValue = SizeUnit[arr[1]];
 
