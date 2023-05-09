@@ -16,6 +16,7 @@
       highlightedProduct === product ? highlightedProductBackgroundColor : ''
     "
     (click)="rowClicked(product)"
+    (dblclick)="rowDoubleClicked(product)"
   >
     <clr-dg-cell class="icon-column less-padding-cell">
       <clr-icon
@@ -35,6 +36,8 @@
       <clr-icon
         *ngIf="product.Footprint"
         shape="map-marker"
+        class="icon-column-icon-link"
+        (click)="focusMapOnFootprint(product)"
         title="Product has footprint"
       ></clr-icon>
     </clr-dg-cell>

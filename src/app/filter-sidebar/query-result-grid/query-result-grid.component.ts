@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { MapViewerService } from 'src/app/map-viewer/services/map-viewer.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
@@ -10,6 +11,9 @@ import {
   SideBarSubNav,
 } from '../services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../services/query-result.service';
+import * as splitGeoJSON from 'geojson-antimeridian-cut';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
 
 @Component({
   selector: 'app-query-result-grid',
@@ -31,6 +35,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     private queryResultService: QueryResultService,
     private productSelectionService: ProductSelectionService,
     private filterSidebarNavigationService: FilterSidebarNavigationService,
+    private mapViewerService: MapViewerService,
     private configService: ConfigService
   ) {
     this.loading = this.queryResultService
@@ -94,7 +99,45 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     this.filterSidebarNavigationService.setShowNav(true);
   }
 
+  focusMapOnFootprint($event) {
+    const selectedProduct = $event as DdipProduct;
+
+    selectedProduct.Footprint = splitGeoJSON(selectedProduct.Footprint);
+
+    let source = new VectorSource({
+      features: new GeoJSON().readFeatures(
+        {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn:ogc:def:crs:EPSG::4326',
+            },
+          },
+
+          features: [
+            {
+              type: 'Feature',
+              properties: { selectedProduct },
+              geometry: selectedProduct.Footprint,
+            },
+          ],
+        },
+        {
+          featureProjection: 'EPSG:3857',
+        }
+      ),
+    });
+    this.mapViewerService.setZoomToExtent(source.getExtent());
+    this.productSelectionService.setHighlightProduct(selectedProduct);
+    this.filterSidebarNavigationService.setShowNav(false);
+  }
+
   rowClicked(product: DdipProduct) {
+    this.productSelectionService.setHighlightProduct(product);
+  }
+
+  rowDoubleClicked(product: DdipProduct) {
     this.goToDetailsTab(product);
   }
 }

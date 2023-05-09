@@ -12,7 +12,7 @@ import Geometry from 'ol/geom/Geometry';
 import LineString from 'ol/geom/LineString';
 import Point from 'ol/geom/Point';
 import Polygon from 'ol/geom/Polygon';
-import { DoubleClickZoom, Draw } from 'ol/interaction';
+import { DoubleClickZoom, Draw, Extent } from 'ol/interaction';
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer';
 import Map from 'ol/Map';
 import { transformExtent } from 'ol/proj';
@@ -20,7 +20,7 @@ import VectorSource from 'ol/source/Vector';
 import Style from 'ol/style/Style';
 import View from 'ol/View';
 import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, take, takeUntil } from 'rxjs/operators';
 import { FilterSidebarNavigationService } from '../filter-sidebar/services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../filter-sidebar/services/query-result.service';
 import { ProductSelectionService } from '../services/product-selection.service';
@@ -36,6 +36,8 @@ import {
 } from './services/map-switcher.service';
 import { MapViewerSelectionStylesService } from './services/map-viewer-selection-styles.service';
 import * as splitGeoJSON from 'geojson-antimeridian-cut';
+import { MapViewerService } from './services/map-viewer.service';
+import { SimpleGeometry } from 'ol/geom';
 
 const SOURCE_PROJECTION = 'EPSG:4326';
 const DESTINATION_PROJECTION = 'EPSG:3857';
@@ -60,7 +62,8 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     private queryResultService: QueryResultService,
     private mapRegionSelectionService: MapRegionSelectionService,
     private mapViewerSelectionStylesService: MapViewerSelectionStylesService,
-    private filterSidebarNavigationService: FilterSidebarNavigationService
+    private filterSidebarNavigationService: FilterSidebarNavigationService,
+    private mapViewerService: MapViewerService
   ) {}
   async ngAfterViewInit() {
     this.map.setTarget(this.elementRef.nativeElement);
@@ -236,6 +239,15 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     // CREATE DRAW BOX - END
 
+    // ZOOM TO FOOTPRINT - START
+    this.mapViewerService
+      .getZoomToExtent()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((extent) => {
+        this.zoomToExtent(extent);
+      });
+    // ZOOM TO FOOTPRINT - END
+
     // LOAD DATA FROM DDIP-API - START
     this.queryResultService
       .getFilteredProducts()
@@ -398,6 +410,20 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       delete this.draw;
       delete this.drawType;
     }
+  }
+
+  private zoomToExtent(extent) {
+    const mapSize = this.map.getSize();
+    const paddings = [
+      mapSize[1] / 10,
+      mapSize[0] / 10,
+      mapSize[1] / 10,
+      mapSize[0] / 10,
+    ];
+
+    console.log(paddings);
+
+    this.map.getView().fit(extent, { padding: paddings });
   }
 
   ngOnDestroy() {
