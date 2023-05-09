@@ -38,6 +38,7 @@ export class FilterElementsService {
   public getQuery(): Observable<string> {
     const filterElements = this.filterElements$.pipe(
       map((e) => this.mapSensingDateToContentDate(e)),
+      map((e) => this.mapSizeUnitToActualSize(e)),
       map((e) => this.convertFilterElementToOdataFilter(e))
     );
 
@@ -81,6 +82,38 @@ export class FilterElementsService {
       return filterElements;
     }
   }
+
+  private mapSizeUnitToActualSize(filterElements: FilterElement[] | string) {
+    if (Array.isArray(filterElements)) {
+      return filterElements.flatMap((fe) => {
+        const fieldFilterType = this.configService.settings.filterConfig?.find(
+          (f) => f.attributeName === fe.attributeName
+        );
+        const valueType = fieldFilterType
+          ? fieldFilterType.valueType
+          : undefined;
+
+        if (valueType == 'size') {
+          const [, ...arr] = fe.value.match(/(\d*)([\s\S]*)/);
+          const numberValue = Number.parseFloat(arr[0]);
+          const unitValue = SizeUnit[arr[1]];
+
+          return [
+            {
+              attributeName: fe.attributeName,
+              operator: fe.operator,
+              value: numberValue * unitValue + '',
+            },
+          ];
+        } else {
+          return [fe];
+        }
+      });
+    } else {
+      return filterElements;
+    }
+  }
+
   private convertFilterElementToOdataFilter(
     filterElements: FilterElement[] | string
   ): string {
@@ -175,4 +208,11 @@ export function addDays(date: Date, days: number) {
   const d = new Date(date.valueOf());
   d.setDate(d.getDate() + days);
   return d;
+}
+
+export enum SizeUnit {
+  B = 1,
+  KB = 1000,
+  MB = 1000000,
+  GB = 1000000000,
 }

@@ -36,4 +36,5 @@ export type IAppFilterConfigValueType =
   | 'date'
   | 'double'
   | 'long'
-  | 'boolean';
+  | 'boolean'
+  | 'size';
