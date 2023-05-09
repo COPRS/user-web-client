@@ -14,7 +14,7 @@ env:
   mapView: |
     "{\"regionSelectionFillColor\":\"rgba(255,155,51,0.3)\",\"regionSelectionStrokeColor\":\"rgba(255,155,51,0.6)\",\"selectionFillColor\":\"rgba(0, 114, 163, 0.3)\",\"selectionStrokeColor\":\"rgba(0, 114, 163, 0.6)\",\"highlightFillColor\":\"rgba(50, 211, 63, 0.3)\",\"highlightStrokeColor\":\"rgba(50, 211, 63, 0.8)\"}"
   filterConfig: |
-    "[{\"attributeName\":\"PublicationDate\",\"valueType\":\"date\"},{\"attributeName\":\"EvictionDate\",\"valueType\":\"date\"},{\"attributeName\":\"ContentDate/Start\",\"valueType\":\"date\"},{\"attributeName\":\"ContentDate/End\",\"valueType\":\"date\"},{\"attributeName\":\"ContentLength\",\"valueType\":\"double\"},{\"attributeName\":\"Name\",\"valueType\":\"string\"},{\"attributeName\":\"ProductType\",\"valueType\":\"string\"}]"
+    "[{\"attributeName\":\"PublicationDate\",\"valueType\":\"date\"},{\"attributeName\":\"EvictionDate\",\"valueType\":\"date\"},{\"attributeName\":\"ContentDate/Start\",\"valueType\":\"date\"},{\"attributeName\":\"ContentDate/End\",\"valueType\":\"date\"},{\"attributeName\":\"ContentLength\",\"valueType\":\"size\"},{\"attributeName\":\"Name\",\"valueType\":\"string\"},{\"attributeName\":\"ProductType\",\"valueType\":\"string\"}]"
 image:
   # Overrides the image tag whose default is the chart appVersion.
   # use image from COPRS repository
