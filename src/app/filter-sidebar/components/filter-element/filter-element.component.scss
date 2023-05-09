@@ -1,3 +1,13 @@
 :host ::ng-deep .clr-control-container {
   width: inherit;
 }
+
+:host ::ng-deep .clr-combobox-wrapper {
+  width: 100%;
+  display: inline-block;
+  min-width: 0;
+}
+
+:host ::ng-deep .clr-input {
+  width: 100%;
+}

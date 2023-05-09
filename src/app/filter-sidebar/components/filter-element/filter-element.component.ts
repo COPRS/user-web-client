@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ComboboxModel } from '@clr/angular/forms/combobox/model/combobox.model';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppFilterConfigValueType } from 'src/app/services/models/IAppConfig';
 import { FilterElement } from '../../models/FilterElement';
@@ -82,11 +83,18 @@ export class FilterElementComponent implements OnInit {
     this.onChange();
   }
 
-  onAttributeNameChange() {
+  onAttributeNameChange(event: ComboboxModel<any>) {
+    this.attributeName = event.model;
+
     delete this.dateValue;
     delete this.value;
     delete this.operator;
     delete this.operatorSuggestions;
+    this.onChange();
+  }
+
+  onOperatorChange(event: ComboboxModel<any>) {
+    this.operator = event.model;
     this.onChange();
   }
 

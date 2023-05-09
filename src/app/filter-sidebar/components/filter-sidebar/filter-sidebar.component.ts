@@ -80,7 +80,7 @@ export class FilterSidebarComponent implements OnInit, OnDestroy {
       this.duration + 's, visibility ' + this.duration + 's';
     navBarStyle.width = this.navWidth + 'vw';
     navBarStyle.left = (showNav ? 0 : this.navWidth * -1) + 'vw';
-    navBarStyle.minWidth = '450px';
+    navBarStyle.minWidth = '500px';
 
     return navBarStyle;
   }
