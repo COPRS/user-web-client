@@ -130,7 +130,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     });
     this.mapViewerService.setZoomToExtent(source.getExtent());
     this.productSelectionService.setHighlightProduct(selectedProduct);
-    this.filterSidebarNavigationService.setShowNav(false);
   }
 
   rowClicked(product: DdipProduct) {

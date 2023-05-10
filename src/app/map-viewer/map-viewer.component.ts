@@ -417,14 +417,15 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private zoomToExtent(extent) {
     const mapSize = this.map.getSize();
+    const filterBarWidth =
+      document.getElementById('side-nav-bar-menu').offsetWidth;
+
     const paddings = [
       mapSize[1] / 10,
       mapSize[0] / 10,
       mapSize[1] / 10,
-      mapSize[0] / 10,
+      mapSize[0] / 10 + filterBarWidth,
     ];
-
-    console.log(paddings);
 
     this.map.getView().fit(extent, { padding: paddings });
   }
