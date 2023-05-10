@@ -15,7 +15,6 @@ export class LoginStatusService {
   }
 
   getIsLoggedIn(): Observable<boolean> {
-    //return this.isLoggedIn$.pipe(distinctUntilChanged());
-    return of(true);
+    return this.isLoggedIn$.pipe(distinctUntilChanged());
   }
 }
