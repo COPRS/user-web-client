@@ -11,6 +11,11 @@ class MockQueryResultService {
   getIsLoading() {
     return from([{ loading: false }]);
   }
+
+  getPagination() {
+    return from([{ page: 1, pageSize: 100 }]);
+  }
+
   setPagination() {}
 }
 
