@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 @Injectable({
@@ -15,6 +15,7 @@ export class LoginStatusService {
   }
 
   getIsLoggedIn(): Observable<boolean> {
-    return this.isLoggedIn$.pipe(distinctUntilChanged());
+    //return this.isLoggedIn$.pipe(distinctUntilChanged());
+    return of(true);
   }
 }

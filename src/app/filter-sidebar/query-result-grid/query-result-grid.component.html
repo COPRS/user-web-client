@@ -1,13 +1,13 @@
 <clr-datagrid
-  class="datagrid-compact"
+  class="datagrid-compact limit-size"
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading | async"
 >
   <clr-dg-column class="icon-column"></clr-dg-column>
   <clr-dg-column class="name-column">Name</clr-dg-column>
   <clr-dg-column class="size-column">Size</clr-dg-column>
-  <clr-dg-column>Content date start</clr-dg-column>
-  <clr-dg-column>Content date end</clr-dg-column>
+  <clr-dg-column class="date-column">Content date start</clr-dg-column>
+  <clr-dg-column class="date-column">Content date end</clr-dg-column>
 
   <clr-dg-row
     *ngFor="let product of products"
@@ -38,7 +38,7 @@
         shape="map-marker"
         class="icon-column-icon-link"
         (click)="focusMapOnFootprint(product)"
-        title="Product has footprint"
+        title="Show footprint"
       ></clr-icon>
     </clr-dg-cell>
     <clr-dg-cell

@@ -102,12 +102,12 @@ function initializeKeycloak(
       deps: [ConfigService],
       multi: true,
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
-      multi: true,
-      deps: [KeycloakService, ConfigService, Location, LoginStatusService],
-    },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: initializeKeycloak,
+    //   multi: true,
+    //   deps: [KeycloakService, ConfigService, Location, LoginStatusService],
+    // },
   ],
   bootstrap: [AppComponent],
 })

@@ -17,7 +17,19 @@
 }
 
 .name-column {
-  width: 150px;
-  max-width: 30%;
+  max-width: 45%;
   overflow-wrap: break-word;
+}
+
+.date-column {
+  width: 100px;
+}
+
+.limit-size {
+  height: 100%;
+  width: 100%
+}
+
+:host ::ng-deep .datagrid-table, :host ::ng-deep .datagrid-table-wrapper, :host ::ng-deep .datagrid-row-scrollable {
+  width: 100%;
 }
