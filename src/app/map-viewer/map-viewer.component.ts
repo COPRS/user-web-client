@@ -49,7 +49,9 @@ const DESTINATION_PROJECTION = 'EPSG:3857';
 })
 export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   private map: Map;
-  private bounds = [-180, -89, 180, 89];
+  //private bounds = [-180, -89, 180, 89];
+  private bounds = [-180, -84, 180, 84];
+
   private readonly onDestroy = new Subject<void>();
   private source = new VectorSource();
   private draw: Draw;
@@ -191,13 +193,14 @@ export class MapViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map = new Map({
       view: new View({
         center: [0, 0],
-        zoom: 1.8,
+        zoom: 3,
+        minZoom: 3,
+        maxZoom: 13,
         extent: transformExtent(
           this.bounds,
           SOURCE_PROJECTION,
           DESTINATION_PROJECTION
         ),
-        constrainOnlyCenter: true,
       }),
     });
 
