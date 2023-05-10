@@ -5,6 +5,7 @@ import {
   distinctUntilChanged,
   distinctUntilKeyChanged,
   mergeMap,
+  take,
 } from 'rxjs/operators';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import {
@@ -19,7 +20,8 @@ import { FilterElementsService } from './filter-elements.service';
 })
 export class QueryResultService {
   private pagination$ = new BehaviorSubject<PaginationConfig>({
-    top: 10,
+    pageSize: 100,
+    page: 1,
   });
   private isLoading$ = new BehaviorSubject<LoadingStatus>({ loading: false });
   private currentPageSubject$ = new BehaviorSubject<{
@@ -32,7 +34,9 @@ export class QueryResultService {
   ]).pipe(
     distinctUntilChanged(
       (x, y) =>
-        x[0] === y[0] && x[1].top === y[1].top && x[1].skip === y[1].skip
+        x[0] === y[0] &&
+        x[1].pageSize === y[1].pageSize &&
+        x[1].page === y[1].page
     ),
     debounceTime(10),
     mergeMap(async (c) => {
@@ -79,16 +83,20 @@ export class QueryResultService {
     return this.isLoading$.asObservable();
   }
 
-  public setPagination(top: number, skip?: number) {
-    if (skip) {
-      this.pagination$.next({ skip, top });
+  public setPagination(pageSize: number, page?: number) {
+    if (page) {
+      this.pagination$.next({ page, pageSize });
     } else {
-      this.pagination$.next({ top });
+      this.pagination$.next({ pageSize });
     }
+  }
+
+  public getPagination() {
+    return this.pagination$.pipe(take(1));
   }
 }
 
-export type PaginationConfig = { skip?: number; top: number };
+export type PaginationConfig = { page?: number; pageSize: number };
 
 export type LoadingStatus = {
   loading: boolean;

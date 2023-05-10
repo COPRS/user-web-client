@@ -26,11 +26,11 @@ export class DdipService {
       $format: 'json',
       $count: true,
     } as OdataQuery;
-    if (pageConfig.skip) {
-      query.$skip = pageConfig.skip;
+    if (pageConfig.page) {
+      query.$skip = (pageConfig.page - 1) * pageConfig.pageSize;
     }
-    if (pageConfig.top) {
-      query.$top = pageConfig.top;
+    if (pageConfig.pageSize) {
+      query.$top = pageConfig.pageSize;
     }
     if (filter) {
       query.$filter = filter;

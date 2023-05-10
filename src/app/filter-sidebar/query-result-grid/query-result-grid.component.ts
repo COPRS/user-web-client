@@ -30,6 +30,7 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   public highlightedProduct: DdipProduct;
   public highlightedProductBackgroundColor: string;
   private readonly onDestroy = new Subject<void>();
+  initializationFinished: boolean = false;
 
   constructor(
     private queryResultService: QueryResultService,
@@ -46,6 +47,15 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.configService.getSettings().then((c) => {
       this.highlightedProductBackgroundColor = c.mapView.highlightFillColor;
+    });
+
+    this.queryResultService.getPagination().subscribe((initialPagination) => {
+      this.page = initialPagination.page;
+      this.pageSize = initialPagination.pageSize;
+      // If we don't use a timeout here, the page gets overwritten as the browser is to fast
+      setTimeout(() => {
+        this.initializationFinished = true;
+      }, 100);
     });
 
     this.queryResultService
@@ -82,8 +92,14 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   }
 
   refresh(state: ClrDatagridStateInterface) {
-    const skip = state.page.from > 0 ? state.page.from : undefined;
-    this.queryResultService.setPagination(state.page.size, skip);
+    if (this.initializationFinished) {
+      console.log(state.page.current, state.page.size);
+
+      this.queryResultService.setPagination(
+        state.page.size,
+        state.page.current
+      );
+    }
   }
 
   ngOnDestroy() {
