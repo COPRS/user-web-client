@@ -6,7 +6,6 @@ import { PaginationConfig } from '../../filter-sidebar/services/query-result.ser
 import { ConfigService } from '../config.service';
 import {
   DdipProduct,
-  DdipProductChecksum,
   DdipProductRawFromPrip,
   DdipProductResponse,
 } from '../models/DdipProductResponse';
@@ -97,6 +96,13 @@ export class DdipService {
         Quicklooks: e.Quicklooks.map((q) =>
           this.constructQuicklookUrl(e.Id, q.Image)
         ),
+        ExtendedAttributes: [
+          ...e.BooleanAttributes,
+          ...e.DateTimeOffsetAttributes,
+          ...e.DoubleAttributes,
+          ...e.IntegerAttributes,
+          ...e.StringAttributes,
+        ],
       };
     });
   }

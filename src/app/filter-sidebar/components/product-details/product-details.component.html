@@ -95,6 +95,10 @@
         <li class="value">
           {{ (selectedProduct$ | async)?.ContentDate.End }}
         </li>
+        <ng-container *ngFor="let additionalAttribute of additionalAttributes">
+          <li class="name">{{ additionalAttribute.label }}:</li>
+          <li class="value">{{ additionalAttribute.value }}</li>
+        </ng-container>
       </ul>
     </div>
   </div>

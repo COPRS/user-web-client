@@ -32,6 +32,7 @@ const EXAMPLE_PRODUCT: DdipProduct = {
     type: 'Polygon',
   } as any,
   Quicklooks: [],
+  ExtendedAttributes: [],
 };
 
 const EXAMPLE_PRODUCT_CLONE: DdipProduct = JSON.parse(

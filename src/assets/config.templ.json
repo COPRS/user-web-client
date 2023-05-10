@@ -3,5 +3,6 @@
   "mapBackgrounds": ${MAP_BACKGROUNDS},
   "keycloak": ${KEYCLOAK},
   "mapView": ${MAP_VIEW},
-  "filterConfig": ${FILTER_CONFIG}
+  "filterConfig": ${FILTER_CONFIG},
+  "additionalAttributes": ${ADDITIONAL_ATTRIBUTES}
 }

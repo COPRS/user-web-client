@@ -3,7 +3,6 @@ import { ConfigService } from '../config.service';
 import { DdipService } from './ddip.service';
 import { IAppConfig } from '../models/IAppConfig';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 
 class MockConfigService {
   settings: IAppConfig = {
@@ -29,6 +28,7 @@ class MockConfigService {
       highlightFillColor: '',
     },
     filterConfig: [],
+    additionalAttributes: [],
   };
 }
 
