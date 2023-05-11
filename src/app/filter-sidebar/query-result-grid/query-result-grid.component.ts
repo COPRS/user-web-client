@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -20,7 +20,9 @@ import GeoJSON from 'ol/format/GeoJSON';
   templateUrl: './query-result-grid.component.html',
   styleUrls: ['./query-result-grid.component.scss'],
 })
-export class QueryResultGridComponent implements OnInit, OnDestroy {
+export class QueryResultGridComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   products: DdipProduct[];
   total: number;
   pageSize: number = 100;
@@ -47,15 +49,6 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.configService.getSettings().then((c) => {
       this.highlightedProductBackgroundColor = c.mapView.highlightFillColor;
-    });
-
-    this.queryResultService.getPagination().subscribe((initialPagination) => {
-      this.page = initialPagination.page;
-      this.pageSize = initialPagination.pageSize;
-      // If we don't use a timeout here, the page gets overwritten as the browser is to fast
-      setTimeout(() => {
-        this.initializationFinished = true;
-      }, 100);
     });
 
     this.queryResultService
@@ -91,10 +84,16 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngAfterViewInit(): void {
+    this.queryResultService.getPagination().subscribe((initialPagination) => {
+      this.page = initialPagination.page;
+      this.pageSize = initialPagination.pageSize;
+      this.initializationFinished = true;
+    });
+  }
+
   refresh(state: ClrDatagridStateInterface) {
     if (this.initializationFinished) {
-      console.log(state.page.current, state.page.size);
-
       this.queryResultService.setPagination(
         state.page.size,
         state.page.current
