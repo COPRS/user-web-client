@@ -35,6 +35,8 @@ spec:
               value: {{ .Values.env.mapView }}
             - name: FILTER_CONFIG
               value: {{ .Values.env.filterConfig }}
+            - name: ADDITIONAL_ATTRIBUTES
+              value: {{ .Values.env.additionalAttributes }}
           ports:
             - name: http
               containerPort: 80
