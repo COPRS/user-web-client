@@ -52,7 +52,7 @@ export class DdipService {
   constructURL(query: OdataQuery): string {
     let queryString: string[] = [];
     Object.keys(query).forEach((p) => {
-      queryString.push(`${p}=${query[p].toString().toLowerCase()}`);
+      queryString.push(`${p}=${query[p]}`);
     });
     return (
       this.config.settings.apiUrl +
