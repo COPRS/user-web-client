@@ -38,7 +38,7 @@
         <img
           [hidden]="quicklookImageLoadError"
           class="quicklookimage"
-          [src]="(selectedProduct$ | async).Quicklooks[0]"
+          [attr.src]="((selectedProduct$ | async).Quicklooks[0]) | secure | async"
           (error)="onQuicklookImageError()"
           alt=""
         />

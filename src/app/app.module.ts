@@ -25,6 +25,7 @@ import {
 import { Location } from '@angular/common';
 import { LoginStatusService } from './services/login-status.service';
 import { ProductDownloadUrlPipe } from 'src/app/filter-sidebar/query-result-grid/product-download-url.pipe';
+import { SecurePipe } from './shared/pipes/secure.pipe';
 
 export function initializeApp(configService: ConfigService) {
   return () => configService.load();
@@ -82,6 +83,7 @@ function initializeKeycloak(
     QueryResultGridComponent,
     FileSizePipe,
     LimitToPipe,
+    SecurePipe,
     ProductDownloadUrlPipe,
     RegionSelectionFilterElementComponent,
   ],
