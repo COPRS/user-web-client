@@ -14,6 +14,9 @@ import { QueryResultService } from '../services/query-result.service';
 import * as splitGeoJSON from 'geojson-antimeridian-cut';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-query-result-grid',
@@ -39,7 +42,9 @@ export class QueryResultGridComponent
     private productSelectionService: ProductSelectionService,
     private filterSidebarNavigationService: FilterSidebarNavigationService,
     private mapViewerService: MapViewerService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private ddipService: DdipService,
+    private http: HttpClient
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -145,6 +150,12 @@ export class QueryResultGridComponent
     });
     this.mapViewerService.setZoomToExtent(source.getExtent());
     this.productSelectionService.setHighlightProduct(selectedProduct);
+  }
+
+  downloadProduct(product: DdipProduct) {
+    const downloadUrl = this.ddipService.constructDownloadUrl(product.Id);
+
+    return this.http.get(downloadUrl, { responseType: 'blob' }).subscribe();
   }
 
   rowClicked(product: DdipProduct) {

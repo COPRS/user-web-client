@@ -25,13 +25,11 @@
         (click)="goToDetailsTab(product)"
         title="Open Product Details"
       ></clr-icon>
-      <a
+      <clr-icon shape="download"
         class="icon-column-icon-link"
-        [href]="product | productDownloadUrl"
-        title="Download"
-      >
-        <clr-icon shape="download"></clr-icon>
-      </a>
+        (click)="downloadProduct(product)"
+        title="Go to footprint"
+      ></clr-icon>
       <clr-icon
         *ngIf="product.Footprint"
         shape="map-marker"
