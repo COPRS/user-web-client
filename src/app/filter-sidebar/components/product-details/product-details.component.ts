@@ -6,6 +6,7 @@ import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../../services/query-result.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-product-details',
@@ -30,7 +31,8 @@ export class ProductDetailsComponent implements OnDestroy {
     private productSelectionService: ProductSelectionService,
     private queryResultService: QueryResultService,
     private ddipService: DdipService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private http: HttpClient
   ) {
     this.showSideNav$ = this.productSelectionService
       .getHighlightedProduct()
@@ -73,7 +75,7 @@ export class ProductDetailsComponent implements OnDestroy {
     this.selectedProduct$.pipe(take(1)).subscribe((res) => {
       if (res?.Id) {
         let downloadUrl = this.ddipService.constructDownloadUrl(res.Id);
-        window.open(downloadUrl, '_blank');
+        this.http.get(downloadUrl, { responseType: 'blob' }).subscribe();
       }
     });
   }
