@@ -8,6 +8,7 @@ import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { ProductDetailsComponent } from './product-details.component';
+import { HttpClient } from '@angular/common/http';
 
 class MockConfigService {
   settings: IAppConfig = {
@@ -43,6 +44,8 @@ class MockDdipService {
     return '';
   }
 }
+
+class MockHttp {}
 
 class MockFilterElementsService {
   public getQuery() {}
@@ -83,6 +86,10 @@ describe('ProductDetailsSidebarComponent', () => {
         {
           provide: ConfigService,
           useClass: MockConfigService,
+        },
+        {
+          provide: HttpClient,
+          useClass: MockHttp,
         },
       ],
     }).compileComponents();
