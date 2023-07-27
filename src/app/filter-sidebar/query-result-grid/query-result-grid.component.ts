@@ -16,7 +16,7 @@ import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { HttpClient } from '@angular/common/http';
-import { DomSanitizer } from '@angular/platform-browser';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-query-result-grid',
@@ -155,7 +155,11 @@ export class QueryResultGridComponent
   downloadProduct(product: DdipProduct) {
     const downloadUrl = this.ddipService.constructDownloadUrl(product.Id);
 
-    return this.http.get(downloadUrl, { responseType: 'blob' }).subscribe();
+    return this.http
+      .get(downloadUrl, { responseType: 'blob' })
+      .subscribe((response) => {
+        saveAs(response, product.Name);
+      });
   }
 
   rowClicked(product: DdipProduct) {

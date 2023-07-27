@@ -7,6 +7,7 @@ import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../../services/query-result.service';
 import { HttpClient } from '@angular/common/http';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-product-details',
@@ -75,7 +76,11 @@ export class ProductDetailsComponent implements OnDestroy {
     this.selectedProduct$.pipe(take(1)).subscribe((res) => {
       if (res?.Id) {
         let downloadUrl = this.ddipService.constructDownloadUrl(res.Id);
-        this.http.get(downloadUrl, { responseType: 'blob' }).subscribe();
+        this.http
+          .get(downloadUrl, { responseType: 'blob' })
+          .subscribe((response) => {
+            saveAs(response, res.Name);
+          });
       }
     });
   }
