@@ -27,6 +27,7 @@ class MockConfigService {
       highlightFillColor: '',
     },
     filterConfig: [],
+    additionalAttributes: [],
   };
 }
 

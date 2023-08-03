@@ -4,6 +4,7 @@
 >
   <!-- side bar-->
   <div
+    id="side-nav-bar-menu"
     class="side-nav-bar-menu-container"
     [ngStyle]="getSideNavBarStyle(showSideNav$ | async)"
   >
@@ -67,7 +68,7 @@
     <!-- side bar content -->
     <div class="side-nav-bar-content-container">
       <hr />
-      <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.FILTERS">
+      <div class="side-nav-bar-content" *ngIf="(selectedSubNav$ | async) === SideBarSubNav.FILTERS">
         <div class="side-nav-bar-content-element">
           <app-filter-element-list></app-filter-element-list>
         </div>
@@ -90,8 +91,8 @@
           </clr-textarea-container>
         </div>
       </div>
-      <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.RESULTS">
-        <div class="side-nav-bar-content-element">
+      <div class="side-nav-bar-content" *ngIf="(selectedSubNav$ | async) === SideBarSubNav.RESULTS">
+        <div class="side-nav-bar-content-element height-fix">
           <div
             class="alert alert-danger"
             role="alert"
@@ -117,7 +118,7 @@
           <app-query-result-grid></app-query-result-grid>
         </div>
       </div>
-      <div *ngIf="(selectedSubNav$ | async) === SideBarSubNav.DETAILS">
+      <div class="side-nav-bar-content" *ngIf="(selectedSubNav$ | async) === SideBarSubNav.DETAILS">
         <div class="side-nav-bar-content-element">
           <app-product-details></app-product-details>
         </div>

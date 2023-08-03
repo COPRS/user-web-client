@@ -1,6 +1,6 @@
 <div *ngIf="(selectedProduct$ | async) !== undefined">
   <div class="clr-row">
-    <div class="clr-col-6">
+    <div class="clr-col-4">
       <button
         class="btn btn-icon btn-sm"
         (click)="selectPreviousProduct()"
@@ -9,7 +9,15 @@
         <clr-icon shape="step-forward-2 down"></clr-icon> Previous
       </button>
     </div>
-    <div class="clr-col-6 align-right">
+    <div class="clr-col-4 align-right">
+      <button
+        class="btn btn-primary btn-icon btn-sm"
+        (click)="downloadProduct()"
+      >
+        <clr-icon shape="download"></clr-icon> Download
+      </button>
+    </div>
+    <div class="clr-col-4 align-right">
       <button
         class="btn btn-icon btn-sm"
         (click)="selectNextProduct()"
@@ -30,7 +38,7 @@
         <img
           [hidden]="quicklookImageLoadError"
           class="quicklookimage"
-          [src]="(selectedProduct$ | async).Quicklooks[0]"
+          [attr.src]="((selectedProduct$ | async).Quicklooks[0]) | secure | async"
           (error)="onQuicklookImageError()"
           alt=""
         />
@@ -87,6 +95,10 @@
         <li class="value">
           {{ (selectedProduct$ | async)?.ContentDate.End }}
         </li>
+        <ng-container *ngFor="let additionalAttribute of additionalAttributes">
+          <li class="name">{{ additionalAttribute.label }}:</li>
+          <li class="value">{{ additionalAttribute.value }}</li>
+        </ng-container>
       </ul>
     </div>
   </div>

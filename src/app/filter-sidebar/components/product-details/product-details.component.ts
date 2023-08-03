@@ -1,26 +1,39 @@
-import { Component } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { map, take, takeUntil } from 'rxjs/operators';
+import { ConfigService } from 'src/app/services/config.service';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { QueryResultService } from '../../services/query-result.service';
+import { HttpClient } from '@angular/common/http';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss'],
 })
-export class ProductDetailsComponent {
+export class ProductDetailsComponent implements OnDestroy {
   showSideNav$: Observable<boolean>;
   selectedProduct$: Observable<DdipProduct>;
   selectedProductPageIndex$: Observable<
     { idx: number; totalLength: number } | undefined
   >;
+  additionalAttributes: {
+    label: string;
+    value: string;
+  }[] = [];
   quicklookImageLoadError = false;
+
+  private readonly onDestroy = new Subject<void>();
 
   constructor(
     private productSelectionService: ProductSelectionService,
-    private queryResultService: QueryResultService
+    private queryResultService: QueryResultService,
+    private ddipService: DdipService,
+    private configService: ConfigService,
+    private http: HttpClient
   ) {
     this.showSideNav$ = this.productSelectionService
       .getHighlightedProduct()
@@ -43,6 +56,12 @@ export class ProductDetailsComponent {
         }
       })
     );
+
+    this.selectedProduct$
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((product) => {
+        this.fillAdditionalAttributes(product);
+      });
   }
 
   selectPreviousProduct() {
@@ -51,6 +70,19 @@ export class ProductDetailsComponent {
 
   selectNextProduct() {
     this.goToOffsetIntList(1);
+  }
+
+  downloadProduct() {
+    this.selectedProduct$.pipe(take(1)).subscribe((res) => {
+      if (res?.Id) {
+        let downloadUrl = this.ddipService.constructDownloadUrl(res.Id);
+        this.http
+          .get(downloadUrl, { responseType: 'blob' })
+          .subscribe((response) => {
+            saveAs(response, res.Name);
+          });
+      }
+    });
   }
 
   goToOffsetIntList(offset: number) {
@@ -78,6 +110,30 @@ export class ProductDetailsComponent {
 
   onQuicklookImageError() {
     this.quicklookImageLoadError = true;
+  }
+
+  ngOnDestroy() {
+    this.onDestroy.next();
+  }
+
+  private fillAdditionalAttributes(product: DdipProduct) {
+    // Reset list
+    this.additionalAttributes = [];
+
+    // Fill list with each configured attribute, if present on product
+    this.configService.settings.additionalAttributes.forEach(
+      (configAttribute) => {
+        const index = product.ExtendedAttributes.findIndex(
+          (attribute) => attribute.Name == configAttribute.value
+        );
+        if (index !== -1) {
+          this.additionalAttributes.push({
+            label: configAttribute.label,
+            value: product.ExtendedAttributes[index].Value + '',
+          });
+        }
+      }
+    );
   }
 
   rootDirectory: any[] = [

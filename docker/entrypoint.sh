@@ -47,7 +47,15 @@ else
     echo "FILTER_CONFIG is set to '$FILTER_CONFIG'";
 fi
 
-envsubst '$${API_URL} $${MAP_BACKGROUNDS} $${KEYCLOAK} $${MAP_VIEW} $${FILTER_CONFIG}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
+if [ -z "$ADDITIONAL_ATTRIBUTES" ]
+then
+    export ADDITIONAL_ATTRIBUTES=${ADDITIONAL_ATTRIBUTES:-[]}
+    echo "ADDITIONAL_ATTRIBUTES is unset, set to default: " $ADDITIONAL_ATTRIBUTES;
+else
+    echo "ADDITIONAL_ATTRIBUTES is set to '$ADDITIONAL_ATTRIBUTES'";
+fi
+
+envsubst '$${API_URL} $${MAP_BACKGROUNDS} $${KEYCLOAK} $${MAP_VIEW} $${FILTER_CONFIG} $${ADDITIONAL_ATTRIBUTES}' < /usr/share/nginx/html/assets/config.templ.json > /usr/share/nginx/html/assets/config.json
 envsubst '$${BASE_HREF}' < /usr/share/nginx/html/index.templ.html > /usr/share/nginx/html/index.html
 
 exec nginx -g 'daemon off;'

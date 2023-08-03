@@ -1,13 +1,13 @@
 <clr-datagrid
-  class="datagrid-compact"
+  class="datagrid-compact limit-size"
   (clrDgRefresh)="refresh($event)"
   [clrDgLoading]="loading | async"
 >
   <clr-dg-column class="icon-column"></clr-dg-column>
   <clr-dg-column class="name-column">Name</clr-dg-column>
   <clr-dg-column class="size-column">Size</clr-dg-column>
-  <clr-dg-column>Content date start</clr-dg-column>
-  <clr-dg-column>Content date end</clr-dg-column>
+  <clr-dg-column class="date-column">Content date start</clr-dg-column>
+  <clr-dg-column class="date-column">Content date end</clr-dg-column>
 
   <clr-dg-row
     *ngFor="let product of products"
@@ -16,6 +16,7 @@
       highlightedProduct === product ? highlightedProductBackgroundColor : ''
     "
     (click)="rowClicked(product)"
+    (dblclick)="rowDoubleClicked(product)"
   >
     <clr-dg-cell class="icon-column less-padding-cell">
       <clr-icon
@@ -24,18 +25,17 @@
         (click)="goToDetailsTab(product)"
         title="Open Product Details"
       ></clr-icon>
-      <a
-        target="_blank"
+      <clr-icon shape="download"
         class="icon-column-icon-link"
-        [href]="product | productDownloadUrl"
-        title="Download"
-      >
-        <clr-icon shape="download"></clr-icon>
-      </a>
+        (click)="downloadProduct(product)"
+        title="Go to footprint"
+      ></clr-icon>
       <clr-icon
         *ngIf="product.Footprint"
         shape="map-marker"
-        title="Product has footprint"
+        class="icon-column-icon-link"
+        (click)="focusMapOnFootprint(product)"
+        title="Go to footprint"
       ></clr-icon>
     </clr-dg-cell>
     <clr-dg-cell
@@ -56,12 +56,17 @@
   </clr-dg-row>
 
   <clr-dg-footer>
-    {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
-    {{ total }} products
     <clr-dg-pagination
       #pagination
       [clrDgTotalItems]="total"
+      [clrDgPage]="page"
       [clrDgPageSize]="pageSize"
-    ></clr-dg-pagination>
+    >
+    {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
+    {{ total }} products
+    <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]"
+    >page size:</clr-dg-page-size
+    >
+    </clr-dg-pagination>
   </clr-dg-footer>
 </clr-datagrid>

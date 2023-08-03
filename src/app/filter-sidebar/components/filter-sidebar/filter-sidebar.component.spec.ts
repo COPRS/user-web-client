@@ -31,6 +31,7 @@ class MockConfigService {
       highlightFillColor: '',
     },
     filterConfig: [],
+    additionalAttributes: [],
   };
 }
 class MockQueryResultService {

@@ -1,56 +1,38 @@
 <div class="clr-row clr-align-items-start">
-  <div class="clr-col-4">
-    <clr-datalist-container>
-      <label style="word-break: keep-all">Attribute&nbsp;Name</label>
-      <input
-        name="Option"
+  <div class="clr-col-5">
+    <clr-combobox-container>
+      <label>Attribute&nbsp;Name</label>
+      <clr-combobox name="Option"
         required
-        clrDatalistInput
-        (change)="onAttributeNameChange()"
         [(ngModel)]="attributeName"
-      />
-      <datalist style="width: 100%">
-        <option
-          *ngFor="let attributeName of attributeNameSuggestions"
-          [value]="attributeName"
-        ></option>
-      </datalist>
-    </clr-datalist-container>
+        (clrSelectionChange)="onAttributeNameChange($event)">
+        <clr-options>
+          <clr-option
+          *ngFor="let name of attributeNameSuggestions"
+          [clrValue]="name"
+          >{{ name }}</clr-option>
+        </clr-options>
+      </clr-combobox>
+    </clr-combobox-container>
   </div>
-  <div class="clr-col-4">
-    <clr-datalist-container>
+  <div class="clr-col-3">
+    <clr-combobox-container>
       <label>Operator</label>
-      <input
-        name="Option"
-        required
-        clrDatalistInput
-        (change)="onChange()"
-        [(ngModel)]="operator"
-        err
-      />
-      <datalist>
-        <option
+      <clr-combobox name="Option"
+      required
+      [(ngModel)]="operator"
+      (clrSelectionChange)="onOperatorChange($event)">
+        <clr-options>
+        <clr-option
           *ngFor="let operator of operatorSuggestions"
-          [value]="operator.value"
-        >
-          {{ operator.description }}
-        </option>
-      </datalist>
-      <clr-control-helper
-        *ngIf="
-          attributeName === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME &&
-          operator &&
-          operator !== 'eq'
-        "
-        >'{{ PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME }}' only supports 'eq'
-        operator</clr-control-helper
-      >
-      <clr-control-error>There was an error</clr-control-error>
-    </clr-datalist-container>
+          [clrValue]="operator.value"
+        >{{ operator.description }}</clr-option>
+      </clr-options>
+      </clr-combobox>
+    </clr-combobox-container>
   </div>
-  <div class="clr-col-4">
     <ng-container [ngSwitch]="valueType">
-      <clr-date-container *ngSwitchCase="'date'" style="width: 100%">
+      <clr-date-container *ngSwitchCase="'date'" class="clr-col-4" style="width: 100%">
         <label>Value</label>
         <input
           [clrDate]="dateValue"
@@ -61,13 +43,42 @@
           style="width: 80%"
         />
       </clr-date-container>
+      <ng-container *ngSwitchCase="'size'">
+        <clr-input-container class="clr-col-2">
+          <label>Value</label>
+          <input
+            clrInput
+            name="value"
+            class="harmonize-background"
+            (change)="onChange()"
+            [(ngModel)]="value"
+            type="number"
+            style="width: 120%"
+            required
+          />
+        </clr-input-container>
+        <clr-combobox-container class="clr-col-2" style="width: 130%">
+          <label>Unit</label>
+          <clr-combobox name="Option" style="min-width: 61px; display: inline-block;"
+          required
+          [(ngModel)]="sizeUnit"
+          (clrSelectionChange)="onSizeUnitChange($event)">
+          <clr-options>
+            <clr-option
+            *ngFor="let sizeUnit of sizeUnitSuggestions"
+            [clrValue]="sizeUnit"
+            >{{ sizeUnit }}</clr-option>
+          </clr-options>
+          </clr-combobox>
+        </clr-combobox-container>
+      </ng-container>
       <ng-container *ngSwitchCase="'long'">
         <ng-container *ngTemplateOutlet="numberInput"></ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="'double'">
         <ng-container *ngTemplateOutlet="numberInput"></ng-container>
       </ng-container>
-      <clr-checkbox-container *ngSwitchCase="'boolean'">
+      <clr-checkbox-container class="clr-col-4" *ngSwitchCase="'boolean'">
         <label>Value</label>
         <clr-checkbox-wrapper>
           <input
@@ -80,7 +91,7 @@
           />
         </clr-checkbox-wrapper>
       </clr-checkbox-container>
-      <clr-input-container *ngSwitchDefault>
+      <clr-input-container class="clr-col-4" *ngSwitchDefault>
         <label>Value</label>
         <input
           clrInput
@@ -89,18 +100,19 @@
           [(ngModel)]="value"
           required
           style="width: 100%"
+          class="harmonize-background"
         />
       </clr-input-container>
     </ng-container>
-  </div>
 </div>
 
 <ng-template #numberInput>
-  <clr-input-container>
+  <clr-input-container class="clr-col-4">
     <label>Value</label>
     <input
       clrInput
       name="value"
+      class="harmonize-background"
       (change)="onChange()"
       [(ngModel)]="value"
       type="number"

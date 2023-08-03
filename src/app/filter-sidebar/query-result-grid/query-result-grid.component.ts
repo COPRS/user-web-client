@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ClrDatagridStateInterface } from '@clr/angular';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
+import { MapViewerService } from 'src/app/map-viewer/services/map-viewer.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
@@ -10,27 +11,40 @@ import {
   SideBarSubNav,
 } from '../services/filter-sidebar-navigation.service';
 import { QueryResultService } from '../services/query-result.service';
+import * as splitGeoJSON from 'geojson-antimeridian-cut';
+import VectorSource from 'ol/source/Vector';
+import GeoJSON from 'ol/format/GeoJSON';
+import { DdipService } from 'src/app/services/ddip/ddip.service';
+import { HttpClient } from '@angular/common/http';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-query-result-grid',
   templateUrl: './query-result-grid.component.html',
   styleUrls: ['./query-result-grid.component.scss'],
 })
-export class QueryResultGridComponent implements OnInit, OnDestroy {
+export class QueryResultGridComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   products: DdipProduct[];
   total: number;
-  pageSize: number = 9;
+  pageSize: number = 100;
+  page: number = 1;
   loading: Observable<boolean>;
   public selected: DdipProduct[];
   public highlightedProduct: DdipProduct;
   public highlightedProductBackgroundColor: string;
   private readonly onDestroy = new Subject<void>();
+  initializationFinished: boolean = false;
 
   constructor(
     private queryResultService: QueryResultService,
     private productSelectionService: ProductSelectionService,
     private filterSidebarNavigationService: FilterSidebarNavigationService,
-    private configService: ConfigService
+    private mapViewerService: MapViewerService,
+    private configService: ConfigService,
+    private ddipService: DdipService,
+    private http: HttpClient
   ) {
     this.loading = this.queryResultService
       .getIsLoading()
@@ -75,9 +89,21 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngAfterViewInit(): void {
+    this.queryResultService.getPagination().subscribe((initialPagination) => {
+      this.page = initialPagination.page;
+      this.pageSize = initialPagination.pageSize;
+      this.initializationFinished = true;
+    });
+  }
+
   refresh(state: ClrDatagridStateInterface) {
-    const skip = state.page.from > 0 ? state.page.from : undefined;
-    this.queryResultService.setPagination(state.page.size, skip);
+    if (this.initializationFinished) {
+      this.queryResultService.setPagination(
+        state.page.size,
+        state.page.current
+      );
+    }
   }
 
   ngOnDestroy() {
@@ -93,7 +119,54 @@ export class QueryResultGridComponent implements OnInit, OnDestroy {
     this.filterSidebarNavigationService.setShowNav(true);
   }
 
+  focusMapOnFootprint($event) {
+    const selectedProduct = $event as DdipProduct;
+
+    selectedProduct.Footprint = splitGeoJSON(selectedProduct.Footprint);
+
+    let source = new VectorSource({
+      features: new GeoJSON().readFeatures(
+        {
+          type: 'FeatureCollection',
+          crs: {
+            type: 'name',
+            properties: {
+              name: 'urn:ogc:def:crs:EPSG::4326',
+            },
+          },
+
+          features: [
+            {
+              type: 'Feature',
+              properties: { selectedProduct },
+              geometry: selectedProduct.Footprint,
+            },
+          ],
+        },
+        {
+          featureProjection: 'EPSG:3857',
+        }
+      ),
+    });
+    this.mapViewerService.setZoomToExtent(source.getExtent());
+    this.productSelectionService.setHighlightProduct(selectedProduct);
+  }
+
+  downloadProduct(product: DdipProduct) {
+    const downloadUrl = this.ddipService.constructDownloadUrl(product.Id);
+
+    return this.http
+      .get(downloadUrl, { responseType: 'blob' })
+      .subscribe((response) => {
+        saveAs(response, product.Name);
+      });
+  }
+
   rowClicked(product: DdipProduct) {
+    this.productSelectionService.setHighlightProduct(product);
+  }
+
+  rowDoubleClicked(product: DdipProduct) {
     this.goToDetailsTab(product);
   }
 }

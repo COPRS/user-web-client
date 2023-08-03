@@ -21,6 +21,7 @@ export interface DdipProduct {
   };
   Footprint: DdipProductFootprint | undefined;
   Quicklooks: string[];
+  ExtendedAttributes: DdipProductExtendedAttribute[];
 }
 
 export interface DdipProductRawFromPrip {

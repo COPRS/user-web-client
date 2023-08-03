@@ -1,7 +1,7 @@
 $side-bar-background-color: rgba(255, 255, 255, 0.65);
 $side-bar-top-distance: 30px;
 $clarity-header-height: 60px;
-$container-content-padding-side: 35px;
+$container-content-padding-side: 15px;
 $container-content-padding-top-bottom: 15px;
 $main-color: rgba(169, 169, 169, 0.8);
 $secondary-color: rgba(211, 211, 211, 0.8);
@@ -61,7 +61,11 @@ $secondary-color: rgba(211, 211, 211, 0.8);
         border: 0;
         border-top: 1px solid $secondary-color;
       }
+      .side-nav-bar-content {
+        height: 99%
+      }
       .side-nav-bar-content-element {
+        
         padding: $container-content-padding-top-bottom
           $container-content-padding-side $container-content-padding-top-bottom
           $container-content-padding-side;
@@ -106,4 +110,8 @@ $secondary-color: rgba(211, 211, 211, 0.8);
 
 .alert-test-fix {
   word-break: break-word;
+}
+
+.height-fix {
+  height: 100%;
 }

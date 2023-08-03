@@ -4,6 +4,7 @@ export interface IAppConfig {
   keycloak: IAppConfigKeycloak;
   mapView: IAppConfigMapView;
   filterConfig: IAppFilterConfig[];
+  additionalAttributes: IAppAdditionalAttributes[];
 }
 
 export interface IAppConfigMapBackgrounds {
@@ -36,4 +37,10 @@ export type IAppFilterConfigValueType =
   | 'date'
   | 'double'
   | 'long'
-  | 'boolean';
+  | 'boolean'
+  | 'size';
+
+export interface IAppAdditionalAttributes {
+  label: string;
+  value: string;
+}

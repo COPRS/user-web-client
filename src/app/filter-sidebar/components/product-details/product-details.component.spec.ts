@@ -2,10 +2,41 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BehaviorSubject } from 'rxjs';
 import { FileSizePipe } from 'src/app/filter-sidebar/query-result-grid/file-size.pipe';
 import { FilterElementsService } from 'src/app/filter-sidebar/services/filter-elements.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { DdipService } from 'src/app/services/ddip/ddip.service';
 import { DdipProduct } from 'src/app/services/models/DdipProductResponse';
+import { IAppConfig } from 'src/app/services/models/IAppConfig';
 import { ProductSelectionService } from 'src/app/services/product-selection.service';
 import { ProductDetailsComponent } from './product-details.component';
+import { HttpClient } from '@angular/common/http';
+
+class MockConfigService {
+  settings: IAppConfig = {
+    apiUrl: 'http://test',
+    mapBackgrounds: [
+      {
+        name: 'Sentinel-2 cloudless 2018 background map',
+        layers: [
+          {
+            url: 'https://tiles.esa.maps.eox.at/wms',
+            layerName: 's2cloudless_3857',
+          },
+        ],
+      },
+    ],
+    keycloak: { clientId: '', realm: '', url: '' },
+    mapView: {
+      regionSelectionFillColor: '',
+      regionSelectionStrokeColor: '',
+      selectionFillColor: '',
+      selectionStrokeColor: '',
+      highlightStrokeColor: '',
+      highlightFillColor: '',
+    },
+    filterConfig: [],
+    additionalAttributes: [],
+  };
+}
 
 class MockDdipService {
   getProducts() {}
@@ -13,6 +44,8 @@ class MockDdipService {
     return '';
   }
 }
+
+class MockHttp {}
 
 class MockFilterElementsService {
   public getQuery() {}
@@ -49,6 +82,14 @@ describe('ProductDetailsSidebarComponent', () => {
         {
           provide: FilterElementsService,
           useClass: MockFilterElementsService,
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService,
+        },
+        {
+          provide: HttpClient,
+          useClass: MockHttp,
         },
       ],
     }).compileComponents();

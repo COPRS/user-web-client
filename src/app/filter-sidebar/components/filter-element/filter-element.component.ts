@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ComboboxModel } from '@clr/angular/forms/combobox/model/combobox.model';
 import { ConfigService } from 'src/app/services/config.service';
 import { IAppFilterConfigValueType } from 'src/app/services/models/IAppConfig';
 import { FilterElement } from '../../models/FilterElement';
@@ -44,6 +45,9 @@ export class FilterElementComponent implements OnInit {
   ];
   attributeName = '';
 
+  sizeUnitSuggestions = ['B', 'KB', 'MB', 'GB'];
+  sizeUnit: string | undefined = 'B';
+
   operatorSuggestions: OperatorSuggestion[] = [];
   operator = '';
 
@@ -66,6 +70,10 @@ export class FilterElementComponent implements OnInit {
       (['long', 'double'] as IAppFilterConfigValueType[]).includes(filterType)
     ) {
       this.value = Number.parseFloat(this.initFilter.value);
+    } else if (filterType === 'size' && this.initFilter.value) {
+      const [, ...arr] = this.initFilter.value.match(/([\d,\.]*)([\s\S]*)/);
+      this.value = arr[0];
+      this.sizeUnit = arr[1];
     } else {
       this.value = this.initFilter.value;
     }
@@ -82,7 +90,9 @@ export class FilterElementComponent implements OnInit {
     this.onChange();
   }
 
-  onAttributeNameChange() {
+  onAttributeNameChange(event: ComboboxModel<any>) {
+    this.attributeName = event.model;
+
     delete this.dateValue;
     delete this.value;
     delete this.operator;
@@ -90,10 +100,24 @@ export class FilterElementComponent implements OnInit {
     this.onChange();
   }
 
+  onOperatorChange(event: ComboboxModel<any>) {
+    this.operator = event.model;
+    this.onChange();
+  }
+
+  onSizeUnitChange(event: ComboboxModel<any>) {
+    this.sizeUnit = event.model;
+    this.onChange();
+  }
+
   onChange(): void {
     this.updateFilterType(this.attributeName);
 
     if (this.attributeName && this.operator) {
+      if (this.valueType == 'size' && this.value) {
+        this.value = this.value + this.sizeUnit;
+      }
+
       this.changed.emit({
         attributeName: this.attributeName,
         operator: this.operator,
@@ -136,6 +160,7 @@ export class FilterElementComponent implements OnInit {
       case 'date':
       case `double`:
       case 'long':
+      case 'size':
         return OPERATOR_SUGGESTIONS.filter((o) =>
           (['gt', 'ge', 'lt', 'le', 'eq'] as Operator[]).includes(o.value)
         );

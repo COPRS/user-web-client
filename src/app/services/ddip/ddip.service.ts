@@ -6,7 +6,6 @@ import { PaginationConfig } from '../../filter-sidebar/services/query-result.ser
 import { ConfigService } from '../config.service';
 import {
   DdipProduct,
-  DdipProductChecksum,
   DdipProductRawFromPrip,
   DdipProductResponse,
 } from '../models/DdipProductResponse';
@@ -26,11 +25,11 @@ export class DdipService {
       $format: 'json',
       $count: true,
     } as OdataQuery;
-    if (pageConfig.skip) {
-      query.$skip = pageConfig.skip;
+    if (pageConfig.page) {
+      query.$skip = (pageConfig.page - 1) * pageConfig.pageSize;
     }
-    if (pageConfig.top) {
-      query.$top = pageConfig.top;
+    if (pageConfig.pageSize) {
+      query.$top = pageConfig.pageSize;
     }
     if (filter) {
       query.$filter = filter;
@@ -97,6 +96,13 @@ export class DdipService {
         Quicklooks: e.Quicklooks.map((q) =>
           this.constructQuicklookUrl(e.Id, q.Image)
         ),
+        ExtendedAttributes: [
+          ...e.BooleanAttributes,
+          ...e.DateTimeOffsetAttributes,
+          ...e.DoubleAttributes,
+          ...e.IntegerAttributes,
+          ...e.StringAttributes,
+        ],
       };
     });
   }
