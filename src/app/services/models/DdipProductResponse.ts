@@ -39,12 +39,7 @@ export interface DdipProductRawFromPrip {
     End: string;
   };
   Footprint: null;
-  Attributes: [];
-  StringAttributes: DdipProductExtendedAttribute[];
-  IntegerAttributes: DdipProductExtendedAttribute[];
-  DoubleAttributes: DdipProductExtendedAttribute[];
-  BooleanAttributes: DdipProductExtendedAttribute[];
-  DateTimeOffsetAttributes: DdipProductExtendedAttribute[];
+  Attributes: DdipProductExtendedAttribute[];
   Quicklooks: DdipQuicklook[];
 }
 

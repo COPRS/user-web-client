@@ -76,7 +76,7 @@ export class DdipService {
     ddipProductsRaw: DdipProductRawFromPrip[]
   ): DdipProduct[] {
     return ddipProductsRaw.map((e): DdipProduct => {
-      const productType = e.StringAttributes?.filter(
+      const productType = e.Attributes?.filter(
         (n) => n.Name === PRODUCT_TYPE_EXTENDED_ATTRIBUTE_NAME
       )[0];
 
@@ -96,13 +96,7 @@ export class DdipService {
         Quicklooks: e.Quicklooks.map((q) =>
           this.constructQuicklookUrl(e.Id, q.Image)
         ),
-        ExtendedAttributes: [
-          ...e.BooleanAttributes,
-          ...e.DateTimeOffsetAttributes,
-          ...e.DoubleAttributes,
-          ...e.IntegerAttributes,
-          ...e.StringAttributes,
-        ],
+        ExtendedAttributes: [...e.Attributes],
       };
     });
   }
