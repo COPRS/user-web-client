@@ -19,3 +19,7 @@ If you seek for more information on how to use the User Web Client after it had 
 ## Design
 
 For more information about the design, please consult the [Architecture Design Document](./docs/architecture/README.md).
+
+<p align="center">
+ <img src="/docs/banner.jpg" width="800" height="50" />
+</p>
