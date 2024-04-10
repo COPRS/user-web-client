@@ -23,3 +23,4 @@ For more information about the design, please consult the [Architecture Design D
 <p align="center">
  <img src="/docs/banner.jpg" width="800" height="50" />
 </p>
+<p align="center">This project is funded by the EU and ESA.</p>
